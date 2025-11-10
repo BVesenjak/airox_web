@@ -3078,15 +3078,17 @@ p {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: cyan;
+    color: var(--red);
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.1s ease;
 }
 
 .video-module__play:hover {
-    transform: translate(-50%, -50%) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 100px 1000px rgba(240, 255, 255, 0.1);
+    /*filter: invert(1);*/
 }
 
 .video-module__video {
