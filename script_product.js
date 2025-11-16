@@ -50,6 +50,93 @@ function updatePriceDisplay() {
     }
 }
 
+// =================================
+// ADD TO CART CTA VIDEO CONTROL
+// =================================
+    // Video state management for #addtocart button
+    (function() {
+        const button = document.getElementById('addtocart-btn');
+        if (!button) return;
+  
+        const idleVideo = button.querySelector('.btn-video-idle');
+        const hoverVideo = button.querySelector('.btn-video-cart-hover');
+        const activeVideo = button.querySelector('.btn-video-cart-active');
+        
+        let isHovering = false;
+        let isPlayingActive = false;
+  
+        // Function to show only one video
+        function showVideo(video) {
+          [idleVideo, hoverVideo, activeVideo].forEach(v => {
+            v.style.opacity = '0';
+            v.pause();
+          });
+          
+          if (video) {
+            video.style.opacity = '1';
+            video.currentTime = 0;
+            video.play().catch(err => console.log('Video play error:', err));
+          }
+        }
+  
+        // Function to set idle state (100% opacity background, no video)
+        function setIdleState() {
+          [idleVideo, hoverVideo, activeVideo].forEach(v => {
+            v.style.opacity = '0';
+            v.pause();
+          });
+          button.style.backgroundColor = 'rgba(255, 179, 0, 1)'; // 100% opacity
+        }
+  
+        // Function to set hover state
+        function setHoverState() {
+          if (isPlayingActive) return; // Don't interrupt active video
+          button.style.backgroundColor = 'transparent';
+          showVideo(hoverVideo);
+        }
+  
+        // Function to set active state
+        function setActiveState() {
+          isPlayingActive = true;
+          button.style.backgroundColor = 'transparent';
+          showVideo(activeVideo);
+        }
+  
+        // Initialize in idle state
+        setIdleState();
+  
+        // Hover event
+        button.addEventListener('mouseenter', function() {
+          isHovering = true;
+          if (!isPlayingActive) {
+            setHoverState();
+          }
+        });
+  
+        // Leave event
+        button.addEventListener('mouseleave', function() {
+          isHovering = false;
+          if (!isPlayingActive) {
+            setIdleState();
+          }
+        });
+  
+        // Click event
+        button.addEventListener('click', function(e) {
+          setActiveState();
+        });
+  
+        // When active video ends
+        activeVideo.addEventListener('ended', function() {
+          isPlayingActive = false;
+          if (isHovering) {
+            setHoverState();
+          } else {
+            setIdleState();
+          }
+        });
+      })();
+
 // Product page navbar scroll behavior (desktop only)
 (function() {
     const navbar = document.getElementById('navbarProduct');
