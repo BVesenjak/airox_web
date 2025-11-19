@@ -2452,7 +2452,7 @@ p {
 }
 
 .star {
-    color: rgb(255, 255, 134);
+    color: #00F0FF;
     animation: glowPattern 12s infinite;
 }
 
@@ -2536,7 +2536,7 @@ p {
 }
 
 .price-block__savings {
-    background-color: var(--red);
+    background-color: #00F0FF;
     color: white;
     padding: 4px 12px;
     border-radius: 8px;
