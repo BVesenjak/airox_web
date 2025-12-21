@@ -142,44 +142,62 @@
                         </div>
                     </div>
 
-                    <!--C O L O R S-->
-                    <div class="variant-group variant-group--color" id="model1ColorGroup">
-                        <label class="variant-group__label">Model 1 Color</label>
-                        <div class="variant-pills variant-pills--color" role="radiogroup" aria-label="Select model color">
-                            <button class="pill pill--active pill--animated pill--color model-color-btn" role="radio" aria-checked="true" data-variant-type="color" data-model="1" data-value="black" data-image="assets/model-black.jpg" data-animation="assets/btn-anim-1.mp4" title="Black" aria-label="Black">Black</button>
-                            <button class="pill pill--animated pill--color model-color-btn" role="radio" aria-checked="false" data-variant-type="color" data-model="1" data-value="white" data-image="assets/model-white.jpg" data-animation="assets/btn-anim-2.mp4" title="White" aria-label="White">White</button>
-                            <button class="pill pill--animated pill--color model-color-btn" role="radio" aria-checked="false" data-variant-type="color" data-model="1" data-value="violet" data-image="assets/model-violet.jpg" data-animation="assets/btn-anim-3.mp4" title="Violet" aria-label="Violet">Violet</button>
+                    <!--═══════════════════════════════════════════════════════════
+                        TWO-PANEL LAYOUT: EQUAL HEIGHTS, NO LAYOUT JUMP
+                        Panel A: Selector (during) → Summary (after completion)
+                        Panel B: CTAs (disabled during → enabled after)
+                    ═══════════════════════════════════════════════════════════-->
+                    <div id="colorSelectionContainer" style="display: flex; flex-direction: column; gap: 20px; min-height: 200px;">
+                        
+                        <!-- PANEL A: Selector / Summary Panel -->
+                        <div id="panelA" style="flex: 1; min-height: 140px; transition: all 0.28s ease-out;">
+                            
+                            <!-- STATE 1: Progressive Color Selector (visible during selection) -->
+                            <div id="progressiveSelectorState" class="variant-group variant-group--color">
+                                <label class="variant-group__label" id="selectorLabel">Choose color for Fan 1</label>
+                                <div class="variant-pills variant-pills--color" role="radiogroup" aria-label="Select model color" id="colorPills">
+                                    <button class="pill pill--animated pill--color" role="radio" aria-checked="false" 
+                                            data-variant-type="color" data-value="black" data-image="assets/model-black.jpg" 
+                                            data-animation="assets/btn-anim-1.mp4" title="Stealth" aria-label="Stealth">Stealth</button>
+                                    <button class="pill pill--animated pill--color" role="radio" aria-checked="false" 
+                                            data-variant-type="color" data-value="white" data-image="assets/model-white.jpg" 
+                                            data-animation="assets/btn-anim-2.mp4" title="Arctic" aria-label="Arctic">Arctic</button>
+                                    <button class="pill pill--animated pill--color" role="radio" aria-checked="false" 
+                                            data-variant-type="color" data-value="violet" data-image="assets/model-violet.jpg" 
+                                            data-animation="assets/btn-anim-3.mp4" title="Ion" aria-label="Ion">Ion</button>
+                                </div>
+                                
+                                <!-- Persistent Micro-Feedback: Never vanishes, always guiding -->
+                                <div id="microFeedback" style="margin-top: 14px; padding: 10px 14px; background: rgba(153, 255, 255, 0.08); border-radius: 8px; min-height: 42px; display: flex; align-items: center; transition: all 0.28s ease-out;">
+                                    <span id="feedbackText" style="font-size: 0.875rem; color: rgba(255,255,255,0.75); line-height: 1.4;">
+                                        👉 Pick a color to continue
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- STATE 2: Summary + Edit Panel (hidden until completion) -->
+                            <div id="summaryState" style="display: none; opacity: 0; transition: opacity 0.28s ease-out;">
+                                <div style="padding: 18px; background: rgba(0,174,255,0.12); border-radius: 12px; border-left: 4px solid rgb(153, 255, 255);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: rgb(153, 255, 255); margin: 0;">✓ Color Selection Complete</h3>
+                                        <button id="editSelectionsBtn" style="padding: 6px 14px; background: rgba(153, 255, 255, 0.15); border: 1.5px solid rgb(153, 255, 255); border-radius: 6px; color: rgb(153, 255, 255); font-size: 0.813rem; font-weight: 600; cursor: pointer; transition: all 0.22s ease;">
+                                            ✏️ Edit
+                                        </button>
+                                    </div>
+                                    <div id="summaryList" style="font-size: 0.875rem; color: rgba(255,255,255,0.88); line-height: 1.6;"></div>
+                                </div>
+                            </div>
+                            
                         </div>
-                    </div>
-                    <!--C O L O R   V A R I A N T S  T O G G L E  S W I T C H-->
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="giftWrap">
-                        <span class="toggle-switch__slider"></span>
-                        <span class="toggle-switch__label" style="color:white;">Advanced color selection</span>
-                    </label>
-                    <div class="variant-group">
-                        <label class="variant-group__label">Model 2 Color</label>
-                        <div class="variant-pills" role="radiogroup" aria-label="Select model color">
-                            <button class="pill pill--active pill--animated" role="radio" aria-checked="true" data-variant-type="model" data-value="black" data-image="assets/model-black.jpg" data-animation="assets/btn-anim-1.mp4">Black</button>
-                            <button class="pill pill--animated" role="radio" aria-checked="false" data-variant-type="model" data-value="white" data-image="assets/model-white.jpg" data-animation="assets/btn-anim-2.mp4">White</button>
-                            <button class="pill pill--animated" role="radio" aria-checked="false" data-variant-type="model" data-value="violet" data-image="assets/model-violet.jpg" data-animation="assets/btn-anim-3.mp4">Violet</button>
+                        
+                        <!-- PANEL B: CTA Panel (always present, but disabled during selection) -->
+                        <div id="panelB" style="flex: 1; min-height: 60px;">
+                            <!-- CTA status indicator (optional reassurance) -->
+                            <div id="ctaStatus" style="margin-bottom: 8px; font-size: 0.813rem; color: rgba(255,255,255,0.6); text-align: center; transition: all 0.28s ease-out;">
+                                Complete color selection to continue
+                            </div>
                         </div>
-                    </div>
-                    <div class="variant-group">
-                        <label class="variant-group__label">Model 3 Color</label>
-                        <div class="variant-pills" role="radiogroup" aria-label="Select model color">
-                            <button class="pill pill--active pill--animated" role="radio" aria-checked="true" data-variant-type="model" data-value="black" data-image="assets/model-black.jpg" data-animation="assets/btn-anim-1.mp4">Black</button>
-                            <button class="pill pill--animated" role="radio" aria-checked="false" data-variant-type="model" data-value="white" data-image="assets/model-white.jpg" data-animation="assets/btn-anim-2.mp4">White</button>
-                            <button class="pill pill--animated" role="radio" aria-checked="false" data-variant-type="model" data-value="violet" data-image="assets/model-violet.jpg" data-animation="assets/btn-anim-3.mp4">Violet</button>
-                        </div>
-                    </div>
-                    <div class="variant-group">
-                        <label class="variant-group__label">Model 4 Color</label>
-                        <div class="variant-pills" role="radiogroup" aria-label="Select model color">
-                            <button class="pill pill--active pill--animated" role="radio" aria-checked="true" data-variant-type="model" data-value="black" data-image="assets/model-black.jpg" data-animation="assets/btn-anim-1.mp4">Black</button>
-                            <button class="pill pill--animated" role="radio" aria-checked="false" data-variant-type="model" data-value="white" data-image="assets/model-white.jpg" data-animation="assets/btn-anim-2.mp4">White</button>
-                            <button class="pill pill--animated" role="radio" aria-checked="false" data-variant-type="model" data-value="violet" data-image="assets/model-violet.jpg" data-animation="assets/btn-anim-3.mp4">Violet</button>
-                        </div>
+                        
                     </div>
                     
                     <!-- Quantity -->
@@ -1206,6 +1224,407 @@
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
     <script src="script_product.js"></script>
+    
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         PROGRESSIVE LOCK-IN COLOR SELECTION SYSTEM
+         
+         State Machine:
+         - SELECTING: User is progressing through fan selections
+         - COMPLETE: All colors selected, showing summary + edit
+         
+         Key Features:
+         - Persistent micro-feedback (never vanishes)
+         - Slow, calm transitions (280ms)
+         - Two equal-height panels (no layout jump)
+         - Edit functionality (return to any fan)
+         - Bundle-aware (duo=2, family=4)
+    ═══════════════════════════════════════════════════════════════════════════ -->
+    <script>
+    (function() {
+        'use strict';
+        
+        // ═══════════════════════════════════════════════════════════
+        // STATE MANAGEMENT
+        // ═══════════════════════════════════════════════════════════
+        const state = {
+            bundle: 'duo',              // 'duo' or 'family'
+            fanCount: 2,                // duo=2, family=4
+            currentFanIndex: 0,         // Current fan being selected (0-based)
+            selectedColors: [],         // Array of selected colors
+            isComplete: false,          // Selection complete flag
+            isLocked: false             // Temporary lock during transitions
+        };
+        
+        // Color name mapping
+        const COLOR_NAMES = {
+            'black': 'Stealth',
+            'white': 'Arctic',
+            'violet': 'Ion'
+        };
+        
+        // ═══════════════════════════════════════════════════════════
+        // DOM REFERENCES
+        // ═══════════════════════════════════════════════════════════
+        const els = {
+            // Bundle
+            bundleButtons: document.querySelectorAll('[data-variant-type="bundle"]'),
+            
+            // Panels
+            panelA: document.getElementById('panelA'),
+            panelB: document.getElementById('panelB'),
+            
+            // Selector state
+            selectorState: document.getElementById('progressiveSelectorState'),
+            selectorLabel: document.getElementById('selectorLabel'),
+            colorPills: document.getElementById('colorPills').querySelectorAll('.pill--color'),
+            microFeedback: document.getElementById('microFeedback'),
+            feedbackText: document.getElementById('feedbackText'),
+            
+            // Summary state
+            summaryState: document.getElementById('summaryState'),
+            summaryList: document.getElementById('summaryList'),
+            editBtn: document.getElementById('editSelectionsBtn'),
+            
+            // CTA
+            ctaStatus: document.getElementById('ctaStatus'),
+            buyNowBtn: document.getElementById('buyNow'),
+            addToCartBtn: document.getElementById('addtocart-btn')
+        };
+        
+        // ═══════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════
+        function init() {
+            setupBundleListeners();
+            setupColorPillListeners();
+            setupEditListener();
+            disableCTAs(); // Start with CTAs disabled
+            updateUI();
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // BUNDLE SELECTION
+        // ═══════════════════════════════════════════════════════════
+        function setupBundleListeners() {
+            els.bundleButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active state
+                    els.bundleButtons.forEach(b => {
+                        b.classList.remove('pill--active');
+                        b.setAttribute('aria-checked', 'false');
+                    });
+                    this.classList.add('pill--active');
+                    this.setAttribute('aria-checked', 'true');
+                    
+                    // Update state
+                    state.bundle = this.dataset.value;
+                    state.fanCount = state.bundle === 'duo' ? 2 : 4;
+                    
+                    // Reset color selection
+                    resetSelection();
+                });
+            });
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // COLOR PILL INTERACTION
+        // ═══════════════════════════════════════════════════════════
+        function setupColorPillListeners() {
+            els.colorPills.forEach(pill => {
+                pill.addEventListener('click', function() {
+                    if (state.isLocked || state.isComplete) return;
+                    
+                    const color = this.dataset.value;
+                    handleColorSelection(color, this);
+                });
+            });
+        }
+        
+        /**
+         * Handle color selection with calm, controlled interaction
+         * Timing: ~280ms lock period for premium feel
+         */
+        function handleColorSelection(color, pillElement) {
+            // Lock interaction
+            state.isLocked = true;
+            
+            // Visual feedback: highlight selected pill
+            els.colorPills.forEach(p => {
+                p.classList.remove('pill--active');
+                p.setAttribute('aria-checked', 'false');
+                p.style.pointerEvents = 'none';
+                p.style.opacity = '0.5';
+            });
+            
+            pillElement.classList.add('pill--active');
+            pillElement.setAttribute('aria-checked', 'true');
+            pillElement.style.opacity = '1';
+            
+            // Store selection
+            state.selectedColors[state.currentFanIndex] = color;
+            
+            // Update micro-feedback with confirmation
+            updateMicroFeedback('confirmation', color);
+            
+            // Wait 280ms then advance (calm, not rushed)
+            setTimeout(() => {
+                advanceSelection();
+            }, 280);
+        }
+        
+        /**
+         * Advance to next fan or complete selection
+         */
+        function advanceSelection() {
+            state.currentFanIndex++;
+            
+            // Check if complete
+            if (state.currentFanIndex >= state.fanCount) {
+                completeSelection();
+                return;
+            }
+            
+            // Reset pills for next selection
+            els.colorPills.forEach(p => {
+                p.classList.remove('pill--active');
+                p.setAttribute('aria-checked', 'false');
+                p.style.pointerEvents = 'auto';
+                p.style.opacity = '1';
+            });
+            
+            // Update UI for next fan
+            updateSelectorLabel();
+            updateMicroFeedback('progress');
+            
+            // Unlock
+            state.isLocked = false;
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // UI UPDATES - PERSISTENT MICRO-FEEDBACK
+        // ═══════════════════════════════════════════════════════════
+        
+        /**
+         * Update selector label dynamically
+         */
+        function updateSelectorLabel() {
+            const fanNum = state.currentFanIndex + 1;
+            els.selectorLabel.textContent = `Choose color for Fan ${fanNum}`;
+        }
+        
+        /**
+         * Update micro-feedback - NEVER vanishes, always guides
+         * @param {string} mode - 'initial', 'confirmation', 'progress'
+         */
+        function updateMicroFeedback(mode, selectedColor = null) {
+            let message = '';
+            
+            switch(mode) {
+                case 'initial':
+                    message = '👉 Pick a color to continue';
+                    break;
+                    
+                case 'confirmation':
+                    const remaining = state.fanCount - state.currentFanIndex - 1;
+                    if (remaining > 0) {
+                        message = `✓ ${COLOR_NAMES[selectedColor]} selected · ${remaining} fan${remaining > 1 ? 's' : ''} remaining`;
+                    } else {
+                        message = `✓ ${COLOR_NAMES[selectedColor]} selected · Complete!`;
+                    }
+                    break;
+                    
+                case 'progress':
+                    const selected = state.selectedColors
+                        .slice(0, state.currentFanIndex)
+                        .map(c => COLOR_NAMES[c])
+                        .join(' · ');
+                    const nextFan = state.currentFanIndex + 1;
+                    message = `Selected: ${selected} · Now choosing Fan ${nextFan}`;
+                    break;
+            }
+            
+            // Smooth text transition
+            els.feedbackText.style.opacity = '0';
+            setTimeout(() => {
+                els.feedbackText.textContent = message;
+                els.feedbackText.style.opacity = '1';
+            }, 140);
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // COMPLETION STATE
+        // ═══════════════════════════════════════════════════════════
+        
+        /**
+         * Complete selection - transition to summary state
+         * Smooth transition: 280ms fade, no layout jump
+         */
+        function completeSelection() {
+            state.isComplete = true;
+            
+            // Fade out selector state
+            els.selectorState.style.opacity = '0';
+            els.selectorState.style.transform = 'translateY(-8px)';
+            
+            setTimeout(() => {
+                // Hide selector, show summary
+                els.selectorState.style.display = 'none';
+                els.summaryState.style.display = 'block';
+                
+                // Build summary
+                buildSummaryList();
+                
+                // Fade in summary
+                setTimeout(() => {
+                    els.summaryState.style.opacity = '1';
+                }, 50);
+                
+                // Update CTA status
+                enableCTAs();
+                
+            }, 280);
+        }
+        
+        /**
+         * Build the summary list showing all selections
+         */
+        function buildSummaryList() {
+            const items = state.selectedColors.map((color, idx) => {
+                return `<div style="display: flex; align-items: center; padding: 6px 0;">
+                    <span style="width: 24px; height: 24px; background: ${getColorHex(color)}; border-radius: 4px; margin-right: 10px; border: 1.5px solid rgba(255,255,255,0.2);"></span>
+                    <span style="flex: 1;"><strong>Fan ${idx + 1}:</strong> ${COLOR_NAMES[color]}</span>
+                </div>`;
+            }).join('');
+            
+            els.summaryList.innerHTML = items;
+        }
+        
+        /**
+         * Get color hex for visual display
+         */
+        function getColorHex(color) {
+            const colorMap = {
+                'black': '#000000',
+                'white': '#ffffff',
+                'violet': '#9b59b6'
+            };
+            return colorMap[color] || '#999';
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // EDIT FUNCTIONALITY
+        // ═══════════════════════════════════════════════════════════
+        
+        /**
+         * Setup edit button listener
+         */
+        function setupEditListener() {
+            els.editBtn.addEventListener('click', function() {
+                resetSelection();
+            });
+        }
+        
+        /**
+         * Reset selection - return to step 1
+         * Preserves previous selections for prefill (optional enhancement)
+         */
+        function resetSelection() {
+            // Reset state
+            const previousSelections = [...state.selectedColors]; // Keep for potential prefill
+            state.currentFanIndex = 0;
+            state.selectedColors = [];
+            state.isComplete = false;
+            state.isLocked = false;
+            
+            // Show selector, hide summary
+            els.summaryState.style.opacity = '0';
+            setTimeout(() => {
+                els.summaryState.style.display = 'none';
+                els.selectorState.style.display = 'block';
+                els.selectorState.style.opacity = '0';
+                els.selectorState.style.transform = 'translateY(-8px)';
+                
+                setTimeout(() => {
+                    els.selectorState.style.opacity = '1';
+                    els.selectorState.style.transform = 'translateY(0)';
+                }, 50);
+            }, 280);
+            
+            // Reset pills
+            els.colorPills.forEach(p => {
+                p.classList.remove('pill--active');
+                p.setAttribute('aria-checked', 'false');
+                p.style.pointerEvents = 'auto';
+                p.style.opacity = '1';
+            });
+            
+            // Reset UI
+            updateSelectorLabel();
+            updateMicroFeedback('initial');
+            disableCTAs();
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // CTA MANAGEMENT
+        // ═══════════════════════════════════════════════════════════
+        
+        /**
+         * Disable CTAs during selection
+         */
+        function disableCTAs() {
+            if (els.buyNowBtn) {
+                els.buyNowBtn.style.opacity = '0.5';
+                els.buyNowBtn.style.pointerEvents = 'none';
+                els.buyNowBtn.setAttribute('disabled', 'true');
+            }
+            if (els.addToCartBtn) {
+                els.addToCartBtn.style.opacity = '0.5';
+                els.addToCartBtn.style.pointerEvents = 'none';
+                els.addToCartBtn.setAttribute('disabled', 'true');
+            }
+            
+            els.ctaStatus.textContent = 'Complete color selection to continue';
+            els.ctaStatus.style.color = 'rgba(255,255,255,0.6)';
+        }
+        
+        /**
+         * Enable CTAs after completion
+         */
+        function enableCTAs() {
+            if (els.buyNowBtn) {
+                els.buyNowBtn.style.opacity = '1';
+                els.buyNowBtn.style.pointerEvents = 'auto';
+                els.buyNowBtn.removeAttribute('disabled');
+            }
+            if (els.addToCartBtn) {
+                els.addToCartBtn.style.opacity = '1';
+                els.addToCartBtn.style.pointerEvents = 'auto';
+                els.addToCartBtn.removeAttribute('disabled');
+            }
+            
+            els.ctaStatus.innerHTML = '✓ <strong style="color: rgb(153, 255, 255);">Selections saved</strong> · Ready to purchase';
+            els.ctaStatus.style.color = 'rgba(255,255,255,0.85)';
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // GENERAL UI UPDATE
+        // ═══════════════════════════════════════════════════════════
+        function updateUI() {
+            updateSelectorLabel();
+            updateMicroFeedback('initial');
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // START
+        // ═══════════════════════════════════════════════════════════
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        
+    })();
+    </script>
 </body>
 </html>
 

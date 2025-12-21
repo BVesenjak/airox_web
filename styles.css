@@ -4315,24 +4315,54 @@ transition: opacity 0s ease !important;
 }
 
 /* Progressive Lock-In Animations */
-#progressiveColorSelector {
-    transition: opacity 0.15s ease, max-height 0.3s ease;
+#progressiveSelectorState {
+    transition: opacity 0.28s ease-out, transform 0.28s ease-out;
 }
 
-#colorFeedback {
-    transition: opacity 0.15s ease;
-    min-height: 20px;
+#summaryState {
+    transition: opacity 0.28s ease-out;
 }
 
-#colorSelectionSummary {
-    transition: opacity 0.15s ease;
+#microFeedback {
+    transition: all 0.28s ease-out;
 }
 
-/* Smooth pill transitions during selection */
+#feedbackText {
+    transition: opacity 0.14s ease-out;
+}
+
+/* Smooth pill transitions during selection - CALM, NOT RUSHED */
 .pill--color {
-    transition: all 0.12s ease !important;
+    transition: all 0.22s ease-out !important;
 }
 
 .pill--color:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
+}
+
+/* Edit button hover effect */
+#editSelectionsBtn:hover {
+    background: rgba(153, 255, 255, 0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(153, 255, 255, 0.3);
+}
+
+#editSelectionsBtn:active {
+    transform: translateY(0);
+}
+
+/* Equal-height panel guarantee */
+#colorSelectionContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#panelA, #panelB {
+    transition: all 0.28s ease-out;
+}
+
+/* CTA status transitions */
+#ctaStatus {
+    transition: all 0.28s ease-out;
 }
