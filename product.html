@@ -182,10 +182,14 @@
                                     <!-- Header: Warm and welcoming, not technical -->
                                     <div class="summary-header">
                                         <h3 class="summary-title">Ready to purchase</h3>
-                                        <!-- Edit button: Secondary emphasis, safe escape hatch -->
-                                        <button id="editSelectionsBtn" class="edit-btn">
-                                            Change selection
-                                        </button>
+                                        <div class="edit-area">
+                                            <!-- Edit button: Secondary emphasis, safe escape hatch -->
+                                            <button id="editSelectionsBtn" class="edit-btn">
+                                                Change selection
+                                            </button>
+                                            <!-- Temporary hint: appears for 3s after completion -->
+                                            <div id="editHint" class="edit-hint">You can change this anytime.</div>
+                                        </div>
                                     </div>
                                     <!-- Grid layout: 2x2 for 4 fans, 1x2 for 2 fans (prevents tall stacks) -->
                                     <div id="summaryList" class="summary-grid"></div>
@@ -1288,6 +1292,7 @@
             summaryState: document.getElementById('summaryState'),
             summaryList: document.getElementById('summaryList'),
             editBtn: document.getElementById('editSelectionsBtn'),
+            editHint: document.getElementById('editHint'),
             
             // CTA
             ctaStatus: document.getElementById('ctaStatus'),
@@ -1500,12 +1505,39 @@
                 // Fade in summary
                 setTimeout(() => {
                     els.summaryState.style.opacity = '1';
+                    
+                    // Show hint text after summary fades in
+                    showEditHint();
                 }, 50);
                 
                 // Update CTA status
                 enableCTAs();
                 
             }, 280);
+        }
+        
+        /**
+         * Show temporary hint text under edit button
+         * Fades in (200ms), stays for 3s, fades out (400ms)
+         */
+        function showEditHint() {
+            if (!els.editHint) return;
+            
+            // Fade in: 200ms
+            setTimeout(() => {
+                els.editHint.classList.add('edit-hint--show');
+            }, 100);
+            
+            // After 3 seconds, fade out: 400ms
+            setTimeout(() => {
+                els.editHint.classList.remove('edit-hint--show');
+                els.editHint.classList.add('edit-hint--fadeout');
+                
+                // Clean up classes after fade-out completes
+                setTimeout(() => {
+                    els.editHint.classList.remove('edit-hint--fadeout');
+                }, 400);
+            }, 3100); // 100ms initial + 3000ms display
         }
         
         /**
