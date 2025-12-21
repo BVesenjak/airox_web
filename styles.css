@@ -4397,7 +4397,7 @@ transition: opacity 0s ease !important;
     font-size: 0.813rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.22s ease-out;
+    transition: all 0.28s ease-out;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -4406,11 +4406,14 @@ transition: opacity 0s ease !important;
     top: 3px;
 }
 
+/* Subtle hover glow - text only, no background competition */
 .edit-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.9);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-1px);
+    color: rgba(255, 255, 255, 0.75);
+    /* Low-opacity cyan glow on text only */
+    text-shadow: 0 0 12px rgba(153, 255, 255, 0.25);
+    /* Remove background effects for text-only affordance */
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .edit-btn:active {

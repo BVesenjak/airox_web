@@ -1518,10 +1518,20 @@
         
         /**
          * Show temporary hint text under edit button
+         * ONE-TIME PER SESSION: only shows on first completion
          * Fades in (200ms), stays for 3s, fades out (400ms)
          */
         function showEditHint() {
             if (!els.editHint) return;
+            
+            // Check if hint has already been shown this session
+            const hintShown = sessionStorage.getItem('editHintShown');
+            if (hintShown === 'true') {
+                return; // Don't show again after edits
+            }
+            
+            // Mark as shown for this session (won't show after reload)
+            sessionStorage.setItem('editHintShown', 'true');
             
             // Fade in: 200ms
             setTimeout(() => {
