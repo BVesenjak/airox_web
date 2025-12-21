@@ -176,15 +176,19 @@
                             </div>
                             
                             <!-- STATE 2: Summary + Edit Panel (hidden until completion) -->
-                            <div id="summaryState" style="display: none; opacity: 0; transition: opacity 0.28s ease-out;">
-                                <div style="padding: 18px; background: rgba(0,174,255,0.12); border-radius: 12px; border-left: 4px solid rgb(153, 255, 255);">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                        <h3 style="font-size: 1rem; font-weight: 600; color: rgb(153, 255, 255); margin: 0;">✓ Color Selection Complete</h3>
-                                        <button id="editSelectionsBtn" style="padding: 6px 14px; background: rgba(153, 255, 255, 0.15); border: 1.5px solid rgb(153, 255, 255); border-radius: 6px; color: rgb(153, 255, 255); font-size: 0.813rem; font-weight: 600; cursor: pointer; transition: all 0.22s ease;">
-                                            ✏️ Edit
+                            <!-- Visual Design: Calm, resolved completion state (not a form or checklist) -->
+                            <div id="summaryState" class="summary-completion-state" style="display: none; opacity: 0; transition: opacity 0.28s ease-out;">
+                                <div class="summary-container">
+                                    <!-- Header: Warm and welcoming, not technical -->
+                                    <div class="summary-header">
+                                        <h3 class="summary-title">Ready to purchase</h3>
+                                        <!-- Edit button: Secondary emphasis, safe escape hatch -->
+                                        <button id="editSelectionsBtn" class="edit-btn">
+                                            Change selection
                                         </button>
                                     </div>
-                                    <div id="summaryList" style="font-size: 0.875rem; color: rgba(255,255,255,0.88); line-height: 1.6;"></div>
+                                    <!-- Grid layout: 2x2 for 4 fans, 1x2 for 2 fans (prevents tall stacks) -->
+                                    <div id="summaryList" class="summary-grid"></div>
                                 </div>
                             </div>
                             
@@ -1343,6 +1347,7 @@
         /**
          * Handle color selection with calm, controlled interaction
          * Timing: ~280ms lock period for premium feel
+         * Context-aware: Handles both sequential progression and specific fan edits
          */
         function handleColorSelection(color, pillElement) {
             // Lock interaction
@@ -1366,9 +1371,18 @@
             // Update micro-feedback with confirmation
             updateMicroFeedback('confirmation', color);
             
-            // Wait 280ms then advance (calm, not rushed)
+            // Determine next action based on context
             setTimeout(() => {
-                advanceSelection();
+                // Check if we were editing a specific fan (all fans already selected)
+                const wasEditingSpecific = state.selectedColors.filter(c => c).length === state.fanCount;
+                
+                if (wasEditingSpecific) {
+                    // Return to completed summary state
+                    completeSelection();
+                } else {
+                    // Continue sequential progression
+                    advanceSelection();
+                }
             }, 280);
         }
         
@@ -1414,9 +1428,10 @@
         
         /**
          * Update micro-feedback - NEVER vanishes, always guides
-         * @param {string} mode - 'initial', 'confirmation', 'progress'
+         * @param {string} mode - 'initial', 'confirmation', 'progress', 'editing'
+         * @param {*} data - selectedColor for confirmation, fanIndex for editing
          */
-        function updateMicroFeedback(mode, selectedColor = null) {
+        function updateMicroFeedback(mode, data = null) {
             let message = '';
             
             switch(mode) {
@@ -1425,6 +1440,7 @@
                     break;
                     
                 case 'confirmation':
+                    const selectedColor = data;
                     const remaining = state.fanCount - state.currentFanIndex - 1;
                     if (remaining > 0) {
                         message = `✓ ${COLOR_NAMES[selectedColor]} selected · ${remaining} fan${remaining > 1 ? 's' : ''} remaining`;
@@ -1440,6 +1456,13 @@
                         .join(' · ');
                     const nextFan = state.currentFanIndex + 1;
                     message = `Selected: ${selected} · Now choosing Fan ${nextFan}`;
+                    break;
+                    
+                case 'editing':
+                    const fanIndex = data;
+                    const fanNum = fanIndex + 1;
+                    const currentColor = state.selectedColors[fanIndex];
+                    message = `✏️ Editing Fan ${fanNum} (currently ${COLOR_NAMES[currentColor]}) · Choose new color`;
                     break;
             }
             
@@ -1487,16 +1510,26 @@
         
         /**
          * Build the summary list showing all selections
+         * Visual: Color dots (not squares/checkboxes) - informational markers
+         * Layout: Grid adjusts based on fanCount (2x2 for 4 fans, 1x2 for 2 fans)
+         * Interaction: Clickable items to edit specific fan color
          */
         function buildSummaryList() {
+            // Apply grid layout class based on fan count
+            els.summaryList.className = state.fanCount === 4 ? 'summary-grid summary-grid--4fans' : 'summary-grid summary-grid--2fans';
+            
             const items = state.selectedColors.map((color, idx) => {
-                return `<div style="display: flex; align-items: center; padding: 6px 0;">
-                    <span style="width: 24px; height: 24px; background: ${getColorHex(color)}; border-radius: 4px; margin-right: 10px; border: 1.5px solid rgba(255,255,255,0.2);"></span>
-                    <span style="flex: 1;"><strong>Fan ${idx + 1}:</strong> ${COLOR_NAMES[color]}</span>
+                return `<div class="summary-item" data-fan-index="${idx}" role="button" tabindex="0" aria-label="Edit Fan ${idx + 1} color">
+                    <span class="color-dot" data-color="${color}" style="background: ${getColorHex(color)};" title="${COLOR_NAMES[color]}"></span>
+                    <span class="fan-label">Fan ${idx + 1}</span>
+                    <span class="color-name">${COLOR_NAMES[color]}</span>
                 </div>`;
             }).join('');
             
             els.summaryList.innerHTML = items;
+            
+            // Add click handlers to summary items for quick edit
+            setupSummaryItemListeners();
         }
         
         /**
@@ -1516,12 +1549,78 @@
         // ═══════════════════════════════════════════════════════════
         
         /**
-         * Setup edit button listener
+         * Setup edit button listener (edit all from start)
          */
         function setupEditListener() {
             els.editBtn.addEventListener('click', function() {
                 resetSelection();
             });
+        }
+        
+        /**
+         * Setup summary item click listeners (edit specific fan)
+         */
+        function setupSummaryItemListeners() {
+            const summaryItems = els.summaryList.querySelectorAll('.summary-item');
+            summaryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const fanIndex = parseInt(this.dataset.fanIndex, 10);
+                    editSpecificFan(fanIndex);
+                });
+                
+                // Keyboard accessibility
+                item.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const fanIndex = parseInt(this.dataset.fanIndex, 10);
+                        editSpecificFan(fanIndex);
+                    }
+                });
+            });
+        }
+        
+        /**
+         * Edit a specific fan's color (jump to that fan in the selector)
+         * @param {number} fanIndex - The fan to edit (0-based)
+         */
+        function editSpecificFan(fanIndex) {
+            // Return to selector state
+            state.isComplete = false;
+            state.currentFanIndex = fanIndex;
+            state.isLocked = false;
+            
+            // Transition from summary to selector
+            els.summaryState.style.opacity = '0';
+            setTimeout(() => {
+                els.summaryState.style.display = 'none';
+                els.selectorState.style.display = 'block';
+                els.selectorState.style.opacity = '0';
+                els.selectorState.style.transform = 'translateY(-8px)';
+                
+                setTimeout(() => {
+                    els.selectorState.style.opacity = '1';
+                    els.selectorState.style.transform = 'translateY(0)';
+                }, 50);
+            }, 280);
+            
+            // Reset pills and highlight current selection if exists
+            els.colorPills.forEach(p => {
+                p.classList.remove('pill--active');
+                p.setAttribute('aria-checked', 'false');
+                p.style.pointerEvents = 'auto';
+                p.style.opacity = '1';
+                
+                // Pre-select current color for this fan
+                if (state.selectedColors[fanIndex] && p.dataset.value === state.selectedColors[fanIndex]) {
+                    p.classList.add('pill--active');
+                    p.setAttribute('aria-checked', 'true');
+                }
+            });
+            
+            // Update UI
+            updateSelectorLabel();
+            updateMicroFeedback('editing', fanIndex);
+            disableCTAs();
         }
         
         /**
