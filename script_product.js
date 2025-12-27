@@ -720,58 +720,123 @@ function initHeroBuyImageSwitching() {
 function initHeroBuyThumbnails() {
     const heroBuyImage = document.getElementById('heroBuyImage');
     const thumbnails = document.querySelectorAll('.thumb-buy');
+    const thumbnailStrip = document.querySelector('.hero-buy__thumbnails');
     const leftArrow = document.querySelector('.carousel-arrow--left');
     const rightArrow = document.querySelector('.carousel-arrow--right');
     
-    if (!heroBuyImage || !thumbnails.length) return;
+    if (!heroBuyImage || !thumbnails.length || !thumbnailStrip) return;
     
     let currentIndex = 0;
+    let isTransitioning = false;
     
-    function updateActiveThumb(index) {
-        // Remove active from all thumbnails
-        thumbnails.forEach(t => t.classList.remove('thumb-buy--active'));
+    function updateActiveThumb(index, shouldScroll = true) {
+        if (isTransitioning || index === currentIndex) return;
+        isTransitioning = true;
         
-        // Set active on current thumbnail
+        thumbnails.forEach(t => t.classList.remove('thumb-buy--active'));
         thumbnails[index].classList.add('thumb-buy--active');
         
-        // Update main image
+        if (shouldScroll) {
+            const thumb = thumbnails[index];
+            const stripRect = thumbnailStrip.getBoundingClientRect();
+            const thumbRect = thumb.getBoundingClientRect();
+            const scrollLeft = thumbnailStrip.scrollLeft;
+            const targetScroll = scrollLeft + (thumbRect.left - stripRect.left);
+            
+            thumbnailStrip.scrollTo({
+                left: targetScroll,
+                behavior: 'smooth'
+            });
+        }
+        
         const newImageSrc = thumbnails[index].dataset.image;
         if (newImageSrc) {
-            // Fade out
             heroBuyImage.style.opacity = '0';
+            heroBuyImage.style.transition = 'opacity 280ms ease-out';
             
-            // Change image after fade
             setTimeout(() => {
                 heroBuyImage.src = newImageSrc;
-                // Fade in
                 heroBuyImage.style.opacity = '1';
-            }, 300);
+                
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 280);
+            }, 280);
+        } else {
+            isTransitioning = false;
         }
         
         currentIndex = index;
+        updateArrowStates();
     }
     
-    // Thumbnail click handlers
+    function updateArrowStates() {
+        if (leftArrow) {
+            leftArrow.disabled = currentIndex === 0;
+        }
+        if (rightArrow) {
+            rightArrow.disabled = currentIndex === thumbnails.length - 1;
+        }
+    }
+    
     thumbnails.forEach((thumb, index) => {
         thumb.addEventListener('click', function() {
-            updateActiveThumb(index);
+            updateActiveThumb(index, true);
         });
     });
     
-    // Arrow navigation
     if (leftArrow) {
         leftArrow.addEventListener('click', function() {
-            const newIndex = currentIndex > 0 ? currentIndex - 1 : thumbnails.length - 1;
-            updateActiveThumb(newIndex);
+            if (currentIndex > 0) {
+                updateActiveThumb(currentIndex - 1, true);
+            }
         });
     }
     
     if (rightArrow) {
         rightArrow.addEventListener('click', function() {
-            const newIndex = currentIndex < thumbnails.length - 1 ? currentIndex + 1 : 0;
-            updateActiveThumb(newIndex);
+            if (currentIndex < thumbnails.length - 1) {
+                updateActiveThumb(currentIndex + 1, true);
+            }
         });
     }
+    
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    thumbnailStrip.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    
+    thumbnailStrip.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].clientX;
+        handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const swipeThreshold = 60;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0 && currentIndex < thumbnails.length - 1) {
+                updateActiveThumb(currentIndex + 1, true);
+            } else if (diff < 0 && currentIndex > 0) {
+                updateActiveThumb(currentIndex - 1, true);
+            }
+        }
+    }
+    
+    thumbnailStrip.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft' && currentIndex > 0) {
+            e.preventDefault();
+            updateActiveThumb(currentIndex - 1, true);
+        } else if (e.key === 'ArrowRight' && currentIndex < thumbnails.length - 1) {
+            e.preventDefault();
+            updateActiveThumb(currentIndex + 1, true);
+        }
+    });
+    
+    updateArrowStates();
 }
 
 // Initialize All
