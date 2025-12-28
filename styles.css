@@ -9,8 +9,8 @@
     --dark-gray: #1a1a1a;
     --medium-gray: #2a2a2a;
     --light-gray: #3a3a3a;
-    --red: rgb(0, 255, 255);
-    --red-hover: #0075a7;
+    --red: #15CCBE;
+    --red-hover: rgb(0, 255, 255);
     --white: #ffffff;
     --text-gray: #b3b3b3;
     --border-gray: #444444;
@@ -336,9 +336,13 @@ body.cursor-click .btn-cta *:hover {
    ================================= */
 
 .btn-cta {
-    background-color: var(--red);
-    color: var(--black);
-    border: none;
+    background-color: var(--white);
+    color: var(--red-hover);
+      border: 3px solid transparent;
+  background:
+    linear-gradient(var(--white), var(--white)) padding-box,
+    linear-gradient(135deg, #0ff4f4, #15ccbe) border-box;
+  box-shadow: 0 0 12px rgba(21,204,190,.25);
     letter-spacing: 1.5px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -357,7 +361,9 @@ body.cursor-click .btn-cta *:hover {
 
 .btn-cta:hover {
     background-color: var(--text-gray);
-    color: var(--red);
+    color: var(--white);
+    border: 3px solid transparent;
+  background: linear-gradient(135deg, #0ff4f4, #15ccbe) border-box;
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
 }
@@ -566,7 +572,7 @@ p {
 .divider {
     border: none;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    background: linear-gradient(90deg, transparent, var(--red-hover), transparent);
     margin: 40px 0;
 }
 
@@ -1037,7 +1043,7 @@ p {
 
 .testimonial-quote {
     font-size: 18px;
-    font-style: italic;
+    font-family: myfont;
     color: var(--text-gray);
     margin-bottom: 30px;
     line-height: 1.8;
@@ -1356,7 +1362,7 @@ p {
 
 .faq-subtitle {
     font-size: 14px;
-    color: var(--red);
+    color: cyan;
     letter-spacing: 2px;
     font-weight: 600;
 }
@@ -1379,7 +1385,7 @@ p {
 }
 
 .faq-item.active {
-    border-color: var(--red);
+    border-color: var(--red-hover);
 }
 
 .faq-question {
@@ -2649,11 +2655,11 @@ p {
 .stars {
     display: flex;
     gap: 4px;
-    color: cyan;
+    color: #15CCBE;
 }
 
 .star {
-    color: #00F0FF;
+    color: #15CCBE;
     animation: glowPattern 12s infinite;
 }
 
@@ -3125,7 +3131,7 @@ p {
 }
 
 .benefit-card__icon {
-    color: cyan;
+    color: #15CCBE;
     margin-bottom: 1.5rem;
 }
 
@@ -3659,7 +3665,7 @@ p {
 
 .story__quote p {
     font-size: 1.25rem;
-    font-style: italic;
+    font-family: myfont;
     margin-bottom: 1.5rem;
     line-height: 1.6;
     color: var(--white);
@@ -4027,9 +4033,33 @@ p {
 
 
 @font-face {
-    font-family: 'Out Of My League';
-    src: url('assets/OutOfMyLeague.ttf') format('truetype');
+    font-family: 'myfont';
+    src: url('assets/myfont.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+
   }
+
+@font-face {
+  font-family: 'myfont2';
+  src: url('assets/myfont2.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'myfont2r';
+  src: url('assets/myfont2r.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'myfont3';
+  src: url('assets/myfont3.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
   
   .cta-btn-wrapper button.buy-cta {
     position: relative !important;
@@ -4047,7 +4077,7 @@ p {
     ) !important;
     padding: 1rem 10rem !important;
     cursor: pointer !important;
-    font-family: 'Out Of My League', sans-serif !important;
+    font-family: 'myfont', sans-serif !important;
     min-height: 120px !important;
   }
   
@@ -4317,7 +4347,7 @@ transition: border-image 0s, background-color 0.2s, box-shadow 0.1s !important;
 border-radius: 20px !important;
 padding: 0.7rem 8rem !important;
 cursor: pointer !important;
-font-family: 'Out Of My League', sans-serif !important;
+font-family: 'myfont', sans-serif !important;
 }
 #addtocart.cta-btn-wrapper button.buy-cta .btn-video {
 transition: opacity 0s ease !important;
@@ -4553,7 +4583,7 @@ transition: opacity 0s ease !important;
 .edit-hint {
     font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.5);
-    font-style: italic;
+    font-family: myfont;
     opacity: 0;
     transition: opacity 0.2s ease-out; /* Fade-in: 200ms */
     max-width: 200px;
@@ -4713,3 +4743,62 @@ transition: opacity 0s ease !important;
     transition: all 0.28s ease-out;
     margin-top: -6px; /* Bring closer to the summary card above */
 }
+
+.frostedText {
+    display: inline-block;
+    padding: 8px 14px;
+  
+    /* subtle cold mist */
+    background: linear-gradient(
+      145deg,
+      rgba(255,255,255,0.10),
+      rgba(255,255,255,0.02)
+    );
+  
+    backdrop-filter: blur(18px) brightness(1.08);
+    -webkit-backdrop-filter: blur(18px) brightness(1.08);
+  
+    border-radius: 6px;
+  
+    /* airy depth without looking like UI glitter */
+    box-shadow:
+      0 12px 40px rgba(0, 180, 255, 0.08),
+      0 4px 10px rgba(0,0,0,0.18),
+      inset 0 0 25px rgba(255,255,255,0.07);
+  
+    color: #E8FFFF;
+  }
+
+body, p, h3 {
+    font-family: "myfont3", sans-serif !important;
+    font-weight: 300;
+  }
+
+  .myfont2 {
+    font-family: "myfont2", sans-serif !important;
+    font-weight: 300;
+  }
+
+  .myfont2r {
+    font-family: "myfont2r", sans-serif !important;
+    font-weight: 300;
+  }
+
+h1, h2 {
+    font-family: "myfont", sans-serif !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.02em !important;
+}
+
+.bold.frostedText{
+    font-size: 1.875em !important;
+    
+}
+
+.icon-row{
+    font-family: "myfont", sans-serif !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.22em !important;
+    font-size: em !important;
+}
+/*html { font-size: 140%; } */
