@@ -318,16 +318,24 @@ body.cursor-click .btn-cta *:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 20px;
     position: relative;
     flex-wrap: wrap;
 }
 
-@media (max-width: 576px) {
-    .footer-cta-content {
-        flex-direction: column;
-        gap: 12px;
-    }
+.footer-cta-main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+}
+
+.footer-cta-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
 }
 
 .footer-cta-text {
@@ -339,12 +347,62 @@ body.cursor-click .btn-cta *:hover {
     margin: 0;
 }
 
+.footer-cta-main-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .footer-cta-content .btn-cta {
     width: auto;
     margin: 0;
     padding: 12px 24px;
     font-size: 14px;
     display: inline-block;
+}
+
+.footer-cta-code {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.footer-cta-rating {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+    .footer-cta-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .footer-cta-main {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+    
+    .footer-cta-action {
+        align-items: center;
+        width: 100%;
+    }
+    
+    .footer-cta-rating {
+        position: static;
+        transform: none;
+        text-align: center;
+        margin-top: 4px;
+    }
 }
 
 .footer-cta-close {
@@ -380,13 +438,14 @@ body.cursor-click .btn-cta *:hover {
    BUTTONS
    ================================= */
 
+   
 .btn-cta {
     background-color: var(--white);
     color: var(--red-hover);
       border: 3px solid transparent;
   background:
     linear-gradient(var(--white), var(--white)) padding-box,
-    linear-gradient(135deg, #0ff4f4, #15ccbe) border-box;
+    linear-gradient(135deg, #f40fc2, #15ccbe) border-box;
   box-shadow: 0 0 12px rgba(21,204,190,.25);
     letter-spacing: 1.5px;
     cursor: pointer;
