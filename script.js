@@ -104,17 +104,40 @@ function handleNavbarVisibility() {
 
 const stickyFooterCTA = document.getElementById('stickyFooterCTA');
 
+// Sticky Footer CTA - appears after scrolling past hero section
 function handleStickyFooter() {
-    const scrollPosition = window.pageYOffset;
+    if (!stickyFooterCTA) return;
+    
+    // Check if user dismissed it for this session
+    if (sessionStorage.getItem('stickyFooterDismissed') === 'true') {
+        stickyFooterCTA.setAttribute('aria-hidden', 'true');
+        return;
+    }
+    
     const heroSection = document.getElementById('hero');
+    if (!heroSection) return;
+    
+    const scrollY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || 0;
     const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
     
-    // Show sticky footer after scrolling past hero
-    if (scrollPosition > heroBottom + 200) {
-        stickyFooterCTA.classList.add('visible');
+    // Show footer when scrolled past hero section
+    if (scrollY > heroBottom) {
+        stickyFooterCTA.setAttribute('aria-hidden', 'false');
     } else {
-        stickyFooterCTA.classList.remove('visible');
+        stickyFooterCTA.setAttribute('aria-hidden', 'true');
     }
+}
+
+// Close button handler
+function initStickyFooterClose() {
+    const closeBtn = document.querySelector('.footer-cta-close');
+    if (!closeBtn) return;
+    
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.setItem('stickyFooterDismissed', 'true');
+        stickyFooterCTA.setAttribute('aria-hidden', 'true');
+    });
 }
 
 // =================================
@@ -446,7 +469,15 @@ window.addEventListener('scroll', () => {
 window.addEventListener('load', () => {
     handleNavbarVisibility();
     handleStickyFooter();
+    initStickyFooterClose();
 });
+
+// Initialize close button on DOM ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStickyFooterClose);
+} else {
+    initStickyFooterClose();
+}
 
 // =================================
 // SCROLL ANIMATIONS

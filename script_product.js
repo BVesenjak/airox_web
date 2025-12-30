@@ -540,64 +540,48 @@ function initLightbox() {
     });
 }
 
-// Initialize Sticky Cart
-function initStickyCart() {
-    const stickyCart = document.getElementById('sticky-cart');
+// Initialize Sticky Footer CTA (same as index.html)
+function initStickyFooterCTA() {
+    const stickyFooterCTA = document.getElementById('stickyFooterCTA');
+    if (!stickyFooterCTA) return;
+    
+    // Check if user dismissed it for this session
+    if (sessionStorage.getItem('stickyFooterDismissed') === 'true') {
+        stickyFooterCTA.setAttribute('aria-hidden', 'true');
+        return;
+    }
+    
     const heroSection = document.getElementById('hero-buy');
+    if (!heroSection) return;
     
-    if (!stickyCart || !heroSection) return;
-    
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) {
-                    stickyCart.setAttribute('aria-hidden', 'false');
-                } else {
-                    stickyCart.setAttribute('aria-hidden', 'true');
-                }
-            });
-        },
-        {
-            threshold: 0,
-            rootMargin: '0px'
+    function checkScroll() {
+        const scrollY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || 0;
+        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+        
+        // Show footer when scrolled past hero section
+        if (scrollY > heroBottom) {
+            stickyFooterCTA.setAttribute('aria-hidden', 'false');
+        } else {
+            stickyFooterCTA.setAttribute('aria-hidden', 'true');
         }
-    );
-    
-    observer.observe(heroSection);
-    
-    // Sticky cart quantity controls
-    const decreaseSticky = document.querySelector('[data-action="decrease-sticky"]');
-    const increaseSticky = document.querySelector('[data-action="increase-sticky"]');
-    const stickyQty = document.getElementById('stickyQty');
-    const mainQtyInput = document.getElementById('quantity');
-    
-    function updateStickyQty(newQty) {
-        const clamped = Math.max(1, Math.min(99, newQty));
-        if (stickyQty) stickyQty.textContent = clamped;
-        if (mainQtyInput) mainQtyInput.value = clamped;
-        state.quantity = clamped;
     }
     
-    if (decreaseSticky) {
-        decreaseSticky.addEventListener('click', () => {
-            updateStickyQty(state.quantity - 1);
+    // Check on scroll
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    
+    // Check immediately
+    setTimeout(checkScroll, 200);
+    window.addEventListener('resize', checkScroll, { passive: true });
+    
+    // Close button handler
+    const closeBtn = stickyFooterCTA.querySelector('.footer-cta-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            sessionStorage.setItem('stickyFooterDismissed', 'true');
+            stickyFooterCTA.setAttribute('aria-hidden', 'true');
         });
     }
-    
-    if (increaseSticky) {
-        increaseSticky.addEventListener('click', () => {
-            updateStickyQty(state.quantity + 1);
-        });
-    }
-    
-    // Quick add buttons
-    const quickAddBtns = document.querySelectorAll('.quick-add');
-    quickAddBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const qty = parseInt(this.dataset.qty);
-            addToCart(qty);
-        });
-    });
 }
 
 // Initialize Video Autoplay on Scroll
@@ -854,7 +838,7 @@ function init() {
     initBrandVideo();
     initAccordion();
     initLightbox();
-    initStickyCart();
+    initStickyFooterCTA();
     initVideoAutoplay();
     initSmoothScroll();
     

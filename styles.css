@@ -298,37 +298,82 @@ body.cursor-click .btn-cta *:hover {
 
 .sticky-footer-cta {
     position: fixed;
-    bottom: -110px;
+    bottom: 0;
     left: 0;
     right: 0;
     background-color: var(--dark-gray);
-    padding: 15px 0;
+    padding: 20px 0;
     z-index: 999;
-    transition: bottom 0.3s ease;
     border-top: 2px solid var(--red);
+    transform: translateY(100%);
+    transition: transform 0.25s ease-out;
+    will-change: transform;
 }
 
-.sticky-footer-cta.visible {
-    bottom: 0;
+.sticky-footer-cta[aria-hidden="false"] {
+    transform: translateY(0);
 }
 
 .footer-cta-content {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+    flex-wrap: wrap;
 }
 
-.footer-cta-icon {
-    font-size: 24px;
-    filter: drop-shadow(0 0 3px rgb(160, 245, 255));
+@media (max-width: 576px) {
+    .footer-cta-content {
+        flex-direction: column;
+        gap: 12px;
+    }
 }
 
 .footer-cta-text {
-    flex-grow: 1;
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 1px;
+    color: var(--white);
+    white-space: nowrap;
+    margin: 0;
+}
+
+.footer-cta-content .btn-cta {
+    width: auto;
+    margin: 0;
+    padding: 12px 24px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.footer-cta-close {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+}
+
+.footer-cta-close:hover {
+    opacity: 1;
+}
+
+@media (max-width: 576px) {
+    .footer-cta-close {
+        top: 8px;
+        right: 12px;
+        transform: none;
+    }
 }
 
 /* =================================
@@ -3740,7 +3785,7 @@ p {
     right: 0;
     background-color: rgba(26, 26, 26, 0.98);
     backdrop-filter: blur(10px);
-    padding: 1.5rem 0;
+    padding: 4.5rem 0; /* 200% more height (was 1.5rem, now 4.5rem) */
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
     border-top: 2px solid var(--red);
     transform: translateY(100%);
