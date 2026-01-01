@@ -302,7 +302,7 @@ body.cursor-click .btn-cta *:hover {
     left: 0;
     right: 0;
     background-color: var(--dark-gray);
-    padding: 20px 0;
+    padding: 32px 0 16px 0;
     z-index: 999;
     border-top: 2px solid var(--red);
     transform: translateY(100%);
@@ -326,7 +326,7 @@ body.cursor-click .btn-cta *:hover {
 .footer-cta-main {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: baseline;
     gap: 20px;
     min-width: 0;
 }
@@ -336,6 +336,12 @@ body.cursor-click .btn-cta *:hover {
     flex-direction: column;
     align-items: center;
     gap: 4px;
+}
+
+.footer-cta-action .btn-cta {
+    line-height: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .footer-cta-text {
@@ -374,7 +380,7 @@ body.cursor-click .btn-cta *:hover {
     letter-spacing: 0.5px;
     white-space: nowrap;
     position: absolute;
-    right: 60px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
 }
