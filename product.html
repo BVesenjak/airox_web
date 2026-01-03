@@ -2253,11 +2253,9 @@
         
         /**
          * Main handler: bundle check → click button
+         * DO NOT preventDefault immediately - let video animation play first
          */
         async function handleAddToCart(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            
             console.log('\n════════════════════════════════════════════');
             console.log('🛒 ADD TO CART TRIGGERED');
             console.log('════════════════════════════════════════════\n');
@@ -2266,8 +2264,43 @@
             const bundleType = getBundleSelection();
             if (!bundleType) {
                 console.error('✗ FAILED: No bundle selected\n');
+                event.preventDefault();
+                event.stopPropagation();
                 alert('Please select a bundle (2-Pack or 4-Pack)');
                 return false;
+            }
+            
+            // Let the video play first (don't block native handlers yet)
+            // Wait for the active video to finish (~duration of btn-cart-active.mp4)
+            console.log('  Letting button video animation play...');
+            
+            // Find the active video element
+            const activeVideo = document.querySelector('#addtocart-btn .btn-video-cart-active');
+            
+            if (activeVideo) {
+                // Wait for video to end before proceeding
+                await new Promise((resolve) => {
+                    const onVideoEnd = () => {
+                        activeVideo.removeEventListener('ended', onVideoEnd);
+                        resolve();
+                    };
+                    
+                    // If video is already playing, wait for it to end
+                    if (!activeVideo.paused) {
+                        activeVideo.addEventListener('ended', onVideoEnd);
+                    } else {
+                        // Video not playing, proceed immediately
+                        resolve();
+                    }
+                    
+                    // Timeout fallback in case video doesn't fire 'ended' event
+                    setTimeout(() => {
+                        activeVideo.removeEventListener('ended', onVideoEnd);
+                        resolve();
+                    }, 2000); // Max 2 second wait
+                });
+                
+                console.log('  Button animation complete, proceeding with cart...');
             }
             
             // Step 2: Click corresponding Shopify button (with retry built-in)
@@ -2303,14 +2336,14 @@
             const addToCartBtn = document.getElementById('addtocart-btn');
             
             if (addToCartDiv) {
-                addToCartDiv.addEventListener('click', handleAddToCart, true); // Use capture phase
+                addToCartDiv.addEventListener('click', handleAddToCart, false); // Use bubble phase, not capture
                 console.log('✓ #addToCart div handler attached');
             } else {
                 console.warn('⚠ #addToCart div not found');
             }
             
             if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', handleAddToCart, true); // Use capture phase
+                addToCartBtn.addEventListener('click', handleAddToCart, false); // Use bubble phase, not capture
                 console.log('✓ #addtocart-btn handler attached');
             } else {
                 console.warn('⚠ #addtocart-btn not found');
