@@ -2083,317 +2083,45 @@
     </script>
     
     <!-- ═══════════════════════════════════════════════════════════════════════════
-         ROBUST SHOPIFY BUTTON CLICK INTEGRATION
-         
-         When #addToCart or #addtocart-btn is clicked:
-         1. Check bundle selection (2-Pack or 4-Pack)
-         2. Click corresponding Shopify button programmatically
+         SIMPLE SHOPIFY INTEGRATION
+         Clicks the correct Shopify button based on bundle selection
     ═══════════════════════════════════════════════════════════════════════════ -->
     <script>
     (function() {
         'use strict';
         
-        // Shopify button component IDs
         const SHOPIFY_BUTTONS = {
             '2pack': 'product-component-1767037426572',
             '4pack': 'product-component-1767037492944'
         };
         
-        /**
-         * Get bundle selection from hero buy block
-         * Returns: '2pack' or '4pack' or null
-         */
-        function getBundleSelection() {
-            console.log('→ Step 1: Checking bundle selection...');
+        function handleAddToCart() {
+            // Get bundle selection
+            const activePill = document.querySelector('.pill--bundle.pill--active');
+            if (!activePill) return;
             
-            const activeBundlePill = document.querySelector('.pill--bundle.pill--active');
-            if (!activeBundlePill) {
-                console.error('✗ No bundle pill selected');
-                return null;
-            }
-            
-            const value = activeBundlePill.dataset.value; // 'duo' or 'family'
-            const bundleType = value === 'duo' ? '2pack' : '4pack';
-            
-            console.log(`✓ Bundle detected: ${value} → ${bundleType}`);
-            
-            return bundleType;
-        }
-        
-        /**
-         * Wait for Shopify button to exist, then click it
-         * Uses retry mechanism with increasing delays
-         */
-        async function clickShopifyButton(bundleType, retryCount = 0) {
-            const MAX_RETRIES = 20;
+            const bundleType = activePill.dataset.value === 'duo' ? '2pack' : '4pack';
             const componentId = SHOPIFY_BUTTONS[bundleType];
             
-            console.log(`→ Step 2: Looking for Shopify button (${bundleType})... (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-            console.log(`  Component ID: ${componentId}`);
-            
-            // Try multiple selectors to find the button
-            const selectors = [
-                `#${componentId} .shopify-buy__btn`,
-                `#${componentId} button.shopify-buy__btn`,
-                `#${componentId} [class*="shopify-buy__btn"]`,
-                `#${componentId} button[type="button"]`,
-                `#${componentId} button`,
-                `#${componentId} .btn`,
-                `#${componentId} a[href*="cart"]`,
-                `#${componentId} *[role="button"]`
-            ];
-            
-            let shopifyButton = null;
-            for (let i = 0; i < selectors.length; i++) {
-                try {
-                    shopifyButton = document.querySelector(selectors[i]);
-                    if (shopifyButton && shopifyButton.offsetParent !== null) { // Check if visible
-                        console.log(`  ✓ Button found using selector: ${selectors[i]}`);
-                        break;
-                    }
-                } catch (e) {
-                    // Continue to next selector
-                }
-            }
-            
-            if (!shopifyButton) {
-                if (retryCount < MAX_RETRIES) {
-                    // Wait a bit longer each retry
-                    const delay = Math.min(100 + (retryCount * 50), 500);
-                    console.log(`  ⏳ Button not found yet, retrying in ${delay}ms...`);
-                    return new Promise((resolve) => {
-                        setTimeout(async () => {
-                            const result = await clickShopifyButton(bundleType, retryCount + 1);
-                            resolve(result);
-                        }, delay);
-                    });
-                } else {
-                    console.error(`✗ Shopify button not found after ${MAX_RETRIES} attempts`);
-                    console.log(`  Tried selectors:`, selectors);
-                    
-                    // Debug: log what's actually in the component
-                    const component = document.getElementById(componentId);
-                    if (component) {
-                        console.log(`  Component exists, innerHTML length: ${component.innerHTML.length}`);
-                        // Try to find ANY button-like element
-                        const allButtons = component.querySelectorAll('button, a, [role="button"], [onclick]');
-                        console.log(`  Found ${allButtons.length} potential button elements`);
-                        allButtons.forEach((btn, idx) => {
-                            console.log(`    Button ${idx}:`, btn.tagName, btn.className, btn.textContent?.substring(0, 50));
-                        });
-                    } else {
-                        console.error(`  Component #${componentId} does not exist in DOM`);
-                    }
-                    
-                    return false;
-                }
-            }
-            
-            console.log('  Button found:', shopifyButton);
-            console.log('  Button text:', shopifyButton.textContent || shopifyButton.innerText || '');
-            console.log('  Button tag:', shopifyButton.tagName);
-            console.log('  Button classes:', shopifyButton.className);
-            
-            // Try multiple click methods
-            let clicked = false;
-            
-            // Method 1: Direct click
-            try {
-                shopifyButton.focus(); // Focus first
-                shopifyButton.click();
-                clicked = true;
-                console.log('✓ Shopify button clicked (method: click())');
-            } catch (e) {
-                console.warn('  Click method 1 failed:', e.message);
-            }
-            
-            // Method 2: Dispatch click event (if method 1 didn't work)
-            if (!clicked) {
-                try {
-                    const clickEvent = new MouseEvent('click', {
-                        bubbles: true,
-                        cancelable: true,
-                        view: window,
-                        buttons: 1
-                    });
-                    shopifyButton.dispatchEvent(clickEvent);
-                    clicked = true;
-                    console.log('✓ Shopify button clicked (method: dispatchEvent)');
-                } catch (e2) {
-                    console.warn('  Click method 2 failed:', e2.message);
-                }
-            }
-            
-            // Method 3: Trigger mousedown + mouseup + click
-            if (!clicked) {
-                try {
-                    ['mousedown', 'mouseup', 'click'].forEach(eventType => {
-                        const event = new MouseEvent(eventType, {
-                            bubbles: true,
-                            cancelable: true,
-                            view: window,
-                            buttons: 1
-                        });
-                        shopifyButton.dispatchEvent(event);
-                    });
-                    clicked = true;
-                    console.log('✓ Shopify button clicked (method: mousedown+mouseup+click)');
-                } catch (e3) {
-                    console.warn('  Click method 3 failed:', e3.message);
-                }
-            }
-            
-            if (!clicked) {
-                console.error('✗ All click methods failed');
-                return false;
-            }
-            
-            return true;
-        }
-        
-        /**
-         * Main handler: bundle check → click button
-         * DO NOT preventDefault immediately - let video animation play first
-         */
-        async function handleAddToCart(event) {
-            console.log('\n════════════════════════════════════════════');
-            console.log('🛒 ADD TO CART TRIGGERED');
-            console.log('════════════════════════════════════════════\n');
-            
-            // Step 1: Get bundle selection
-            const bundleType = getBundleSelection();
-            if (!bundleType) {
-                console.error('✗ FAILED: No bundle selected\n');
-                event.preventDefault();
-                event.stopPropagation();
-                alert('Please select a bundle (2-Pack or 4-Pack)');
-                return false;
-            }
-            
-            // Let the video play first (don't block native handlers yet)
-            // Wait for the active video to finish (~duration of btn-cart-active.mp4)
-            console.log('  Letting button video animation play...');
-            
-            // Find the active video element
+            // Wait for video to finish, then click Shopify button
             const activeVideo = document.querySelector('#addtocart-btn .btn-video-cart-active');
             
-            if (activeVideo) {
-                // Wait for video to end before proceeding
-                await new Promise((resolve) => {
-                    const onVideoEnd = () => {
-                        activeVideo.removeEventListener('ended', onVideoEnd);
-                        resolve();
-                    };
-                    
-                    // If video is already playing, wait for it to end
-                    if (!activeVideo.paused) {
-                        activeVideo.addEventListener('ended', onVideoEnd);
-                    } else {
-                        // Video not playing, proceed immediately
-                        resolve();
-                    }
-                    
-                    // Timeout fallback in case video doesn't fire 'ended' event
-                    setTimeout(() => {
-                        activeVideo.removeEventListener('ended', onVideoEnd);
-                        resolve();
-                    }, 2000); // Max 2 second wait
-                });
-                
-                console.log('  Button animation complete, proceeding with cart...');
-            }
+            const clickShopify = () => {
+                const btn = document.querySelector(`#${componentId} .shopify-buy__btn, #${componentId} button`);
+                if (btn) btn.click();
+            };
             
-            // Step 2: Click corresponding Shopify button (with retry built-in)
-            try {
-                const clicked = await clickShopifyButton(bundleType);
-                
-                if (clicked) {
-                    console.log('\n════════════════════════════════════════════');
-                    console.log('✓ SUCCESS: Shopify button clicked');
-                    console.log('  Bundle: ' + bundleType);
-                    console.log('════════════════════════════════════════════\n');
-                    return true;
-                } else {
-                    console.error('\n✗ FAILED: Could not click Shopify button after all retries\n');
-                    alert('Error: Could not add item to cart. The Shopify button may not be loaded yet. Please wait a moment and try again.');
-                    return false;
-                }
-            } catch (error) {
-                console.error('\n✗ ERROR:', error);
-                alert('Error: Could not add item to cart. Please try again.');
-                return false;
-            }
-        }
-        
-        /**
-         * Initialize: Wire up click handlers immediately
-         */
-        function init() {
-            console.log('🔧 Initializing Shopify Button Clicker...');
-            
-            // Wire up handlers immediately - don't wait for Shopify buttons
-            const addToCartDiv = document.getElementById('addToCart');
-            const addToCartBtn = document.getElementById('addtocart-btn');
-            
-            if (addToCartDiv) {
-                addToCartDiv.addEventListener('click', handleAddToCart, false); // Use bubble phase, not capture
-                console.log('✓ #addToCart div handler attached');
+            if (activeVideo && !activeVideo.paused) {
+                activeVideo.addEventListener('ended', clickShopify, { once: true });
+                setTimeout(clickShopify, 2000); // Fallback
             } else {
-                console.warn('⚠ #addToCart div not found');
+                setTimeout(clickShopify, 100);
             }
-            
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', handleAddToCart, false); // Use bubble phase, not capture
-                console.log('✓ #addtocart-btn handler attached');
-            } else {
-                console.warn('⚠ #addtocart-btn not found');
-            }
-            
-            // Also check periodically if Shopify buttons are loaded (for debugging)
-            let checkCount = 0;
-            const checkInterval = setInterval(() => {
-                checkCount++;
-                const button2pack = document.querySelector(`#${SHOPIFY_BUTTONS['2pack']} .shopify-buy__btn`);
-                const button4pack = document.querySelector(`#${SHOPIFY_BUTTONS['4pack']} .shopify-buy__btn`);
-                
-                if (button2pack && button4pack) {
-                    console.log(`✓ Both Shopify buttons are now loaded (after ${checkCount} checks)`);
-                    clearInterval(checkInterval);
-                } else if (checkCount % 20 === 0) {
-                    console.log(`  Still checking... (${checkCount} checks)`);
-                    console.log(`  2-pack: ${button2pack ? '✓' : '✗'}, 4-pack: ${button4pack ? '✓' : '✗'}`);
-                }
-            }, 100);
-            
-            // Stop checking after 15 seconds
-            setTimeout(() => {
-                clearInterval(checkInterval);
-                const button2pack = document.querySelector(`#${SHOPIFY_BUTTONS['2pack']} .shopify-buy__btn`);
-                const button4pack = document.querySelector(`#${SHOPIFY_BUTTONS['4pack']} .shopify-buy__btn`);
-                
-                if (!button2pack || !button4pack) {
-                    console.warn('⚠ Shopify buttons may not be fully loaded');
-                    console.log(`  2-pack: ${button2pack ? '✓' : '✗'}, 4-pack: ${button4pack ? '✓' : '✗'}`);
-                    console.log('  Handlers are attached and will work when buttons load');
-                }
-            }, 15000);
-            
-            console.log('\n🎉 Integration initialized!\n');
         }
         
-        // Initialize immediately
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-        
-        // Expose for debugging
-        window.ShopifyButtonClicker = {
-            getBundleSelection,
-            clickShopifyButton,
-            handleAddToCart
-        };
+        // Attach handler
+        const btn = document.getElementById('addtocart-btn');
+        if (btn) btn.addEventListener('click', handleAddToCart);
         
     })();
     </script>
