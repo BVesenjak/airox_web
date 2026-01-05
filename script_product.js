@@ -50,93 +50,6 @@ function updatePriceDisplay() {
     }
 }
 
-// =================================
-// ADD TO CART CTA VIDEO CONTROL
-// =================================
-    // Video state management for #addtocart button
-    (function() {
-        const button = document.getElementById('addtocart-btn');
-        if (!button) return;
-  
-        const idleVideo = button.querySelector('.btn-video-idle');
-        const hoverVideo = button.querySelector('.btn-video-cart-hover');
-        const activeVideo = button.querySelector('.btn-video-cart-active');
-        
-        let isHovering = false;
-        let isPlayingActive = false;
-  
-        // Function to show only one video
-        function showVideo(video) {
-          [idleVideo, hoverVideo, activeVideo].forEach(v => {
-            v.style.opacity = '0';
-            v.pause();
-          });
-          
-          if (video) {
-            video.style.opacity = '1';
-            video.currentTime = 0;
-            video.play().catch(err => console.log('Video play error:', err));
-          }
-        }
-  
-        // Function to set idle state (100% opacity background, no video)
-        function setIdleState() {
-          [idleVideo, hoverVideo, activeVideo].forEach(v => {
-            v.style.opacity = '0';
-            v.pause();
-          });
-          button.style.backgroundColor = 'rgba(255, 179, 0, 1)'; // 100% opacity
-        }
-  
-        // Function to set hover state
-        function setHoverState() {
-          if (isPlayingActive) return; // Don't interrupt active video
-          button.style.backgroundColor = 'transparent';
-          showVideo(hoverVideo);
-        }
-  
-        // Function to set active state
-        function setActiveState() {
-          isPlayingActive = true;
-          button.style.backgroundColor = 'transparent';
-          showVideo(activeVideo);
-        }
-  
-        // Initialize in idle state
-        setIdleState();
-  
-        // Hover event
-        button.addEventListener('mouseenter', function() {
-          isHovering = true;
-          if (!isPlayingActive) {
-            setHoverState();
-          }
-        });
-  
-        // Leave event
-        button.addEventListener('mouseleave', function() {
-          isHovering = false;
-          if (!isPlayingActive) {
-            setIdleState();
-          }
-        });
-  
-        // Click event
-        button.addEventListener('click', function(e) {
-          setActiveState();
-        });
-  
-        // When active video ends
-        activeVideo.addEventListener('ended', function() {
-          isPlayingActive = false;
-          if (isHovering) {
-            setHoverState();
-          } else {
-            setIdleState();
-          }
-        });
-      })();
-
 // Product page navbar scroll behavior (desktop only)
 (function() {
     const navbar = document.getElementById('navbarProduct');
@@ -540,48 +453,64 @@ function initLightbox() {
     });
 }
 
-// Initialize Sticky Footer CTA (same as index.html)
-function initStickyFooterCTA() {
-    const stickyFooterCTA = document.getElementById('stickyFooterCTA');
-    if (!stickyFooterCTA) return;
-    
-    // Check if user dismissed it for this session
-    if (sessionStorage.getItem('stickyFooterDismissed') === 'true') {
-        stickyFooterCTA.setAttribute('aria-hidden', 'true');
-        return;
-    }
-    
+// Initialize Sticky Cart
+function initStickyCart() {
+    const stickyCart = document.getElementById('sticky-cart');
     const heroSection = document.getElementById('hero-buy');
-    if (!heroSection) return;
     
-    function checkScroll() {
-        const scrollY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || 0;
-        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-        
-        // Show footer when scrolled past hero section
-        if (scrollY > heroBottom) {
-            stickyFooterCTA.setAttribute('aria-hidden', 'false');
-        } else {
-            stickyFooterCTA.setAttribute('aria-hidden', 'true');
+    if (!stickyCart || !heroSection) return;
+    
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    stickyCart.setAttribute('aria-hidden', 'false');
+                } else {
+                    stickyCart.setAttribute('aria-hidden', 'true');
+                }
+            });
+        },
+        {
+            threshold: 0,
+            rootMargin: '0px'
         }
+    );
+    
+    observer.observe(heroSection);
+    
+    // Sticky cart quantity controls
+    const decreaseSticky = document.querySelector('[data-action="decrease-sticky"]');
+    const increaseSticky = document.querySelector('[data-action="increase-sticky"]');
+    const stickyQty = document.getElementById('stickyQty');
+    const mainQtyInput = document.getElementById('quantity');
+    
+    function updateStickyQty(newQty) {
+        const clamped = Math.max(1, Math.min(99, newQty));
+        if (stickyQty) stickyQty.textContent = clamped;
+        if (mainQtyInput) mainQtyInput.value = clamped;
+        state.quantity = clamped;
     }
     
-    // Check on scroll
-    window.addEventListener('scroll', checkScroll, { passive: true });
-    
-    // Check immediately
-    setTimeout(checkScroll, 200);
-    window.addEventListener('resize', checkScroll, { passive: true });
-    
-    // Close button handler
-    const closeBtn = stickyFooterCTA.querySelector('.footer-cta-close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            sessionStorage.setItem('stickyFooterDismissed', 'true');
-            stickyFooterCTA.setAttribute('aria-hidden', 'true');
+    if (decreaseSticky) {
+        decreaseSticky.addEventListener('click', () => {
+            updateStickyQty(state.quantity - 1);
         });
     }
+    
+    if (increaseSticky) {
+        increaseSticky.addEventListener('click', () => {
+            updateStickyQty(state.quantity + 1);
+        });
+    }
+    
+    // Quick add buttons
+    const quickAddBtns = document.querySelectorAll('.quick-add');
+    quickAddBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const qty = parseInt(this.dataset.qty);
+            addToCart(qty);
+        });
+    });
 }
 
 // Initialize Video Autoplay on Scroll
@@ -704,123 +633,58 @@ function initHeroBuyImageSwitching() {
 function initHeroBuyThumbnails() {
     const heroBuyImage = document.getElementById('heroBuyImage');
     const thumbnails = document.querySelectorAll('.thumb-buy');
-    const thumbnailStrip = document.querySelector('.hero-buy__thumbnails');
     const leftArrow = document.querySelector('.carousel-arrow--left');
     const rightArrow = document.querySelector('.carousel-arrow--right');
     
-    if (!heroBuyImage || !thumbnails.length || !thumbnailStrip) return;
+    if (!heroBuyImage || !thumbnails.length) return;
     
     let currentIndex = 0;
-    let isTransitioning = false;
     
-    function updateActiveThumb(index, shouldScroll = true) {
-        if (isTransitioning || index === currentIndex) return;
-        isTransitioning = true;
-        
+    function updateActiveThumb(index) {
+        // Remove active from all thumbnails
         thumbnails.forEach(t => t.classList.remove('thumb-buy--active'));
+        
+        // Set active on current thumbnail
         thumbnails[index].classList.add('thumb-buy--active');
         
-        if (shouldScroll) {
-            const thumb = thumbnails[index];
-            const stripRect = thumbnailStrip.getBoundingClientRect();
-            const thumbRect = thumb.getBoundingClientRect();
-            const scrollLeft = thumbnailStrip.scrollLeft;
-            const targetScroll = scrollLeft + (thumbRect.left - stripRect.left);
-            
-            thumbnailStrip.scrollTo({
-                left: targetScroll,
-                behavior: 'smooth'
-            });
-        }
-        
+        // Update main image
         const newImageSrc = thumbnails[index].dataset.image;
         if (newImageSrc) {
+            // Fade out
             heroBuyImage.style.opacity = '0';
-            heroBuyImage.style.transition = 'opacity 280ms ease-out';
             
+            // Change image after fade
             setTimeout(() => {
                 heroBuyImage.src = newImageSrc;
+                // Fade in
                 heroBuyImage.style.opacity = '1';
-                
-                setTimeout(() => {
-                    isTransitioning = false;
-                }, 280);
-            }, 280);
-        } else {
-            isTransitioning = false;
+            }, 300);
         }
         
         currentIndex = index;
-        updateArrowStates();
     }
     
-    function updateArrowStates() {
-        if (leftArrow) {
-            leftArrow.disabled = currentIndex === 0;
-        }
-        if (rightArrow) {
-            rightArrow.disabled = currentIndex === thumbnails.length - 1;
-        }
-    }
-    
+    // Thumbnail click handlers
     thumbnails.forEach((thumb, index) => {
         thumb.addEventListener('click', function() {
-            updateActiveThumb(index, true);
+            updateActiveThumb(index);
         });
     });
     
+    // Arrow navigation
     if (leftArrow) {
         leftArrow.addEventListener('click', function() {
-            if (currentIndex > 0) {
-                updateActiveThumb(currentIndex - 1, true);
-            }
+            const newIndex = currentIndex > 0 ? currentIndex - 1 : thumbnails.length - 1;
+            updateActiveThumb(newIndex);
         });
     }
     
     if (rightArrow) {
         rightArrow.addEventListener('click', function() {
-            if (currentIndex < thumbnails.length - 1) {
-                updateActiveThumb(currentIndex + 1, true);
-            }
+            const newIndex = currentIndex < thumbnails.length - 1 ? currentIndex + 1 : 0;
+            updateActiveThumb(newIndex);
         });
     }
-    
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    thumbnailStrip.addEventListener('touchstart', function(e) {
-        touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-    
-    thumbnailStrip.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].clientX;
-        handleSwipe();
-    }, { passive: true });
-    
-    function handleSwipe() {
-        const swipeThreshold = 60;
-        const diff = touchStartX - touchEndX;
-        
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0 && currentIndex < thumbnails.length - 1) {
-                updateActiveThumb(currentIndex + 1, true);
-            } else if (diff < 0 && currentIndex > 0) {
-                updateActiveThumb(currentIndex - 1, true);
-            }
-        }
-    }
-    
-    thumbnailStrip.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft' && currentIndex > 0) {
-            e.preventDefault();
-            updateActiveThumb(currentIndex - 1, true);
-        } else if (e.key === 'ArrowRight' && currentIndex < thumbnails.length - 1) {
-            e.preventDefault();
-            updateActiveThumb(currentIndex + 1, true);
-        }
-    });
-    
-    updateArrowStates();
 }
 
 // Initialize All
@@ -838,7 +702,7 @@ function init() {
     initBrandVideo();
     initAccordion();
     initLightbox();
-    initStickyFooterCTA();
+    initStickyCart();
     initVideoAutoplay();
     initSmoothScroll();
     

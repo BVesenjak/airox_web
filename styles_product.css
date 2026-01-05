@@ -469,6 +469,12 @@ button {
     display: flex;
     gap: var(--space-sm);
     margin-bottom: var(--space-md);
+    width: 100%;
+}
+
+.cta-group #buyNow {
+    width: 100%;
+    flex: 1;
 }
 
 .btn {

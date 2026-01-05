@@ -156,7 +156,7 @@
                     
                     <!-- Variant Selectors -->
                     <div class="variant-group variant-group--bundle">
-                        <label class="variant-group__label">Bundle</label>
+                        <label class="variant-group__label">Choose Bundle</label>
                         <div class="variant-pills variant-pills--bundle" role="radiogroup" aria-label="Select bundle">
                             <button class="pill pill--active pill--animated pill--bundle" role="radio" aria-checked="true" data-variant-type="bundle" data-value="duo" data-animation="assets/btn-anim-5.mp4">2-Pack — Buy 1 Get 1 FREE 🎁</button>
                             <button class="pill pill--animated pill--bundle" role="radio" aria-checked="false" data-variant-type="bundle" data-value="family" data-animation="assets/btn-anim-6.mp4">Family (4-Pack) — 57% OFF 🔥</button>
@@ -257,6 +257,12 @@
                     </label>
                     -->
                     
+<!-- Buy CTA -->
+                   <!-- Buy CTA -->
+                   <div class="cta-group">
+                    <button id="buyNow" class="btn-cta" data-analytics="confirm-selection">CHECKOUT NOW</button>
+                </div>
+
                         <!-- ADD TO CART cta-->
                         <!-- div with id="addToCart" for the toast popup -->
                         <div id="addToCart">
@@ -314,21 +320,7 @@
 
 
                     
-                    <!-- Buy CTA -->
-                   <!-- Buy CTA -->
-                    <div class="cta-group">
-                        <div class="cta-btn-wrapper">
-                            <button id="buyNow" class="buy-cta" data-analytics="buy-now">
-                                <video class="btn-video btn-video-default" autoplay loop muted playsinline>
-                                    <source src="assets/btn-bg-1.mp4" type="video/mp4">
-                                </video>
-                                <video class="btn-video btn-video-hover" autoplay loop muted playsinline>
-                                    <source src="assets/btn-bg-2.mp4" type="video/mp4">
-                                </video>
-                                <span class="btn-text">BUY NOW</span>
-                            </button>
-                        </div>
-                    </div>
+                    
                     
                     <button class="scroll-cue" aria-label="Scroll to benefits">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1950,7 +1942,15 @@
             setupBundleListeners();
             setupColorPillListeners();
             setupEditListener();
-            disableCTAs(); // Start with CTAs disabled
+            disableCTAs(); // Start with Add to Cart disabled (CONFIRM SELECTION stays enabled)
+            
+            // Ensure CONFIRM SELECTION button is always enabled
+            if (els.buyNowBtn) {
+                els.buyNowBtn.style.opacity = '1';
+                els.buyNowBtn.style.pointerEvents = 'auto';
+                els.buyNowBtn.removeAttribute('disabled');
+            }
+            
             updateUI();
         }
         
@@ -2362,11 +2362,8 @@
          * Disable CTAs during selection
          */
         function disableCTAs() {
-            if (els.buyNowBtn) {
-                els.buyNowBtn.style.opacity = '0.5';
-                els.buyNowBtn.style.pointerEvents = 'none';
-                els.buyNowBtn.setAttribute('disabled', 'true');
-            }
+            // Keep "CONFIRM SELECTION" button always enabled
+            // Only disable Add to Cart
             if (els.addToCartBtn) {
                 els.addToCartBtn.style.opacity = '0.5';
                 els.addToCartBtn.style.pointerEvents = 'none';
@@ -2381,11 +2378,8 @@
          * Enable CTAs after completion
          */
         function enableCTAs() {
-            if (els.buyNowBtn) {
-                els.buyNowBtn.style.opacity = '1';
-                els.buyNowBtn.style.pointerEvents = 'auto';
-                els.buyNowBtn.removeAttribute('disabled');
-            }
+            // "CONFIRM SELECTION" button is always enabled, so no need to enable it here
+            // Only enable Add to Cart
             if (els.addToCartBtn) {
                 els.addToCartBtn.style.opacity = '1';
                 els.addToCartBtn.style.pointerEvents = 'auto';
