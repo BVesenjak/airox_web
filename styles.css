@@ -4558,8 +4558,15 @@ transition: opacity 0s ease !important;
   }
     */
 
+.variant-pills--bundle {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px;
+}
+
 .variant-pills--bundle button {
-    width: 49%;
+    flex: 1 1 0;
+    min-width: 0;
     height:100px;
     text-align: left;
 }
