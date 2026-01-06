@@ -28,7 +28,8 @@
         selectedColors: [],         // Array of selected colors (e.g. ['black', 'white'])
         activeUnitIndex: 0,         // Which unit chip is currently active
         isComplete: false,          // Selection complete flag
-        isLocked: false             // Temporary lock during transitions
+        isLocked: false,            // Temporary lock during transitions
+        hasCustomized: false        // True if user has changed any color from defaults
     };
     
     // Color name mapping
@@ -108,7 +109,7 @@
         enableCTAs();
         
         // Update UI to show we're ready
-        updateMicroFeedback('ready');
+        updateMicroFeedback('defaultready');
         
         updateUI();
     }
@@ -156,13 +157,14 @@
         state.activeUnitIndex = 0;
         state.currentFanIndex = 0;
         state.isComplete = false;
+        state.hasCustomized = false;
         
         // Render bundle contents
         renderBundleContentsIcons();
         
         // Reset UI
         updateSelectorLabel();
-        updateMicroFeedback('ready');
+        updateMicroFeedback('defaultready');
         
         // Sync pill selection to default color
         syncSelectedPill();
@@ -286,7 +288,7 @@
         updateSelectorLabel();
         
         // Show ready feedback
-        updateMicroFeedback('ready');
+        updateMicroFeedback(getReadyMode());
         
         // Sync pill selection to active unit
         syncSelectedPill();
@@ -322,6 +324,9 @@
         // Update the active unit's color
         state.selectedColors[state.activeUnitIndex] = color;
         
+        // Mark as customized (user has made a change)
+        state.hasCustomized = true;
+        
         // Re-render bundle contents to show new icon/label
         renderBundleContentsIcons();
         
@@ -339,10 +344,10 @@
                 state.currentFanIndex = state.activeUnitIndex;
                 renderBundleContentsIcons();
                 updateSelectorLabel();
-                updateMicroFeedback('ready');
+                updateMicroFeedback(getReadyMode());
             } else {
                 // On last unit, just show ready state
-                updateMicroFeedback('ready');
+                updateMicroFeedback(getReadyMode());
             }
             
             // Sync pill selection to new color
@@ -364,16 +369,28 @@
     }
     
     /**
+     * Get the appropriate ready mode based on customization state
+     */
+    function getReadyMode() {
+        return state.hasCustomized ? 'activeready' : 'defaultready';
+    }
+    
+    /**
      * Update micro-feedback based on mode
-     * Modes: 'ready', 'confirmation'
+     * Modes: 'defaultready', 'activeready', 'confirmation'
      */
     function updateMicroFeedback(mode, data = null) {
         if (!els.feedbackText) return;
         
         switch(mode) {
-            case 'ready':
-                els.feedbackText.innerHTML = '👉 Pick a color or tap another fan to edit';
+            case 'defaultready':
+                els.feedbackText.innerHTML = '✓ Defaults preselected — tap any fan to customize (optional)';
                 els.microFeedback.style.background = 'rgba(153, 255, 255, 0.08)';
+                break;
+                
+            case 'activeready':
+                els.feedbackText.innerHTML = "✓ Selections updated · you're ready to checkout";
+                els.microFeedback.style.background = 'rgba(21, 204, 190, 0.15)';
                 break;
                 
             case 'confirmation':
@@ -435,7 +452,7 @@
                 state.currentFanIndex = 0;
                 renderBundleContentsIcons();
                 updateSelectorLabel();
-                updateMicroFeedback('ready');
+                updateMicroFeedback(getReadyMode());
                 syncSelectedPill();
             });
         }
