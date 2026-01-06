@@ -333,22 +333,22 @@
         // Update micro-feedback with confirmation
         updateMicroFeedback('confirmation', color);
         
-        // Optional: Auto-advance to next unit (subtle improvement)
+        // Auto-advance to next unit with wrap-around
         setTimeout(() => {
             // Unlock interaction
             state.isLocked = false;
             
-            // Auto-advance only if not on last unit
-            if (state.activeUnitIndex < state.fanCount - 1) {
-                state.activeUnitIndex++;
-                state.currentFanIndex = state.activeUnitIndex;
-                renderBundleContentsIcons();
-                updateSelectorLabel();
-                updateMicroFeedback(getReadyMode());
-            } else {
-                // On last unit, just show ready state
-                updateMicroFeedback(getReadyMode());
+            // Advance to next unit, cycling back to first if at the end
+            state.activeUnitIndex++;
+            if (state.activeUnitIndex >= state.fanCount) {
+                state.activeUnitIndex = 0;
             }
+            state.currentFanIndex = state.activeUnitIndex;
+            
+            // Update UI for new active unit
+            renderBundleContentsIcons();
+            updateSelectorLabel();
+            updateMicroFeedback(getReadyMode());
             
             // Sync pill selection to new color
             syncSelectedPill();
@@ -390,7 +390,7 @@
                 
             case 'activeready':
                 els.feedbackText.innerHTML = "✓ Selections updated · you're ready to checkout";
-                els.microFeedback.style.background = 'rgba(21, 204, 190, 0.15)';
+                els.microFeedback.style.background = 'rgba(21, 204, 190, 0.10)';
                 break;
                 
             case 'confirmation':
