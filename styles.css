@@ -4597,6 +4597,7 @@ transition: opacity 0s ease !important;
 }
 
 .fan-chip {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4630,15 +4631,46 @@ transition: opacity 0s ease !important;
 }
 
 .fan-chip__label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px !important;
+    opacity: 0.7;
 }
 
 .fan-chip.active .fan-chip__label {
+    color: rgba(21, 204, 190, 0.8) !important;
+    opacity: 0.85;
+}
+
+/* Unit badge on chips */
+.unit-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(153, 255, 255, 0.25);
+    border-radius: 4px;
+    padding: 0 4px;
+    letter-spacing: 0.3px;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
+
+.fan-chip.active .unit-badge {
     color: #15ccbe;
+    border-color: #15ccbe;
+    box-shadow: 0 0 6px rgba(21, 204, 190, 0.4);
+    background: rgba(21, 204, 190, 0.15);
 }
 
 /* Mobile optimization */
@@ -4658,7 +4690,15 @@ transition: opacity 0s ease !important;
     }
     
     .fan-chip__label {
-        font-size: 0.688rem;
+        font-size: 9px !important;
+    }
+    
+    .unit-badge {
+        top: 3px;
+        left: 3px;
+        min-width: 16px;
+        height: 16px;
+        font-size: 9px;
     }
 }
 

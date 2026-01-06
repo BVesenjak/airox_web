@@ -101,6 +101,9 @@
         // Render initial bundle contents
         renderBundleContentsIcons();
         
+        // Sync initial pill selection
+        syncSelectedPill();
+        
         // Enable CTAs since we have defaults
         enableCTAs();
         
@@ -158,9 +161,11 @@
         renderBundleContentsIcons();
         
         // Reset UI
-        resetColorPillsVisual();
         updateSelectorLabel();
         updateMicroFeedback('ready');
+        
+        // Sync pill selection to default color
+        syncSelectedPill();
         
         // Ensure CTAs are enabled (we have defaults)
         enableCTAs();
@@ -209,17 +214,23 @@
                 chip.classList.add('active');
             }
             
+            // Badge (unit number)
+            const badge = document.createElement('span');
+            badge.className = 'unit-badge';
+            badge.textContent = i + 1;
+            
             // Icon
             const icon = document.createElement('img');
             icon.className = 'fan-chip__icon';
             icon.src = iconSrc;
             icon.alt = colorName;
             
-            // Label
+            // Label (color name - now shrunk)
             const label = document.createElement('span');
             label.className = 'fan-chip__label';
             label.textContent = colorName;
             
+            chip.appendChild(badge);
             chip.appendChild(icon);
             chip.appendChild(label);
             
@@ -228,6 +239,34 @@
             
             els.bundleContentsChips.appendChild(chip);
         }
+    }
+    
+    /**
+     * Sync pill selection to match active unit's color
+     * Ensures exactly ONE pill shows selected state
+     */
+    function syncSelectedPill() {
+        if (!els.colorPills || els.colorPills.length === 0) return;
+        
+        // Get active unit's current color
+        const activeColor = state.selectedColors[state.activeUnitIndex];
+        if (!activeColor) return;
+        
+        // Remove selected state from all pills
+        els.colorPills.forEach(pill => {
+            pill.classList.remove('pill--active');
+            pill.setAttribute('aria-checked', 'false');
+            pill.style.pointerEvents = 'auto';
+            pill.style.opacity = '1';
+        });
+        
+        // Find and select the matching pill
+        els.colorPills.forEach(pill => {
+            if (pill.dataset.value === activeColor) {
+                pill.classList.add('pill--active');
+                pill.setAttribute('aria-checked', 'true');
+            }
+        });
     }
     
     /**
@@ -249,8 +288,8 @@
         // Show ready feedback
         updateMicroFeedback('ready');
         
-        // Reset color pills visual (no persistent selection)
-        resetColorPillsVisual();
+        // Sync pill selection to active unit
+        syncSelectedPill();
     }
     
     // ═══════════════════════════════════════════════════════════
@@ -306,22 +345,10 @@
                 updateMicroFeedback('ready');
             }
             
-            // Reset pills visual (no persistent selection)
-            resetColorPillsVisual();
+            // Sync pill selection to new color
+            syncSelectedPill();
             
         }, 280);
-    }
-    
-    /**
-     * Reset color pills to neutral state (no persistent selection)
-     */
-    function resetColorPillsVisual() {
-        els.colorPills.forEach(p => {
-            p.classList.remove('pill--active');
-            p.setAttribute('aria-checked', 'false');
-            p.style.pointerEvents = 'auto';
-            p.style.opacity = '1';
-        });
     }
     
     // ═══════════════════════════════════════════════════════════
@@ -409,7 +436,7 @@
                 renderBundleContentsIcons();
                 updateSelectorLabel();
                 updateMicroFeedback('ready');
-                resetColorPillsVisual();
+                syncSelectedPill();
             });
         }
     }
