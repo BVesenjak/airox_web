@@ -6,11 +6,14 @@
 // - COMPLETE: All colors selected, showing summary + edit
 // 
 // Key Features:
+// - Bundle contents visualizer with clickable fan chips
+// - Default colors preselected (never blocked)
+// - Direct unit editing via chip click
 // - Persistent micro-feedback (never vanishes)
 // - Slow, calm transitions (280ms)
 // - Two equal-height panels (no layout jump)
 // - Edit functionality (return to any fan)
-// - Bundle-aware (duo=2, family=4)
+// - Bundle-aware (single=1, duo=2, family=4)
 // ═══════════════════════════════════════════════════════════════════════════
 (function() {
     'use strict';
@@ -19,10 +22,11 @@
     // STATE MANAGEMENT
     // ═══════════════════════════════════════════════════════════
     const state = {
-        bundle: 'duo',              // 'duo' or 'family'
-        fanCount: 2,                // duo=2, family=4
-        currentFanIndex: 0,         // Current fan being selected (0-based)
-        selectedColors: [],         // Array of selected colors
+        bundle: 'duo',              // 'single', 'duo', or 'family'
+        fanCount: 2,                // single=1, duo=2, family=4
+        currentFanIndex: 0,         // Current fan being edited (0-based)
+        selectedColors: [],         // Array of selected colors (e.g. ['black', 'white'])
+        activeUnitIndex: 0,         // Which unit chip is currently active
         isComplete: false,          // Selection complete flag
         isLocked: false             // Temporary lock during transitions
     };
@@ -34,12 +38,31 @@
         'violet': 'Ion'
     };
     
+    // Icon mapping
+    const COLOR_ICONS = {
+        'black': 'assets/icons/LOLO3.png',
+        'white': 'assets/icons/eins.png',
+        'violet': 'assets/icons/2.png'
+    };
+    
+    // Bundle defaults (key: bundle value, value: array of colors)
+    const BUNDLE_DEFAULTS = {
+        'single': ['white'],
+        'duo': ['black', 'white'],
+        'family': ['black', 'black', 'white', 'violet']
+    };
+    
     // ═══════════════════════════════════════════════════════════
     // DOM REFERENCES
     // ═══════════════════════════════════════════════════════════
     const els = {
         // Bundle
         bundleButtons: document.querySelectorAll('[data-variant-type="bundle"]'),
+        
+        // Bundle Contents Visualizer
+        bundleContentsSection: document.getElementById('bundleContentsSection'),
+        bundleContentsLabel: document.getElementById('bundleContentsLabel'),
+        bundleContentsChips: document.getElementById('bundleContentsChips'),
         
         // Panels
         panelA: document.getElementById('panelA'),
@@ -71,14 +94,18 @@
         setupBundleListeners();
         setupColorPillListeners();
         setupEditListener();
-        disableCTAs(); // Start with Add to Cart disabled (CONFIRM SELECTION stays enabled)
         
-        // Ensure CONFIRM SELECTION button is always enabled
-        if (els.buyNowBtn) {
-            els.buyNowBtn.style.opacity = '1';
-            els.buyNowBtn.style.pointerEvents = 'auto';
-            els.buyNowBtn.removeAttribute('disabled');
-        }
+        // Set defaults for initial bundle
+        setDefaultsForBundle(state.bundle);
+        
+        // Render initial bundle contents
+        renderBundleContentsIcons();
+        
+        // Enable CTAs since we have defaults
+        enableCTAs();
+        
+        // Update UI to show we're ready
+        updateMicroFeedback('ready');
         
         updateUI();
     }
@@ -98,13 +125,132 @@
                 this.setAttribute('aria-checked', 'true');
                 
                 // Update state
-                state.bundle = this.dataset.value;
-                state.fanCount = state.bundle === 'duo' ? 2 : 4;
-                
-                // Reset color selection
-                resetSelection();
+                const newBundle = this.dataset.value;
+                setBundle(newBundle);
             });
         });
+    }
+    
+    /**
+     * Set bundle and apply defaults
+     */
+    function setBundle(bundleValue) {
+        state.bundle = bundleValue;
+        
+        // Set fan count based on bundle
+        if (bundleValue === 'single') {
+            state.fanCount = 1;
+        } else if (bundleValue === 'duo') {
+            state.fanCount = 2;
+        } else if (bundleValue === 'family') {
+            state.fanCount = 4;
+        }
+        
+        // Apply defaults
+        setDefaultsForBundle(bundleValue);
+        
+        // Reset to first unit
+        state.activeUnitIndex = 0;
+        state.currentFanIndex = 0;
+        state.isComplete = false;
+        
+        // Render bundle contents
+        renderBundleContentsIcons();
+        
+        // Reset UI
+        resetColorPillsVisual();
+        updateSelectorLabel();
+        updateMicroFeedback('ready');
+        
+        // Ensure CTAs are enabled (we have defaults)
+        enableCTAs();
+        
+        updateUI();
+    }
+    
+    /**
+     * Set default colors for a bundle
+     */
+    function setDefaultsForBundle(bundleValue) {
+        state.selectedColors = [...BUNDLE_DEFAULTS[bundleValue]];
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // BUNDLE CONTENTS VISUALIZER
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Render the fan chips showing current bundle configuration
+     */
+    function renderBundleContentsIcons() {
+        if (!els.bundleContentsChips) return;
+        
+        // Update label
+        const fanWord = state.fanCount === 1 ? 'fan' : 'fans';
+        els.bundleContentsLabel.textContent = `Your bundle includes ${state.fanCount} ${fanWord} — tap any fan to change its color`;
+        
+        // Clear existing chips
+        els.bundleContentsChips.innerHTML = '';
+        
+        // Create chips for each fan
+        for (let i = 0; i < state.fanCount; i++) {
+            const color = state.selectedColors[i] || 'black';
+            const colorName = COLOR_NAMES[color];
+            const iconSrc = COLOR_ICONS[color];
+            
+            const chip = document.createElement('button');
+            chip.className = 'fan-chip';
+            chip.setAttribute('type', 'button');
+            chip.setAttribute('aria-label', `Fan ${i + 1} color: ${colorName}. Click to edit.`);
+            chip.dataset.unitIndex = i;
+            
+            // Active state
+            if (i === state.activeUnitIndex) {
+                chip.classList.add('active');
+            }
+            
+            // Icon
+            const icon = document.createElement('img');
+            icon.className = 'fan-chip__icon';
+            icon.src = iconSrc;
+            icon.alt = colorName;
+            
+            // Label
+            const label = document.createElement('span');
+            label.className = 'fan-chip__label';
+            label.textContent = colorName;
+            
+            chip.appendChild(icon);
+            chip.appendChild(label);
+            
+            // Click handler
+            chip.addEventListener('click', () => handleUnitChipClick(i));
+            
+            els.bundleContentsChips.appendChild(chip);
+        }
+    }
+    
+    /**
+     * Handle clicking a unit chip (selects which fan to edit)
+     */
+    function handleUnitChipClick(index) {
+        if (state.isLocked) return;
+        
+        // Update active unit
+        state.activeUnitIndex = index;
+        state.currentFanIndex = index;
+        
+        // Re-render chips to update active state
+        renderBundleContentsIcons();
+        
+        // Update selector label
+        updateSelectorLabel();
+        
+        // Show ready feedback
+        updateMicroFeedback('ready');
+        
+        // Reset color pills visual (no persistent selection)
+        resetColorPillsVisual();
     }
     
     // ═══════════════════════════════════════════════════════════
@@ -113,82 +259,69 @@
     function setupColorPillListeners() {
         els.colorPills.forEach(pill => {
             pill.addEventListener('click', function() {
-                if (state.isLocked || state.isComplete) return;
+                if (state.isLocked) return;
                 
                 const color = this.dataset.value;
-                handleColorSelection(color, this);
+                handleColorPillClick(color, this);
             });
         });
     }
     
     /**
-     * Handle color selection with calm, controlled interaction
-     * Timing: ~280ms lock period for premium feel
-     * Context-aware: Handles both sequential progression and specific fan edits
+     * Handle color pill click - updates the active unit's color
      */
-    function handleColorSelection(color, pillElement) {
-        // Lock interaction
+    function handleColorPillClick(color, pillElement) {
+        // Lock interaction briefly for premium feel
         state.isLocked = true;
         
-        // Visual feedback: highlight selected pill
-        els.colorPills.forEach(p => {
-            p.classList.remove('pill--active');
-            p.setAttribute('aria-checked', 'false');
-            p.style.pointerEvents = 'none';
-            p.style.opacity = '0.5';
-        });
+        // Brief visual feedback on pill (but not persistent)
+        pillElement.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            pillElement.style.transform = '';
+        }, 150);
         
-        pillElement.classList.add('pill--active');
-        pillElement.setAttribute('aria-checked', 'true');
-        pillElement.style.opacity = '1';
+        // Update the active unit's color
+        state.selectedColors[state.activeUnitIndex] = color;
         
-        // Store selection
-        state.selectedColors[state.currentFanIndex] = color;
+        // Re-render bundle contents to show new icon/label
+        renderBundleContentsIcons();
         
         // Update micro-feedback with confirmation
         updateMicroFeedback('confirmation', color);
         
-        // Determine next action based on context
+        // Optional: Auto-advance to next unit (subtle improvement)
         setTimeout(() => {
-            // Check if we were editing a specific fan (all fans already selected)
-            const wasEditingSpecific = state.selectedColors.filter(c => c).length === state.fanCount;
+            // Unlock interaction
+            state.isLocked = false;
             
-            if (wasEditingSpecific) {
-                // Return to completed summary state
-                completeSelection();
+            // Auto-advance only if not on last unit
+            if (state.activeUnitIndex < state.fanCount - 1) {
+                state.activeUnitIndex++;
+                state.currentFanIndex = state.activeUnitIndex;
+                renderBundleContentsIcons();
+                updateSelectorLabel();
+                updateMicroFeedback('ready');
             } else {
-                // Continue sequential progression
-                advanceSelection();
+                // On last unit, just show ready state
+                updateMicroFeedback('ready');
             }
+            
+            // Reset pills visual (no persistent selection)
+            resetColorPillsVisual();
+            
         }, 280);
     }
     
     /**
-     * Advance to next fan or complete selection
+     * Reset color pills to neutral state (no persistent selection)
      */
-    function advanceSelection() {
-        state.currentFanIndex++;
-        
-        // Check if complete
-        if (state.currentFanIndex >= state.fanCount) {
-            completeSelection();
-            return;
-        }
-        
-        // Reset pills for next selection
+    function resetColorPillsVisual() {
         els.colorPills.forEach(p => {
             p.classList.remove('pill--active');
             p.setAttribute('aria-checked', 'false');
             p.style.pointerEvents = 'auto';
             p.style.opacity = '1';
         });
-        
-        // Update UI for next fan
-        updateSelectorLabel();
-        updateMicroFeedback('progress');
-        
-        // Unlock
-        state.isLocked = false;
     }
     
     // ═══════════════════════════════════════════════════════════
@@ -196,335 +329,97 @@
     // ═══════════════════════════════════════════════════════════
     
     /**
-     * Update selector label dynamically
+     * Update the selector label to show which fan is being edited
      */
     function updateSelectorLabel() {
-        const fanNum = state.currentFanIndex + 1;
-        els.selectorLabel.textContent = `Choose color for Fan ${fanNum}`;
+        const fanNumber = state.activeUnitIndex + 1;
+        els.selectorLabel.textContent = `Choose color for Fan ${fanNumber}`;
     }
     
     /**
-     * Update micro-feedback - NEVER vanishes, always guides
-     * @param {string} mode - 'initial', 'confirmation', 'progress', 'editing'
-     * @param {*} data - selectedColor for confirmation, fanIndex for editing
+     * Update micro-feedback based on mode
+     * Modes: 'ready', 'confirmation'
      */
     function updateMicroFeedback(mode, data = null) {
-        let message = '';
+        if (!els.feedbackText) return;
         
         switch(mode) {
-            case 'initial':
-                message = '👉 Pick a color to continue';
+            case 'ready':
+                els.feedbackText.innerHTML = '👉 Pick a color or tap another fan to edit';
+                els.microFeedback.style.background = 'rgba(153, 255, 255, 0.08)';
                 break;
                 
             case 'confirmation':
-                const selectedColor = data;
-                const remaining = state.fanCount - state.currentFanIndex - 1;
-                if (remaining > 0) {
-                    message = `✓ ${COLOR_NAMES[selectedColor]} selected · ${remaining} fan${remaining > 1 ? 's' : ''} remaining`;
-                } else {
-                    message = `✓ ${COLOR_NAMES[selectedColor]} selected · Complete!`;
-                }
-                break;
-                
-            case 'progress':
-                const selected = state.selectedColors
-                    .slice(0, state.currentFanIndex)
-                    .map(c => COLOR_NAMES[c])
-                    .join(' · ');
-                const nextFan = state.currentFanIndex + 1;
-                message = `Selected: ${selected} · Now choosing Fan ${nextFan}`;
-                break;
-                
-            case 'editing':
-                const fanIndex = data;
-                const fanNum = fanIndex + 1;
-                const currentColor = state.selectedColors[fanIndex];
-                message = `✏️ Editing Fan ${fanNum} (currently ${COLOR_NAMES[currentColor]}) · Choose new color`;
+                const colorName = COLOR_NAMES[data] || data;
+                els.feedbackText.innerHTML = `✓ ${colorName} selected`;
+                els.microFeedback.style.background = 'rgba(21, 204, 190, 0.15)';
                 break;
         }
-        
-        // Smooth text transition
-        els.feedbackText.style.opacity = '0';
-        setTimeout(() => {
-            els.feedbackText.textContent = message;
-            els.feedbackText.style.opacity = '1';
-        }, 140);
-    }
-    
-    // ═══════════════════════════════════════════════════════════
-    // COMPLETION STATE
-    // ═══════════════════════════════════════════════════════════
-    
-    /**
-     * Complete selection - transition to summary state
-     * Smooth transition: 280ms fade, no layout jump
-     */
-    function completeSelection() {
-        state.isComplete = true;
-        
-        // Fade out selector state
-        els.selectorState.style.opacity = '0';
-        els.selectorState.style.transform = 'translateY(-8px)';
-        
-        setTimeout(() => {
-            // Hide selector, show summary
-            els.selectorState.style.display = 'none';
-            els.summaryState.style.display = 'block';
-            
-            // Build summary
-            buildSummaryList();
-            
-            // Fade in summary
-            setTimeout(() => {
-                els.summaryState.style.opacity = '1';
-                
-                // Show hint text after summary fades in
-                showEditHint();
-            }, 50);
-            
-            // Update CTA status
-            enableCTAs();
-            
-        }, 280);
-    }
-    
-    /**
-     * Show temporary hint text under edit button
-     * ONE-TIME PER SESSION: only shows on first completion
-     * Hint displays for 3s, button glow lasts 4s
-     */
-    function showEditHint() {
-        if (!els.editHint || !els.editBtn) return;
-        
-        // Check if hint has already been shown this session
-        const hintShown = sessionStorage.getItem('editHintShown');
-        if (hintShown === 'true') {
-            return; // Don't show again after edits
-        }
-        
-        // Mark as shown for this session (won't show after reload)
-        sessionStorage.setItem('editHintShown', 'true');
-        
-        // Apply glow effect to button text (synchronized with hint appearance)
-        setTimeout(() => {
-            els.editBtn.classList.add('edit-btn--glow');
-            els.editHint.classList.add('edit-hint--show');
-        }, 100);
-        
-        // After 3 seconds, fade out hint
-        setTimeout(() => {
-            els.editHint.classList.remove('edit-hint--show');
-            els.editHint.classList.add('edit-hint--fadeout');
-            
-            // Clean up hint classes after fade-out completes
-            setTimeout(() => {
-                els.editHint.classList.remove('edit-hint--fadeout');
-            }, 400);
-        }, 3100); // 100ms initial + 3000ms display
-        
-        // After 4 seconds, remove button glow (1s longer than hint)
-        setTimeout(() => {
-            els.editBtn.classList.remove('edit-btn--glow');
-        }, 4100); // 100ms initial + 4000ms glow
-    }
-    
-    /**
-     * Build the summary list showing all selections
-     * Visual: Color dots (not squares/checkboxes) - informational markers
-     * Layout: Grid adjusts based on fanCount (2x2 for 4 fans, 1x2 for 2 fans)
-     * Interaction: Clickable items to edit specific fan color
-     */
-    function buildSummaryList() {
-        // Apply grid layout class based on fan count
-        els.summaryList.className = state.fanCount === 4 ? 'summary-grid summary-grid--4fans' : 'summary-grid summary-grid--2fans';
-        
-        const items = state.selectedColors.map((color, idx) => {
-            return `<div class="summary-item" data-fan-index="${idx}" role="button" tabindex="0" aria-label="Edit Fan ${idx + 1} color">
-                <span class="color-dot" data-color="${color}" style="background: ${getColorHex(color)};" title="${COLOR_NAMES[color]}"></span>
-                <span class="fan-label">Fan ${idx + 1}</span>
-                <span class="color-name">${COLOR_NAMES[color]}</span>
-            </div>`;
-        }).join('');
-        
-        els.summaryList.innerHTML = items;
-        
-        // Add click handlers to summary items for quick edit
-        setupSummaryItemListeners();
-    }
-    
-    /**
-     * Get color hex for visual display
-     */
-    function getColorHex(color) {
-        const colorMap = {
-            'black': '#000000',
-            'white': '#ffffff',
-            'violet': '#9b59b6'
-        };
-        return colorMap[color] || '#999';
-    }
-    
-    // ═══════════════════════════════════════════════════════════
-    // EDIT FUNCTIONALITY
-    // ═══════════════════════════════════════════════════════════
-    
-    /**
-     * Setup edit button listener (edit all from start)
-     */
-    function setupEditListener() {
-        els.editBtn.addEventListener('click', function() {
-            resetSelection();
-        });
-    }
-    
-    /**
-     * Setup summary item click listeners (edit specific fan)
-     */
-    function setupSummaryItemListeners() {
-        const summaryItems = els.summaryList.querySelectorAll('.summary-item');
-        summaryItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const fanIndex = parseInt(this.dataset.fanIndex, 10);
-                editSpecificFan(fanIndex);
-            });
-            
-            // Keyboard accessibility
-            item.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    const fanIndex = parseInt(this.dataset.fanIndex, 10);
-                    editSpecificFan(fanIndex);
-                }
-            });
-        });
-    }
-    
-    /**
-     * Edit a specific fan's color (jump to that fan in the selector)
-     * @param {number} fanIndex - The fan to edit (0-based)
-     */
-    function editSpecificFan(fanIndex) {
-        // Return to selector state
-        state.isComplete = false;
-        state.currentFanIndex = fanIndex;
-        state.isLocked = false;
-        
-        // Transition from summary to selector
-        els.summaryState.style.opacity = '0';
-        setTimeout(() => {
-            els.summaryState.style.display = 'none';
-            els.selectorState.style.display = 'block';
-            els.selectorState.style.opacity = '0';
-            els.selectorState.style.transform = 'translateY(-8px)';
-            
-            setTimeout(() => {
-                els.selectorState.style.opacity = '1';
-                els.selectorState.style.transform = 'translateY(0)';
-            }, 50);
-        }, 280);
-        
-        // Reset pills and highlight current selection if exists
-        els.colorPills.forEach(p => {
-            p.classList.remove('pill--active');
-            p.setAttribute('aria-checked', 'false');
-            p.style.pointerEvents = 'auto';
-            p.style.opacity = '1';
-            
-            // Pre-select current color for this fan
-            if (state.selectedColors[fanIndex] && p.dataset.value === state.selectedColors[fanIndex]) {
-                p.classList.add('pill--active');
-                p.setAttribute('aria-checked', 'true');
-            }
-        });
-        
-        // Update UI
-        updateSelectorLabel();
-        updateMicroFeedback('editing', fanIndex);
-        disableCTAs();
-    }
-    
-    /**
-     * Reset selection - return to step 1
-     * Preserves previous selections for prefill (optional enhancement)
-     */
-    function resetSelection() {
-        // Reset state
-        const previousSelections = [...state.selectedColors]; // Keep for potential prefill
-        state.currentFanIndex = 0;
-        state.selectedColors = [];
-        state.isComplete = false;
-        state.isLocked = false;
-        
-        // Show selector, hide summary
-        els.summaryState.style.opacity = '0';
-        setTimeout(() => {
-            els.summaryState.style.display = 'none';
-            els.selectorState.style.display = 'block';
-            els.selectorState.style.opacity = '0';
-            els.selectorState.style.transform = 'translateY(-8px)';
-            
-            setTimeout(() => {
-                els.selectorState.style.opacity = '1';
-                els.selectorState.style.transform = 'translateY(0)';
-            }, 50);
-        }, 280);
-        
-        // Reset pills
-        els.colorPills.forEach(p => {
-            p.classList.remove('pill--active');
-            p.setAttribute('aria-checked', 'false');
-            p.style.pointerEvents = 'auto';
-            p.style.opacity = '1';
-        });
-        
-        // Reset UI
-        updateSelectorLabel();
-        updateMicroFeedback('initial');
-        disableCTAs();
     }
     
     // ═══════════════════════════════════════════════════════════
     // CTA MANAGEMENT
     // ═══════════════════════════════════════════════════════════
-    
-    /**
-     * Disable CTAs during selection
-     */
     function disableCTAs() {
-        // Keep "CONFIRM SELECTION" button always enabled
-        // Only disable Add to Cart
+        // Disable Add to Cart
         if (els.addToCartBtn) {
-            els.addToCartBtn.style.opacity = '0.5';
+            els.addToCartBtn.style.opacity = '0.4';
             els.addToCartBtn.style.pointerEvents = 'none';
             els.addToCartBtn.setAttribute('disabled', 'true');
         }
         
-        els.ctaStatus.textContent = 'Complete color selection to continue';
-        els.ctaStatus.style.color = 'rgba(255,255,255,0.6)';
+        // Update status
+        if (els.ctaStatus) {
+            els.ctaStatus.textContent = 'Complete color selection to continue';
+            els.ctaStatus.style.opacity = '1';
+        }
     }
     
-    /**
-     * Enable CTAs after completion
-     */
     function enableCTAs() {
-        // "CONFIRM SELECTION" button is always enabled, so no need to enable it here
-        // Only enable Add to Cart
+        // Enable Add to Cart
         if (els.addToCartBtn) {
             els.addToCartBtn.style.opacity = '1';
             els.addToCartBtn.style.pointerEvents = 'auto';
             els.addToCartBtn.removeAttribute('disabled');
         }
         
-        els.ctaStatus.innerHTML = '✓ <strong style="color: rgb(153, 255, 255);">Selections saved</strong> · Ready to purchase';
-        els.ctaStatus.style.color = 'rgba(255,255,255,0.85)';
+        // Ensure CHECKOUT NOW button is always enabled
+        if (els.buyNowBtn) {
+            els.buyNowBtn.style.opacity = '1';
+            els.buyNowBtn.style.pointerEvents = 'auto';
+            els.buyNowBtn.removeAttribute('disabled');
+        }
+        
+        // Update status
+        if (els.ctaStatus) {
+            els.ctaStatus.textContent = '';
+            els.ctaStatus.style.opacity = '0';
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // EDIT FUNCTIONALITY (Legacy - kept for compatibility)
+    // ═══════════════════════════════════════════════════════════
+    function setupEditListener() {
+        if (els.editBtn) {
+            els.editBtn.addEventListener('click', () => {
+                // Reset to first fan
+                state.activeUnitIndex = 0;
+                state.currentFanIndex = 0;
+                renderBundleContentsIcons();
+                updateSelectorLabel();
+                updateMicroFeedback('ready');
+                resetColorPillsVisual();
+            });
+        }
     }
     
     // ═══════════════════════════════════════════════════════════
     // GENERAL UI UPDATE
     // ═══════════════════════════════════════════════════════════
     function updateUI() {
-        updateSelectorLabel();
-        updateMicroFeedback('initial');
+        // This function can be used for any additional UI updates if needed
+        // Currently most updates are handled by specific functions
     }
     
     // ═══════════════════════════════════════════════════════════
@@ -536,63 +431,65 @@
         init();
     }
     
-    // Expose state for Shopify integration
+    // ═══════════════════════════════════════════════════════════
+    // EXPOSE STATE FOR SHOPIFY INTEGRATION
+    // ═══════════════════════════════════════════════════════════
     window.ProgressiveLockInState = {
-        get selectedColors() {
-            return state.selectedColors.slice(); // Return copy
-        },
-        get bundle() {
-            return state.bundle;
-        },
-        get fanCount() {
-            return state.fanCount;
-        },
-        get isComplete() {
-            return state.isComplete;
-        }
+        getState: () => state,
+        getSelectedColors: () => state.selectedColors,
+        getColorNames: () => state.selectedColors.map(c => COLOR_NAMES[c]),
+        getBundle: () => state.bundle,
+        getFanCount: () => state.fanCount
     };
     
 })();
 
+
 // ═══════════════════════════════════════════════════════════════════════════
 // SIMPLE SHOPIFY INTEGRATION
-// Clicks the correct Shopify button based on bundle selection
+// Maps internal selection to Shopify Buy Button clicks
 // ═══════════════════════════════════════════════════════════════════════════
 (function() {
     'use strict';
     
+    // Map bundle values to Shopify button IDs
     const SHOPIFY_BUTTONS = {
-        '2pack': 'product-component-1767037426572',
-        '4pack': 'product-component-1767037492944'
+        'single': 'product-component-1767471363799',  // 1-pack
+        'duo': 'product-component-1767037426572',      // 2-pack
+        'family': 'product-component-1767037492944'    // 4-pack
     };
     
+    /**
+     * Handle Add to Cart click
+     * Triggers the appropriate Shopify Buy Button based on bundle selection
+     */
     function handleAddToCart() {
-        // Get bundle selection
-        const activePill = document.querySelector('.pill--bundle.pill--active');
-        if (!activePill) return;
+        // Get current state
+        const state = window.ProgressiveLockInState.getState();
+        const bundle = state.bundle;
         
-        const bundleType = activePill.dataset.value === 'duo' ? '2pack' : '4pack';
-        const componentId = SHOPIFY_BUTTONS[bundleType];
+        // Get corresponding Shopify button container
+        const shopifyContainerId = SHOPIFY_BUTTONS[bundle];
+        const container = document.getElementById(shopifyContainerId);
         
-        // Wait for video to finish, then click Shopify button
-        const activeVideo = document.querySelector('#addtocart-btn .btn-video-cart-active');
+        if (!container) {
+            console.error('Shopify button container not found for bundle:', bundle);
+            return;
+        }
         
-        const clickShopify = () => {
-            const btn = document.querySelector(`#${componentId} .shopify-buy__btn, #${componentId} button`);
-            if (btn) btn.click();
-        };
-        
-        if (activeVideo && !activeVideo.paused) {
-            activeVideo.addEventListener('ended', clickShopify, { once: true });
-            setTimeout(clickShopify, 2000); // Fallback
+        // Find and click the Shopify "Add to cart" button
+        const shopifyBtn = container.querySelector('.shopify-buy__btn');
+        if (shopifyBtn) {
+            shopifyBtn.click();
         } else {
-            setTimeout(clickShopify, 100);
+            console.error('Shopify button not found in container:', shopifyContainerId);
         }
     }
     
-    // Attach handler
+    // Attach handler to custom Add to Cart button
     const btn = document.getElementById('addtocart-btn');
-    if (btn) btn.addEventListener('click', handleAddToCart);
+    if (btn) {
+        btn.addEventListener('click', handleAddToCart);
+    }
     
 })();
-
