@@ -14,6 +14,8 @@
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    
 </head>
 <body>
     <!-- Section 1: Navigation Bar -->
@@ -257,198 +259,12 @@
                     <button id="buyNow" class="btn-cta" data-analytics="confirm-selection">CHECKOUT NOW</button>
                 </div>
 
-                <div id='product-component-1767740291986'></div>
-<script type="text/javascript">
-/*<![CDATA[*/
-(function () {
-  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-  if (window.ShopifyBuy) {
-    if (window.ShopifyBuy.UI) {
-      ShopifyBuyInit();
-    } else {
-      loadScript();
-    }
-  } else {
-    loadScript();
-  }
-  function loadScript() {
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = scriptURL;
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-    script.onload = ShopifyBuyInit;
-  }
-  function ShopifyBuyInit() {
-    var client = ShopifyBuy.buildClient({
-      domain: 'jnr35f-j0.myshopify.com',
-      storefrontAccessToken: '6d2b3371273563fc70b1554be9a6750d',
-    });
-    ShopifyBuy.UI.onReady(client).then(function (ui) {
-      ui.createComponent('product', {
-        id: '10493710762322',
-        node: document.getElementById('product-component-1767740291986'),
-        moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
-        options: {
-  "product": {
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "calc(25% - 20px)",
-          "margin-left": "20px",
-          "margin-bottom": "50px"
-        }
-      },
-      "button": {
-        "font-family": "Karla, sans-serif",
-        "font-weight": "bold",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2a93db"
-        },
-        "background-color": "#2fa3f3",
-        ":focus": {
-          "background-color": "#2a93db"
-        },
-        "border-radius": "8px",
-        "padding-left": "100px",
-        "padding-right": "100px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "buttonDestination": "checkout",
-    "contents": {
-      "img": false,
-      "title": false,
-      "price": false
-    },
-    "text": {
-      "button": "Checkout"
-    },
-    "googleFonts": [
-      "Karla"
-    ]
-  },
-  "productSet": {
-    "styles": {
-      "products": {
-        "@media (min-width: 601px)": {
-          "margin-left": "-20px"
-        }
-      }
-    }
-  },
-  "modalProduct": {
-    "contents": {
-      "img": false,
-      "imgWithCarousel": true,
-      "button": false,
-      "buttonWithQuantity": true
-    },
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "100%",
-          "margin-left": "0px",
-          "margin-bottom": "0px"
-        }
-      },
-      "button": {
-        "font-family": "Karla, sans-serif",
-        "font-weight": "bold",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2a93db"
-        },
-        "background-color": "#2fa3f3",
-        ":focus": {
-          "background-color": "#2a93db"
-        },
-        "border-radius": "8px",
-        "padding-left": "100px",
-        "padding-right": "100px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "googleFonts": [
-      "Karla"
-    ],
-    "text": {
-      "button": "Add to cart"
-    }
-  },
-  "option": {},
-  "cart": {
-    "styles": {
-      "button": {
-        "font-family": "Karla, sans-serif",
-        "font-weight": "bold",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2a93db"
-        },
-        "background-color": "#2fa3f3",
-        ":focus": {
-          "background-color": "#2a93db"
-        },
-        "border-radius": "8px"
-      }
-    },
-    "text": {
-      "total": "Subtotal",
-      "button": "Checkout"
-    },
-    "popup": false,
-    "googleFonts": [
-      "Karla"
-    ]
-  },
-  "toggle": {
-    "styles": {
-      "toggle": {
-        "font-family": "Karla, sans-serif",
-        "font-weight": "bold",
-        "background-color": "#2fa3f3",
-        ":hover": {
-          "background-color": "#2a93db"
-        },
-        ":focus": {
-          "background-color": "#2a93db"
-        }
-      },
-      "count": {
-        "font-size": "14px"
-      }
-    },
-    "googleFonts": [
-      "Karla"
-    ]
-  }
-},
-      });
-    });
-  }
-})();
-/*]]>*/
-</script>
+               
 
                         <!-- ADD TO CART cta-->
                         <!-- div with id="addToCart" for the toast popup -->
                         <div id="addToCart">
-                        <!-- Button with video-->
+                        <!-- Button with video
                         <div id="addtocart" class="cta-btn-wrapper">
                             <button class="buy-cta" id="addtocart-btn">
                           <video class="btn-video btn-video-idle" muted playsinline style="opacity: 0;">
@@ -478,6 +294,7 @@
                         </button>
                         </div>
                         </div>
+                    -->
 
 
 
@@ -1342,6 +1159,11 @@
     
     <!-- Progressive Lock-In Color Selection System -->
     <script src="progressive-lockin.js"></script>
+    <!-- Shopify CDN script -->
+    <script src="https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js"></script>
+
+    <!-- Shopify storefront API script-->
+     <script src="ssa.js"></script>
 </body>
 </html>
 
