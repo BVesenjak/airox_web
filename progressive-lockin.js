@@ -22,8 +22,8 @@
     // STATE MANAGEMENT
     // ═══════════════════════════════════════════════════════════
     const state = {
-        bundle: 'duo',              // 'single', 'duo', or 'family'
-        fanCount: 2,                // single=1, duo=2, family=4
+        bundle: 'single',           // 'single', 'duo', or 'family'
+        fanCount: 1,                // single=1, duo=2, family=4
         currentFanIndex: 0,         // Current fan being edited (0-based)
         selectedColors: [],         // Array of selected colors (e.g. ['black', 'white'])
         activeUnitIndex: 0,         // Which unit chip is currently active
@@ -52,6 +52,23 @@
         'duo': ['black', 'white'],
         'family': ['black', 'black', 'white', 'violet']
     };
+    
+    // Color shorthand mapping for session tracking
+    const COLOR_SHORTHAND = {
+        'black': 's',    // Stealth
+        'white': 'a',    // Arctic
+        'violet': 'i'    // Ion
+    };
+    
+    // Shopify button mapping
+    const SHOPIFY_BUTTON_IDS = {
+        'single': 'product-component-1767037492944',
+        'duo': 'product-component-1767471509348',
+        'family': 'product-component-1767471363799'
+    };
+    
+    // Session order tracking (e.g., "1s,2s,3a,4i")
+    let sessionOrder = '';
     
     // ═══════════════════════════════════════════════════════════
     // DOM REFERENCES
@@ -89,6 +106,31 @@
     };
     
     // ═══════════════════════════════════════════════════════════
+    // SESSION ORDER TRACKING
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Generate order string from current colors (e.g., "1s,2s,3a,4i")
+     */
+    function generateOrderString() {
+        const orderParts = [];
+        for (let i = 0; i < state.fanCount; i++) {
+            const color = state.selectedColors[i] || 'black';
+            const shorthand = COLOR_SHORTHAND[color];
+            orderParts.push(`${i + 1}${shorthand}`);
+        }
+        return orderParts.join(',');
+    }
+    
+    /**
+     * Update session order
+     */
+    function updateSessionOrder() {
+        sessionOrder = generateOrderString();
+        console.log('Session order updated:', sessionOrder);
+    }
+    
+    // ═══════════════════════════════════════════════════════════
     // INITIALIZATION
     // ═══════════════════════════════════════════════════════════
     function init() {
@@ -98,6 +140,12 @@
         
         // Set defaults for initial bundle
         setDefaultsForBundle(state.bundle);
+        
+        // Update initial pricing (1-pack is default)
+        const activeButton = document.querySelector('[data-variant-type="bundle"].pill--active');
+        if (activeButton) {
+            updatePricing(activeButton);
+        }
         
         // Render initial bundle contents
         renderBundleContentsIcons();
@@ -110,6 +158,12 @@
         
         // Update UI to show we're ready
         updateMicroFeedback('defaultready');
+        
+        // Initialize session order
+        updateSessionOrder();
+        
+        // Setup checkout button handler
+        setupCheckoutHandler();
         
         updateUI();
     }
@@ -128,11 +182,36 @@
                 this.classList.add('pill--active');
                 this.setAttribute('aria-checked', 'true');
                 
+                // Update pricing display
+                updatePricing(this);
+                
                 // Update state
                 const newBundle = this.dataset.value;
                 setBundle(newBundle);
             });
         });
+    }
+    
+    /**
+     * Update pricing display based on selected bundle
+     */
+    function updatePricing(bundleButton) {
+        const price = bundleButton.dataset.price;
+        const comparePrice = bundleButton.dataset.compare;
+        const savings = bundleButton.dataset.savings;
+        
+        // Update price elements
+        const currentPriceEl = document.getElementById('currentPrice');
+        const comparePriceEl = document.getElementById('comparePrice');
+        const savingsBadgeEl = document.getElementById('savingsBadge');
+        
+        if (currentPriceEl) currentPriceEl.textContent = `$${price}`;
+        if (comparePriceEl) comparePriceEl.textContent = `$${comparePrice}`;
+        if (savingsBadgeEl) {
+            savingsBadgeEl.textContent = savings;
+            // Hide badge if empty
+            savingsBadgeEl.style.display = savings ? 'inline-block' : 'none';
+        }
     }
     
     /**
@@ -171,6 +250,9 @@
         
         // Ensure CTAs are enabled (we have defaults)
         enableCTAs();
+        
+        // Update session order with new defaults
+        updateSessionOrder();
         
         updateUI();
     }
@@ -312,6 +394,10 @@
      * Handle color pill click - updates the active unit's color
      */
     function handleColorPillClick(color, pillElement) {
+        // Check if this is actually a different color
+        const currentColor = state.selectedColors[state.activeUnitIndex];
+        const isDifferentColor = currentColor !== color;
+        
         // Lock interaction briefly for premium feel
         state.isLocked = true;
         
@@ -324,8 +410,13 @@
         // Update the active unit's color
         state.selectedColors[state.activeUnitIndex] = color;
         
-        // Mark as customized (user has made a change)
-        state.hasCustomized = true;
+        // Mark as customized only if user changed to a different color
+        if (isDifferentColor) {
+            state.hasCustomized = true;
+            
+            // Update session order tracking
+            updateSessionOrder();
+        }
         
         // Re-render bundle contents to show new icon/label
         renderBundleContentsIcons();
@@ -454,6 +545,33 @@
                 updateSelectorLabel();
                 updateMicroFeedback(getReadyMode());
                 syncSelectedPill();
+            });
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // CHECKOUT HANDLER
+    // ═══════════════════════════════════════════════════════════
+    function setupCheckoutHandler() {
+        const buyNowBtn = document.getElementById('buyNow');
+        if (buyNowBtn) {
+            buyNowBtn.addEventListener('click', function(e) {
+                // Get the Shopify button ID based on current bundle
+                const shopifyButtonId = SHOPIFY_BUTTON_IDS[state.bundle];
+                
+                // Find the container and click its button
+                const container = document.getElementById(shopifyButtonId);
+                if (container) {
+                    const shopifyBtn = container.querySelector('.shopify-buy__btn');
+                    if (shopifyBtn) {
+                        console.log('Programmatically clicking Shopify button for:', state.bundle, 'Order:', sessionOrder);
+                        shopifyBtn.click();
+                    } else {
+                        console.error('Shopify button not found in container:', shopifyButtonId);
+                    }
+                } else {
+                    console.error('Shopify container not found:', shopifyButtonId);
+                }
             });
         }
     }

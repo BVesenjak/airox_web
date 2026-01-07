@@ -2950,10 +2950,11 @@ p {
     font-weight: 500;
     transition: all 0.18s ease;
     cursor: pointer;
+    overflow: visible;
 }
 
 .pill:hover {
-    border-color: rgb(153, 255, 255);
+    background-color: rgba(0, 174, 255, 0.156);
 }
 
 .pill:focus-visible {
@@ -4562,6 +4563,7 @@ transition: opacity 0s ease !important;
     display: flex !important;
     flex-wrap: nowrap !important;
     gap: 8px;
+    overflow: visible;
 }
 
 .variant-pills--bundle button {
@@ -4569,6 +4571,7 @@ transition: opacity 0s ease !important;
     min-width: 0;
     height:100px;
     text-align: left;
+    overflow: visible;
 }
 
 /* Bundle Contents Visualizer */
@@ -4599,6 +4602,77 @@ transition: opacity 0s ease !important;
 /* Increased spacing when only 2 fans are displayed (2-pack) */
 .bundle-contents-chips:has(.fan-chip:nth-child(2):last-child) {
     gap: 24px;
+}
+
+/* Bundle Badges - Premium Animated Badges */
+.bundle-card {
+    position: relative;
+    overflow: visible;
+}
+
+.bundle-badge {
+    position: absolute;
+    z-index: 10;
+    
+    /* CRITICAL: Remove from layout flow completely */
+    pointer-events: none;
+    
+    /* Visual styling (inspired by btn-cta) */
+    background: linear-gradient(135deg, #f40fc2, #15ccbe);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    
+    /* Shadow - crisp and sharp (default) */
+    box-shadow: 
+        0 2px 6px rgba(244, 15, 194, 0.35),
+        0 4px 12px rgba(21, 204, 190, 0.25);
+    
+    /* Performance optimization */
+    will-change: transform, opacity, filter;
+    
+    /* Continuous animation */
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+/* Top right badge - overlapping corner (floating above) */
+.bundle-badge--top-right {
+    top: -6px;
+    right: -6px;
+    transform-origin: top right;
+}
+
+/* Bottom left badge - inside pill, near corner (floating above) */
+.bundle-badge--bottom-left {
+    bottom: 6px;
+    left: 6px;
+    transform-origin: bottom left;
+}
+
+/* Continuous pulse animation */
+@keyframes badge-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        filter: blur(0px);
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+        filter: blur(0.4px);
+    }
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .bundle-badge {
+        animation: none;
+    }
 }
 
 .fan-chip {

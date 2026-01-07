@@ -148,19 +148,28 @@
                     
                     <div class="price-block">
                         <div class="price-block__main">
-                            <span class="price-block__compare myfont2r">$89.99</span>
-                            <span class="price-block__current myfont2" id="currentPrice">$39.99</span>
+                            <span class="price-block__compare myfont2r" id="comparePrice">$49.99</span>
+                            <span class="price-block__current myfont2" id="currentPrice">$38.99</span>
                         </div>
-                        <span class="price-block__savings myfont2">Save $50</span>
+                        <span class="price-block__savings myfont2" id="savingsBadge"></span>
                     </div>
                     
                     <!-- Variant Selectors -->
                     <div class="variant-group variant-group--bundle">
                         <label class="variant-group__label">Choose Bundle</label>
                         <div class="variant-pills variant-pills--bundle" role="radiogroup" aria-label="Select bundle">
-                            <button class="pill pill--animated pill--bundle" role="radio" aria-checked="false" data-variant-type="bundle" data-value="single" data-animation="assets/btn-anim-4.mp4">1-Pack — Buy 1</button>
-                            <button class="pill pill--active pill--animated pill--bundle" role="radio" aria-checked="true" data-variant-type="bundle" data-value="duo" data-animation="assets/btn-anim-5.mp4">2-Pack — Buy 1 Get 1 FREE 🎁</button>
-                            <button class="pill pill--animated pill--bundle" role="radio" aria-checked="false" data-variant-type="bundle" data-value="family" data-animation="assets/btn-anim-6.mp4">Family (4-Pack) — 57% OFF 🔥</button>
+                            <button class="pill pill--active pill--animated pill--bundle bundle-card" role="radio" aria-checked="true" data-variant-type="bundle" data-value="single" data-animation="assets/btn-anim-4.mp4" data-price="38.99" data-compare="89.99" data-savings="">
+                                1-Pack — Buy 1
+                            </button>
+                            <button class="pill pill--animated pill--bundle bundle-card" role="radio" aria-checked="false" data-variant-type="bundle" data-value="duo" data-animation="assets/btn-anim-5.mp4" data-price="38.99" data-compare="89.99" data-savings="+1 Fan gratis">
+                                <span class="bundle-badge bundle-badge--top-right">BEST VALUE</span>
+                                <span class="bundle-badge bundle-badge--bottom-left">RECOMMENDED</span>
+                                2-Pack — Buy 1 Get 1 FREE 🎁
+                            </button>
+                            <button class="pill pill--animated pill--bundle bundle-card" role="radio" aria-checked="false" data-variant-type="bundle" data-value="family" data-animation="assets/btn-anim-6.mp4" data-price="105.99" data-compare="199.99" data-savings="SAVE €50">
+                                <span class="bundle-badge bundle-badge--top-right">MAX SAVINGS</span>
+                                Family (4-Pack) — 57% OFF 🔥
+                            </button>
                         </div>
                     </div>
 
@@ -247,6 +256,194 @@
                    <div class="cta-group">
                     <button id="buyNow" class="btn-cta" data-analytics="confirm-selection">CHECKOUT NOW</button>
                 </div>
+
+                <div id='product-component-1767740291986'></div>
+<script type="text/javascript">
+/*<![CDATA[*/
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  if (window.ShopifyBuy) {
+    if (window.ShopifyBuy.UI) {
+      ShopifyBuyInit();
+    } else {
+      loadScript();
+    }
+  } else {
+    loadScript();
+  }
+  function loadScript() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = scriptURL;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+    script.onload = ShopifyBuyInit;
+  }
+  function ShopifyBuyInit() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'jnr35f-j0.myshopify.com',
+      storefrontAccessToken: '6d2b3371273563fc70b1554be9a6750d',
+    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '10493710762322',
+        node: document.getElementById('product-component-1767740291986'),
+        moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
+        options: {
+  "product": {
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "calc(25% - 20px)",
+          "margin-left": "20px",
+          "margin-bottom": "50px"
+        }
+      },
+      "button": {
+        "font-family": "Karla, sans-serif",
+        "font-weight": "bold",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2a93db"
+        },
+        "background-color": "#2fa3f3",
+        ":focus": {
+          "background-color": "#2a93db"
+        },
+        "border-radius": "8px",
+        "padding-left": "100px",
+        "padding-right": "100px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "buttonDestination": "checkout",
+    "contents": {
+      "img": false,
+      "title": false,
+      "price": false
+    },
+    "text": {
+      "button": "Checkout"
+    },
+    "googleFonts": [
+      "Karla"
+    ]
+  },
+  "productSet": {
+    "styles": {
+      "products": {
+        "@media (min-width: 601px)": {
+          "margin-left": "-20px"
+        }
+      }
+    }
+  },
+  "modalProduct": {
+    "contents": {
+      "img": false,
+      "imgWithCarousel": true,
+      "button": false,
+      "buttonWithQuantity": true
+    },
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0px",
+          "margin-bottom": "0px"
+        }
+      },
+      "button": {
+        "font-family": "Karla, sans-serif",
+        "font-weight": "bold",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2a93db"
+        },
+        "background-color": "#2fa3f3",
+        ":focus": {
+          "background-color": "#2a93db"
+        },
+        "border-radius": "8px",
+        "padding-left": "100px",
+        "padding-right": "100px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "googleFonts": [
+      "Karla"
+    ],
+    "text": {
+      "button": "Add to cart"
+    }
+  },
+  "option": {},
+  "cart": {
+    "styles": {
+      "button": {
+        "font-family": "Karla, sans-serif",
+        "font-weight": "bold",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2a93db"
+        },
+        "background-color": "#2fa3f3",
+        ":focus": {
+          "background-color": "#2a93db"
+        },
+        "border-radius": "8px"
+      }
+    },
+    "text": {
+      "total": "Subtotal",
+      "button": "Checkout"
+    },
+    "popup": false,
+    "googleFonts": [
+      "Karla"
+    ]
+  },
+  "toggle": {
+    "styles": {
+      "toggle": {
+        "font-family": "Karla, sans-serif",
+        "font-weight": "bold",
+        "background-color": "#2fa3f3",
+        ":hover": {
+          "background-color": "#2a93db"
+        },
+        ":focus": {
+          "background-color": "#2a93db"
+        }
+      },
+      "count": {
+        "font-size": "14px"
+      }
+    },
+    "googleFonts": [
+      "Karla"
+    ]
+  }
+},
+      });
+    });
+  }
+})();
+/*]]>*/
+</script>
 
                         <!-- ADD TO CART cta-->
                         <!-- div with id="addToCart" for the toast popup -->
@@ -698,8 +895,8 @@
                         <div class="corner-bracket br"></div>
                         <img src="assets/product-main.png" alt="WARCHARGE" class="product-main-img">
                         <p class="product-price">
-                            <span class="old-price myfont2r">$89.99</span>
-                            <span class="sale-price myfont2">$39.99</span>
+                            <span class="old-price myfont2r">$49.99</span>
+                            <span class="sale-price myfont2">$38.99</span>
                         </p>
                     </div>
                 </div>
@@ -952,6 +1149,173 @@
                 <div class="col-3"><div id='product-component-1767037492944'></div></div>
                 <div class="col-3"><div id='product-component-1767471363799'></div></div>
                 <div class="col-3"><div id='product-component-1767471509348'></div></div>
+                <div id='product-component-1767737103366'></div>
+<script type="text/javascript">
+/*<![CDATA[*/
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  if (window.ShopifyBuy) {
+    if (window.ShopifyBuy.UI) {
+      ShopifyBuyInit();
+    } else {
+      loadScript();
+    }
+  } else {
+    loadScript();
+  }
+  function loadScript() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = scriptURL;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+    script.onload = ShopifyBuyInit;
+  }
+  function ShopifyBuyInit() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'jnr35f-j0.myshopify.com',
+      storefrontAccessToken: '6d2b3371273563fc70b1554be9a6750d',
+    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '10493710762322',
+        node: document.getElementById('product-component-1767737103366'),
+        moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
+        options: {
+  "product": {
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "calc(25% - 20px)",
+          "margin-left": "20px",
+          "margin-bottom": "50px"
+        }
+      },
+      "button": {
+        "font-weight": "bold",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#13b8ab"
+        },
+        "background-color": "#15ccbe",
+        ":focus": {
+          "background-color": "#13b8ab"
+        },
+        "padding-left": "100px",
+        "padding-right": "100px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "buttonDestination": "checkout",
+    "contents": {
+      "img": false,
+      "title": false,
+      "price": false
+    },
+    "text": {
+      "button": "Buy now"
+    }
+  },
+  "productSet": {
+    "styles": {
+      "products": {
+        "@media (min-width: 601px)": {
+          "margin-left": "-20px"
+        }
+      }
+    }
+  },
+  "modalProduct": {
+    "contents": {
+      "img": false,
+      "imgWithCarousel": true,
+      "button": false,
+      "buttonWithQuantity": true
+    },
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0px",
+          "margin-bottom": "0px"
+        }
+      },
+      "button": {
+        "font-weight": "bold",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#13b8ab"
+        },
+        "background-color": "#15ccbe",
+        ":focus": {
+          "background-color": "#13b8ab"
+        },
+        "padding-left": "100px",
+        "padding-right": "100px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "text": {
+      "button": "Add to cart"
+    }
+  },
+  "option": {},
+  "cart": {
+    "styles": {
+      "button": {
+        "font-weight": "bold",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#13b8ab"
+        },
+        "background-color": "#15ccbe",
+        ":focus": {
+          "background-color": "#13b8ab"
+        }
+      }
+    },
+    "text": {
+      "total": "Subtotal",
+      "button": "Checkout"
+    }
+  },
+  "toggle": {
+    "styles": {
+      "toggle": {
+        "font-weight": "bold",
+        "background-color": "#15ccbe",
+        ":hover": {
+          "background-color": "#13b8ab"
+        },
+        ":focus": {
+          "background-color": "#13b8ab"
+        }
+      },
+      "count": {
+        "font-size": "14px"
+      }
+    }
+  }
+},
+      });
+    });
+  }
+})();
+/*]]>*/
+</script>
             </div>
             
         </div>
