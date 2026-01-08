@@ -498,6 +498,11 @@ document.addEventListener('DOMContentLoaded', () => {
 let cartCount = 0;
 const cartCountElement = document.querySelector('.cart-count');
 
+// Hide cart count initially
+if (cartCountElement) {
+    cartCountElement.style.display = 'none';
+}
+
 // Add to cart buttons
 document.querySelectorAll('.btn-cta, .btn-hero, .btn-choose').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -508,37 +513,17 @@ document.querySelectorAll('.btn-cta, .btn-hero, .btn-choose').forEach(btn => {
         if (cartCountElement) {
             cartCountElement.textContent = cartCount;
             
+            // Show cart count if hidden
+            if (cartCount > 0) {
+                cartCountElement.style.display = 'inline-block';
+            }
+            
             // Add animation
             cartCountElement.style.transform = 'scale(1.5)';
             setTimeout(() => {
                 cartCountElement.style.transform = 'scale(1)';
             }, 200);
         }
-        
-        // Show success message (you can replace with a better notification)
-        const message = currentLanguage === 'en' 
-            ? 'Added to cart!' 
-            : 'Zum Warenkorb hinzugefügt!';
-        
-        // Create temporary notification
-        const notification = document.createElement('div');
-        notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background-color: #e50914;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 5px;
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-        `;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.remove();
-        }, 2000);
     });
 });
 
