@@ -166,19 +166,23 @@ window.client = ShopifyBuy.buildClient({
           <p><strong>${item.title}</strong></p>
           <p style="color: #666; font-size: 14px;">Colors: ${item.colors}</p>
           <p><strong>$${(parseFloat(item.variant.price.amount) * item.quantity).toFixed(2)}</strong></p>
-          <div class="quantity-picker" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-            <button class="qty-btn" data-action="decrease" data-key="${key}" style="padding: 5px 10px;">−</button>
-            <span class="qty-value" style="min-width: 30px; text-align: center; font-weight: bold;">${item.quantity}</span>
-            <button class="qty-btn" data-action="increase" data-key="${key}" style="padding: 5px 10px;">+</button>
-          </div>
+           <div class="quantity-picker" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+             <button class="qty-btn" data-action="decrease" data-key="${key}" style="padding: 8px 12px;; border: 1px solid; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; min-width: 32px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">−</button>
+             <span class="qty-value" style="min-width: 40px; text-align: center; font-weight: bold; font-size: 18px; color: #15ccbe;">${item.quantity}</span>
+             <button class="qty-btn" data-action="increase" data-key="${key}" style="padding: 8px 12px;; border: 1px solid; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; min-width: 32px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">+</button>
+           </div>
         </div>
       </div>
     `).join('');
     
     const totalItems = Object.values(groupedItems).reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cartCount').textContent = totalItems;
-    document.querySelector('.cart-count').textContent = totalItems;
     document.getElementById('cartTotal').textContent = `$${currentCheckout.totalPrice.amount}`;
+    
+    // Update navbar badge
+    if (window.updateNavbarCartBadge) {
+      window.updateNavbarCartBadge(totalItems);
+    }
     
     drawer.classList.add('open');
     
@@ -190,27 +194,62 @@ window.client = ShopifyBuy.buildClient({
         const lineItemIds = window.cartLineItemIds[key];
         const currentQty = window.cartGroupedItems[key].quantity;
         
+        // Disable button during update
+        this.disabled = true;
+        const originalText = this.textContent;
+        this.textContent = '...';
+        
         try {
           if (action === 'increase') {
-            const item = currentCheckout.lineItems.find(li => lineItemIds.includes(li.id));
-            currentCheckout = await client.checkout.addLineItems(currentCheckout.id, [{
-              variantId: item.variant.id,
-              quantity: 1,
-              customAttributes: item.customAttributes
-            }]);
-          } else {
-            // Only remove one line item at a time
-            if (currentQty > 1) {
-              currentCheckout = await client.checkout.removeLineItems(currentCheckout.id, [lineItemIds[0]]);
+            // Find the first line item to get variant info
+            const firstLineItem = currentCheckout.lineItems.find(li => lineItemIds.includes(li.id));
+            
+            // Update the line item quantity by 1
+            const lineItemsToUpdate = [{
+              id: firstLineItem.id,
+              quantity: firstLineItem.quantity + 1
+            }];
+            
+            currentCheckout = await client.checkout.updateLineItems(currentCheckout.id, lineItemsToUpdate);
+            console.log('Increased quantity for:', key, 'New qty:', firstLineItem.quantity + 1);
+            
+          } else if (action === 'decrease') {
+            // Find the first line item
+            const firstLineItem = currentCheckout.lineItems.find(li => lineItemIds.includes(li.id));
+            
+            if (firstLineItem.quantity > 1) {
+              // Decrease quantity by 1
+              const lineItemsToUpdate = [{
+                id: firstLineItem.id,
+                quantity: firstLineItem.quantity - 1
+              }];
+              
+              currentCheckout = await client.checkout.updateLineItems(currentCheckout.id, lineItemsToUpdate);
+              console.log('Decreased quantity for:', key, 'New qty:', firstLineItem.quantity - 1);
+              
             } else {
-              // Last one - remove completely
+              // Last one - remove all line items in this group
               currentCheckout = await client.checkout.removeLineItems(currentCheckout.id, lineItemIds);
+              console.log('Removed last item for:', key);
             }
           }
           
+          // Update navbar badge
+          const totalItems = currentCheckout.lineItems.reduce((sum, item) => sum + item.quantity, 0);
+          if (window.updateNavbarCartBadge) {
+            window.updateNavbarCartBadge(totalItems);
+          }
+          
+          // Re-render drawer with updated cart
           openCartDrawer(false);
+          
         } catch (error) {
           console.error('Quantity update error:', error);
+          alert('Failed to update quantity. Please try again.');
+          
+          // Re-enable button
+          this.disabled = false;
+          this.textContent = originalText;
         }
       });
     });
