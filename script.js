@@ -492,10 +492,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // =================================
-// CART FUNCTIONALITY (Basic)
+// CART FUNCTIONALITY (Shopify Storefront API Integration)
 // =================================
 
-let cartCount = 0;
 const cartCountElement = document.querySelector('.cart-count');
 
 // Hide cart count initially
@@ -503,29 +502,58 @@ if (cartCountElement) {
     cartCountElement.style.display = 'none';
 }
 
-// Add to cart buttons
-document.querySelectorAll('.btn-cta, .btn-hero, .btn-choose').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        // Don't add to cart if it's a link
-        if (btn.tagName === 'A') return;
+/**
+ * Update navbar cart badge
+ */
+window.updateNavbarCartBadge = function(totalItems) {
+    if (!cartCountElement) return;
+    
+    if (totalItems > 0) {
+        cartCountElement.textContent = totalItems;
+        cartCountElement.style.display = 'inline-block';
         
-        cartCount++;
-        if (cartCountElement) {
-            cartCountElement.textContent = cartCount;
-            
-            // Show cart count if hidden
-            if (cartCount > 0) {
-                cartCountElement.style.display = 'inline-block';
-            }
-            
-            // Add animation
-            cartCountElement.style.transform = 'scale(1.5)';
-            setTimeout(() => {
-                cartCountElement.style.transform = 'scale(1)';
-            }, 200);
+        // Add animation
+        cartCountElement.style.transform = 'scale(1.5)';
+        setTimeout(() => {
+            cartCountElement.style.transform = 'scale(1)';
+        }, 200);
+    } else {
+        cartCountElement.style.display = 'none';
+    }
+};
+
+/**
+ * Load cart count from Shopify on page load
+ */
+async function loadInitialCartCount() {
+    const checkoutId = localStorage.getItem('shopify_checkout_id');
+    if (!checkoutId || !window.client) return;
+    
+    try {
+        const checkout = await window.client.checkout.fetch(checkoutId);
+        if (checkout && !checkout.completedAt && checkout.lineItems) {
+            const totalItems = checkout.lineItems.reduce((sum, item) => sum + item.quantity, 0);
+            window.updateNavbarCartBadge(totalItems);
         }
-    });
-});
+    } catch (e) {
+        console.log('No existing cart found');
+    }
+}
+
+// Load cart count when Shopify client is ready
+if (window.client) {
+    loadInitialCartCount();
+} else {
+    // Wait for ssa.js to load
+    const checkClient = setInterval(() => {
+        if (window.client) {
+            clearInterval(checkClient);
+            loadInitialCartCount();
+        }
+    }, 100);
+    
+    setTimeout(() => clearInterval(checkClient), 3000);
+}
 
 // Add animation keyframes dynamically
 const style = document.createElement('style');

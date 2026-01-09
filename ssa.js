@@ -3,10 +3,12 @@
 // ════════════════════════════════════════════════════════════
 
 // 1. Initialize Shopify client
-var client = ShopifyBuy.buildClient({
+window.client = ShopifyBuy.buildClient({
     domain: 'jnr35f-j0.myshopify.com',
     storefrontAccessToken: '6d2b3371273563fc70b1554be9a6750d',
   });
+  
+  var client = window.client;
   
   // 2. Initialize UI component for cart drawer
   const ui = ShopifyBuy.UI.init(client);
@@ -75,6 +77,19 @@ var client = ShopifyBuy.buildClient({
     };
   }
   
+  // ==================================================================
+  // NAVBAR CART
+  // ==================================================================
+  document.querySelector('.cart-icon').addEventListener('click', async function() {
+    // Fetch latest cart state
+    const checkout = await getOrCreateCheckout();
+    currentCheckout = checkout;
+    
+    // Open drawer
+    openCartDrawer(false);
+  });
+
+
   // ════════════════════════════════════════════════════════════
   // ADD TO CART BUTTON
   // ════════════════════════════════════════════════════════════
@@ -84,20 +99,135 @@ var client = ShopifyBuy.buildClient({
       const { variantId, colors } = getSelectedBundle();
       const checkout = await getOrCreateCheckout();
       
+      // Open drawer immediately with loading state
+      openCartDrawer(true); // Pass loading flag
+      
       currentCheckout = await client.checkout.addLineItems(checkout.id, [{
         variantId: variantId,
         quantity: 1,
         customAttributes: [{ key: 'Colors', value: colors }]
       }]);
       
-      // Update and open cart drawer
-      ui.components.cart[0].updateProperties({ lineItems: currentCheckout.lineItems });
-      ui.components.cart[0].open();
+      // Update navbar badge immediately
+      const totalItems = currentCheckout.lineItems.reduce((sum, item) => sum + item.quantity, 0);
+      if (window.updateNavbarCartBadge) {
+        window.updateNavbarCartBadge(totalItems);
+      }
+      
+      // Update with real data
+      openCartDrawer(false);
       
     } catch (error) {
-      console.error('Add to cart error:', error);
-      alert('Failed to add to cart');
+      console.error('Error:', error);
+      document.getElementById('cartDrawer').classList.remove('open');
     }
+  });
+  
+  function openCartDrawer(isLoading = false) {
+    const drawer = document.getElementById('cartDrawer');
+    const itemsContainer = document.getElementById('cartItems');
+    
+    if (isLoading) {
+      itemsContainer.innerHTML = '<p style="text-align:center;padding:20px;">Adding to cart...</p>';
+      drawer.classList.add('open');
+      return;
+    }
+    
+    // Group items by variant ID + colors
+    const groupedItems = {};
+    const lineItemIds = {}; // Track line item IDs for updates
+    
+    currentCheckout.lineItems.forEach(item => {
+      const colors = item.customAttributes.find(a => a.key === 'Colors')?.value || '';
+      const key = `${item.variant.id}-${colors}`;
+      
+      if (groupedItems[key]) {
+        groupedItems[key].quantity += item.quantity;
+        lineItemIds[key].push(item.id);
+      } else {
+        groupedItems[key] = {
+          ...item,
+          quantity: item.quantity,
+          colors: colors
+        };
+        lineItemIds[key] = [item.id];
+      }
+    });
+    
+    // Store globally for handlers to access
+    window.cartGroupedItems = groupedItems;
+    window.cartLineItemIds = lineItemIds;
+    
+    // Render with quantity picker
+    itemsContainer.innerHTML = Object.entries(groupedItems).map(([key, item]) => `
+      <div class="cart-item">
+        <img src="${item.variant.image.src}" alt="${item.title}">
+        <div style="flex: 1;">
+          <p><strong>${item.title}</strong></p>
+          <p style="color: #666; font-size: 14px;">Colors: ${item.colors}</p>
+          <p><strong>$${(parseFloat(item.variant.price.amount) * item.quantity).toFixed(2)}</strong></p>
+          <div class="quantity-picker" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+            <button class="qty-btn" data-action="decrease" data-key="${key}" style="padding: 5px 10px;">−</button>
+            <span class="qty-value" style="min-width: 30px; text-align: center; font-weight: bold;">${item.quantity}</span>
+            <button class="qty-btn" data-action="increase" data-key="${key}" style="padding: 5px 10px;">+</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    
+    const totalItems = Object.values(groupedItems).reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cartCount').textContent = totalItems;
+    document.querySelector('.cart-count').textContent = totalItems;
+    document.getElementById('cartTotal').textContent = `$${currentCheckout.totalPrice.amount}`;
+    
+    drawer.classList.add('open');
+    
+    // Attach handlers
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const action = this.dataset.action;
+        const key = this.dataset.key;
+        const lineItemIds = window.cartLineItemIds[key];
+        const currentQty = window.cartGroupedItems[key].quantity;
+        
+        try {
+          if (action === 'increase') {
+            const item = currentCheckout.lineItems.find(li => lineItemIds.includes(li.id));
+            currentCheckout = await client.checkout.addLineItems(currentCheckout.id, [{
+              variantId: item.variant.id,
+              quantity: 1,
+              customAttributes: item.customAttributes
+            }]);
+          } else {
+            // Only remove one line item at a time
+            if (currentQty > 1) {
+              currentCheckout = await client.checkout.removeLineItems(currentCheckout.id, [lineItemIds[0]]);
+            } else {
+              // Last one - remove completely
+              currentCheckout = await client.checkout.removeLineItems(currentCheckout.id, lineItemIds);
+            }
+          }
+          
+          openCartDrawer(false);
+        } catch (error) {
+          console.error('Quantity update error:', error);
+        }
+      });
+    });
+  }
+  
+  // Close cart handlers
+  document.getElementById('closeCart').addEventListener('click', () => {
+    document.getElementById('cartDrawer').classList.remove('open');
+  });
+  
+  document.querySelector('.cart-drawer__overlay').addEventListener('click', () => {
+    document.getElementById('cartDrawer').classList.remove('open');
+  });
+  
+  // Checkout from cart
+  document.getElementById('cartCheckout').addEventListener('click', () => {
+    window.location.href = currentCheckout.webUrl;
   });
   
   // ════════════════════════════════════════════════════════════
@@ -116,6 +246,12 @@ var client = ShopifyBuy.buildClient({
           quantity: 1,
           customAttributes: [{ key: 'Colors', value: colors }]
         }]);
+        
+        // Update navbar badge
+        const totalItems = currentCheckout.lineItems.reduce((sum, item) => sum + item.quantity, 0);
+        if (window.updateNavbarCartBadge) {
+          window.updateNavbarCartBadge(totalItems);
+        }
       }
       
       // Redirect to checkout

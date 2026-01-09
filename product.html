@@ -970,6 +970,22 @@
         </div>
     </div>
 
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="cart-drawer">
+        <div class="cart-drawer__overlay"></div>
+        <div class="cart-drawer__content">
+          <div class="cart-drawer__header">
+            <h3>Cart (<span id="cartCount">0</span>)</h3>
+            <button id="closeCart">×</button>
+          </div>
+          <div id="cartItems"></div>
+          <div class="cart-drawer__footer">
+            <p>Total: <strong id="cartTotal">$0.00</strong></p>
+            <button id="cartCheckout">Checkout</button>
+          </div>
+        </div>
+      </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
