@@ -9,8 +9,8 @@
     --dark-gray: #1a1a1a;
     --medium-gray: #2a2a2a;
     --light-gray: #3a3a3a;
-    --red: #15CCBE;
-    --red-hover: rgb(0, 255, 255);
+    --red: #15ccbe;
+    --red-hover: #47b0ff;
     --white: #ffffff;
     --text-gray: #b3b3b3;
     --border-gray: #444444;
@@ -857,10 +857,17 @@ p {
     color: var(--white);
 }
 
-.divider {
+.upperdivider {
     border: none;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--red-hover), transparent);
+    background: linear-gradient(90deg, transparent, cyan, transparent);
+    margin: 40px 0;
+}
+
+.lowerdivider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #15CCBE, transparent);
     margin: 40px 0;
 }
 
@@ -1808,7 +1815,7 @@ p {
 }
 
 .btn-join {
-    background-color: var(--red);
+    background-color: #47b0ff;
     color: var(--white);
     border: none;
     padding: 18px 40px;
