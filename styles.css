@@ -867,7 +867,7 @@ p {
 .lowerdivider {
     border: none;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #15CCBE, transparent);
+    background: linear-gradient(90deg, transparent, rgba(21, 204, 190, 0.7), transparent);
     margin: 40px 0;
 }
 
@@ -1338,8 +1338,9 @@ p {
 
 .testimonial-quote {
     font-size: 18px;
-    font-family: myfont;
-    color: var(--text-gray);
+    font-family: myfont3;
+    font-style: italic;
+    color: rgb(105, 105, 105);
     margin-bottom: 30px;
     line-height: 1.8;
 }
@@ -1637,15 +1638,21 @@ p {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQYlWNgYGD4TwQGBkaKFI6CUTAIAAANBgABvKwZPgAAAABJRU5ErkJggg==');
-    opacity: 0.05;
+    background-image: url('assets/faqbg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.7;
     pointer-events: none;
+    z-index: 0;
 }
 
 .faq-header {
     text-align: right;
     margin-bottom: 60px;
     padding: 40px;
+    position: relative;
+    z-index: 1;
 }
 
 .faq-title {
@@ -1664,6 +1671,8 @@ p {
 
 .faq-list-wrapper {
     width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .faq-list {
