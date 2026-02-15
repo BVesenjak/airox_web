@@ -1042,6 +1042,85 @@
         </div>
     </section>
 
+    <!-- Section 10: Brand Video Section -->
+    <section id="brand-video" class="brand-video">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="weight-light">One Device.</span>
+                <span class="weight-bold">Total CONTROL</span>
+            </h2>
+            <p class="section-subtitle">Building wellness technology that empowers your daily life.</p>
+            
+            <div class="video-module">
+                <div class="video-module__wrapper">
+                    <img 
+                        src="assets/high-energy.jpg" 
+                        alt="Brand story video" 
+                        class="video-module__poster"
+                        id="brandVideoPoster"
+                        loading="lazy">
+                    <button class="video-module__play" id="brandVideoPlay" aria-label="Play brand video">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="currentColor">
+                            <circle cx="32" cy="32" r="32" opacity="0.9"/>
+                            <path d="M26 20l20 12-20 12V20z" fill="white"/>
+                        </svg>
+                    </button>
+                    <video 
+                        class="video-module__video" 
+                        id="brandVideo"
+                        poster="assets/high-energy.jpg"
+                        controls
+                        style="display: none;">
+                        <source src="assets/hero-animation.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <!--<p class="video-module__caption">Discover how AIROX is redefining personal wellness.</p>-->
+            </div>
+            
+            <div class="credibility-badges">
+                <div class="badge">
+                    <span class="badge__label">Featured in</span>
+                    <span class="badge__value">TechCrunch</span>
+                </div>
+                <div class="badge">
+                    <span class="badge__label">Certified by</span>
+                    <span class="badge__value">CE & FDA</span>
+                </div>
+                <div class="badge">
+                    <span class="badge__label">Awarded</span>
+                    <span class="badge__value">Best Design 2025</span>
+                </div>
+            </div>
+            <hr>
+
+            <div class="cta-btn-wrapper cta-btn-double-wrapper" style="text-align: center !important;">
+                <button id="buyNow" class="buy-cta" data-analytics="buy-now">
+                    <video class="btn-video btn-video-default" autoplay loop muted playsinline>
+                        <source src="assets/btn-bg-1.mp4" type="video/mp4">
+                    </video>
+                    <video class="btn-video btn-video-hover" autoplay loop muted playsinline>
+                        <source src="assets/btn-bg-2.mp4" type="video/mp4">
+                    </video>
+                    <span class="btn-text" style="
+                    font-weight: 800;
+                    font-size: 62px;
+                    color: #ffffff;
+                    letter-spacing: 2px;
+                    text-shadow:
+                        2px 2px 6px rgba(255, 255, 255, 0.1),   /* soft shadow depth */
+                        0 0 8px rgba(255, 255, 255, 0.2); /* subtle warm glow fun */
+                    background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    display: inline-block;
+                    text-transform: uppercase;
+                    ">GET AIROX</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Section 13: Sticky Footer CTA -->
     <div id="stickyFooterCTA" class="sticky-footer-cta" aria-hidden="false">
         <div class="container">
@@ -1109,6 +1188,7 @@
                 </div>
             </div>
         </div>
+        <br><br><br>
     </footer>
 
     <!-- Lightbox -->

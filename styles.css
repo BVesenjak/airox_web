@@ -839,7 +839,7 @@ p {
 
 /* See How It Works Section */
 .see-how-section {
-    padding: 80px 180px;
+    padding: 20px 180px 10px;
     background-color: var(--black);
 
 }
