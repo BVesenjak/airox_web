@@ -1391,6 +1391,13 @@ p {
     color: var(--text-gray);
 }
 
+/* Mobile testimonial styles */
+@media (max-width: 768px) {
+    .testimonial-signature {
+        font-size: 28px;
+    }
+}
+
 .testimonial-image {
     max-width: 100%;
     height: auto;
