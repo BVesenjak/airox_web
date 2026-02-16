@@ -69,6 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         langToggle.addEventListener('click', () => {
             currentLanguage = currentLanguage === 'en' ? 'de' : 'en';
             applyLanguage(currentLanguage);
+            // Reload current testimonial to update language
+            if (typeof currentTestimonialIndex !== 'undefined') {
+                loadTestimonial(currentTestimonialIndex);
+            }
         });
     }
 });
@@ -170,7 +174,9 @@ const testimonials = [
     },
     {
         name: "DIETER R.",
-        quote: "The best tools almost disappear. They simply work. Nothing excessive, nothing constrained, everything just so. Fresh air on demand is a small thing, but it’s also the essence of comfort. In an age that celebrates more, it’s the less that restores you. True luxury is found in what doesn’t ask for attention, but quietly makes life better.",
+        quote_en: "The best tools almost disappear. They simply work. Nothing excessive, nothing constrained, everything just so. Fresh air on demand is a small thing, but it’s also the essence of comfort. In an age that celebrates more, it’s the less that restores you. True luxury is found in what doesn’t ask for attention, but quietly makes life better.",
+        quote_de: "Die besten Werkzeuge verschwinden fast. Sie funktionieren einfach. Nichts Übertriebenes, nichts Eingeengtes, alles stimmt. Frische Luft, wann immer man sie braucht — eine Kleinigkeit, aber auch das Wesen von Komfort. In einer Zeit, die das Mehr feiert, ist es das Weniger, das einem guttut. Wahrer Luxus liegt in dem, was keine Aufmerksamkeit verlangt, sondern das Leben leise besser macht.",
+        hasTranslation: true,
         credentials: "Industrial Designer · Minimalist Thinker",
         image: "assets/testimonial-dieter.jpg"
     }
@@ -186,8 +192,11 @@ function loadTestimonial(index) {
     content.classList.add('fade-out');
     
     setTimeout(() => {
-        // Update content
-        document.querySelector('.testimonial-quote').textContent = testimonial.quote;
+        // Update content with language support
+        const quote = testimonial.hasTranslation 
+            ? (currentLanguage === 'de' ? testimonial.quote_de : testimonial.quote_en)
+            : testimonial.quote;
+        document.querySelector('.testimonial-quote').textContent = quote;
         document.querySelector('.testimonial-signature').textContent = testimonial.name;
         document.querySelector('.testimonial-credentials').textContent = testimonial.credentials;
         document.querySelector('.testimonial-image').src = testimonial.image;
@@ -779,4 +788,5 @@ if (document.readyState === 'loading') {
 console.log('%c🔥 WARCHARGE', 'font-size: 24px; font-weight: bold; color: #e50914;');
 console.log('%cPeak Performance Nutrition', 'font-size: 14px; color: #b3b3b3;');
 console.log('%cWebsite developed with warrior precision', 'font-size: 12px; font-style: italic; color: #666;');
+
 
