@@ -3398,6 +3398,23 @@ p {
     width: 100%;
 }
 
+#addToCart {
+    width: 100%;
+    margin-bottom: 7px;
+}
+
+.product-trust-badges {
+    margin-top: 1rem;
+    text-align: center;
+    width: 100%;
+}
+
+.trust-badges-image {
+    max-width: 100%;
+    height: auto;
+    opacity: 0.9;
+}
+
 .btn--compact {
     padding: 10px 24px;
     font-size: 0.875rem;
