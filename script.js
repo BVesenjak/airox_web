@@ -158,19 +158,19 @@ document.addEventListener('click', (e) => {
 const testimonials = [
     {
         name: "MATILDA D.",
-        quote: "It’s funny how something so small can change the whole mood of a day. You feel lighter, cooler more yourself. It’s not just a breeze, it's that peaceful, slowed-down feeling it produces. It's like the breeze understands you. That’s what I love the most about it. It’s a tiny piece of freedom I can hold in my hand every day.",
+        quote: "It’s not just a breeze, it's that peaceful, slowed-down feeling it produces. It's like the breeze understands you. That’s what I love the most about it. It’s a tiny piece of freedom I can hold in my hand every day.",
         credentials: "Creative Director · Style Founder",
         image: "assets/testimonial-matilda.jpg"
     },
     {
         name: "NAOTO F.",
-        quote: "When an object fits naturally into daily life, you stop thinking about it, yet you’d miss it if it were gone. That’s the balance I respect. A device that moves the air softly, breezily even, intuitively it reminds you that comfort doesn’t need to make a hassle. It just needs to happen, at the right time, in the right way.",
+        quote: "A device that moves the air softly, breezily even, intuitively reminds you that comfort doesn’t need to make a hassle. It just needs to happen, at the right time, in the right way.",
         credentials: " Product Designer · MUJI Collaborator",
         image: "assets/testimonial-naoto.jpg"
     },
     {
         name: "DIETER R.",
-        quote: "The best tools almost disappear — they simply work. Nothing excessive, nothing constrained, everything just so. Fresh air on demand is a small thing, but it’s also the essence of comfort. In an age that celebrates more, it’s the less that restores you. True luxury is found in what doesn’t ask for attention, but quietly makes life better.",
+        quote: "The best tools almost disappear. They simply work. Nothing excessive, nothing constrained, everything just so. Fresh air on demand is a small thing, but it’s also the essence of comfort. In an age that celebrates more, it’s the less that restores you. True luxury is found in what doesn’t ask for attention, but quietly makes life better.",
         credentials: "Industrial Designer · Minimalist Thinker",
         image: "assets/testimonial-dieter.jpg"
     }
