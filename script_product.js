@@ -761,6 +761,225 @@ function initHeroBuyThumbnails() {
 }
 
 
+// Video Testimonials Carousel — scroll-based with drag/momentum, auto-rotate, iOS-style dots
+function initVideoTestimonialsCarousel() {
+    var track = document.querySelector('.video-carousel-track');
+    var cards = track ? track.querySelectorAll('.video-card') : [];
+    var pagination = document.querySelector('.carousel-pagination');
+
+    if (!track || !cards.length || !pagination) return;
+
+    var totalSlides = cards.length;
+    var currentSlide = 0;
+    var autoRotateInterval = null;
+
+    // --- Build dots dynamically ---
+    var dots = [];
+    for (var i = 0; i < totalSlides; i++) {
+        var dot = document.createElement('span');
+        dot.className = 'dot';
+        dot.dataset.index = i;
+        pagination.appendChild(dot);
+        dots.push(dot);
+    }
+
+    // --- Dot visibility: max 5 visible, edge-aware window ---
+    // Determines which dot indices are visible and their role
+    function updateDots() {
+        var last = totalSlides - 1;
+
+        // Calculate the visible window [start, end] clamped to array bounds
+        // Active is centered when possible; at edges the window shifts
+        var winStart, winEnd;
+
+        if (currentSlide <= 0) {
+            // First page: show 3 (active, +1, +2)
+            winStart = 0;
+            winEnd = Math.min(2, last);
+        } else if (currentSlide === 1) {
+            // Second page: show 4 (-1, active, +1, +2)
+            winStart = 0;
+            winEnd = Math.min(3, last);
+        } else if (currentSlide >= last) {
+            // Last page: show 3 (-2, -1, active)
+            winStart = Math.max(last - 2, 0);
+            winEnd = last;
+        } else if (currentSlide === last - 1) {
+            // Second-to-last: show 4 (-2, -1, active, +1)
+            winStart = Math.max(last - 3, 0);
+            winEnd = last;
+        } else {
+            // Middle: show 5 (-2, -1, active, +1, +2)
+            winStart = currentSlide - 2;
+            winEnd = currentSlide + 2;
+        }
+
+        for (var i = 0; i < totalSlides; i++) {
+            if (i < winStart || i > winEnd) {
+                dots[i].dataset.vis = 'hidden';
+            } else if (i === currentSlide) {
+                dots[i].dataset.vis = 'active';
+            } else {
+                var dist = Math.abs(i - currentSlide);
+                dots[i].dataset.vis = dist === 1 ? 'adjacent' : 'far';
+            }
+        }
+    }
+
+    // Scroll to a specific card index
+    function scrollToCard(index) {
+        var card = cards[index];
+        if (!card) return;
+        var style = getComputedStyle(track);
+        var gap = parseFloat(style.gap) || 20;
+        var scrollTarget = (card.offsetWidth + gap) * index;
+        track.scrollTo({ left: scrollTarget, behavior: 'smooth' });
+        currentSlide = index;
+        updateDots();
+    }
+
+    // Detect which card is closest to the start after manual scroll/drag
+    function detectCurrentSlide() {
+        var style = getComputedStyle(track);
+        var gap = parseFloat(style.gap) || 20;
+        var cardWidth = cards[0].offsetWidth + gap;
+        var newIndex = Math.round(track.scrollLeft / cardWidth);
+        newIndex = Math.max(0, Math.min(newIndex, totalSlides - 1));
+        if (newIndex !== currentSlide) {
+            currentSlide = newIndex;
+            updateDots();
+        }
+    }
+
+    // Dot click navigation
+    dots.forEach(function(dot, index) {
+        dot.addEventListener('click', function() {
+            scrollToCard(index);
+            resetAutoRotate();
+        });
+    });
+
+    // Auto-rotate every 5 seconds
+    function startAutoRotate() {
+        autoRotateInterval = setInterval(function() {
+            var next = (currentSlide + 1) % totalSlides;
+            scrollToCard(next);
+        }, 5000);
+    }
+
+    function resetAutoRotate() {
+        clearInterval(autoRotateInterval);
+        startAutoRotate();
+    }
+
+    startAutoRotate();
+
+    // Update dots on scroll settle (for drag/swipe)
+    var scrollTimer = null;
+    track.addEventListener('scroll', function() {
+        if (scrollTimer) clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(detectCurrentSlide, 100);
+    }, { passive: true });
+
+    // Initial dot state
+    updateDots();
+
+    // --- Desktop drag-to-scroll with momentum (mirrors initHeroBuyThumbnails) ---
+    var isDown = false;
+    var startX;
+    var scrollLeft;
+    var velTrack = [];
+    var momentumId = null;
+
+    function disableSnap() {
+        track.style.scrollSnapType = 'none';
+        track.style.scrollBehavior = 'auto';
+    }
+
+    function enableSnap() {
+        track.style.scrollSnapType = '';
+        track.style.scrollBehavior = '';
+    }
+
+    function stopMomentum() {
+        if (momentumId) {
+            cancelAnimationFrame(momentumId);
+            momentumId = null;
+        }
+    }
+
+    function startDrag(e) {
+        stopMomentum();
+        isDown = true;
+        track.style.cursor = 'grabbing';
+        disableSnap();
+        startX = e.pageX;
+        scrollLeft = track.scrollLeft;
+        velTrack = [{ x: e.pageX, t: Date.now() }];
+        resetAutoRotate();
+    }
+
+    function endDrag() {
+        if (!isDown) return;
+        isDown = false;
+        track.style.cursor = 'grab';
+
+        var now = Date.now();
+        var recent = velTrack.filter(function(p) { return now - p.t < 80; });
+        var velocity = 0;
+
+        if (recent.length >= 2) {
+            var first = recent[0];
+            var last = recent[recent.length - 1];
+            var dt = last.t - first.t;
+            if (dt > 0) {
+                velocity = (first.x - last.x) / dt;
+            }
+        }
+
+        if (Math.abs(velocity) > 0.1) {
+            var v = velocity * 18;
+            var friction = 0.97;
+
+            function momentumStep() {
+                v *= friction;
+                track.scrollLeft += v;
+
+                if (Math.abs(v) > 0.5) {
+                    momentumId = requestAnimationFrame(momentumStep);
+                } else {
+                    momentumId = null;
+                    enableSnap();
+                }
+            }
+
+            momentumId = requestAnimationFrame(momentumStep);
+        } else {
+            enableSnap();
+        }
+    }
+
+    function onDrag(e) {
+        if (!isDown) return;
+        e.preventDefault();
+        var dx = e.pageX - startX;
+        track.scrollLeft = scrollLeft - dx;
+
+        velTrack.push({ x: e.pageX, t: Date.now() });
+        if (velTrack.length > 10) velTrack.shift();
+    }
+
+    track.addEventListener('mousedown', startDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('mousemove', onDrag);
+
+    track.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+
+    track.style.cursor = 'grab';
+}
+
 // Initialize All
 function init() {
     // Variant & Cart
@@ -784,6 +1003,7 @@ function init() {
     initButtonHoverAnimations();
     initHeroBuyImageSwitching();
     initHeroBuyThumbnails();
+    initVideoTestimonialsCarousel();
 
     // Initial updates
     updatePriceDisplay();

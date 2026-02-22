@@ -243,46 +243,6 @@ window.addEventListener('DOMContentLoaded', () => {
     loadTestimonial(0);
 });
 
-// =================================
-// VIDEO TESTIMONIALS CAROUSEL
-// =================================
-
-let currentVideoSlide = 0;
-const videoCarouselTrack = document.querySelector('.video-carousel-track');
-const dots = document.querySelectorAll('.carousel-pagination .dot');
-
-function updateVideoCarousel() {
-    const slideWidth = 100; // percentage
-    if (videoCarouselTrack) {
-        videoCarouselTrack.style.transform = `translateX(-${currentVideoSlide * slideWidth}%)`;
-    }
-    
-    // Update dots
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentVideoSlide);
-    });
-}
-
-// Auto-rotate video carousel
-let videoCarouselInterval = setInterval(() => {
-    currentVideoSlide = (currentVideoSlide + 1) % dots.length;
-    updateVideoCarousel();
-}, 5000);
-
-// Manual dot navigation
-dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-        currentVideoSlide = index;
-        updateVideoCarousel();
-        
-        // Reset auto-rotate
-        clearInterval(videoCarouselInterval);
-        videoCarouselInterval = setInterval(() => {
-            currentVideoSlide = (currentVideoSlide + 1) % dots.length;
-            updateVideoCarousel();
-        }, 5000);
-    });
-});
 
 // =================================
 // ADD TO CART CTA VIDEO CONTROL
