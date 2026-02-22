@@ -2358,11 +2358,14 @@ p {
         top: 0 !important;
     }
     
+    .hero-buy__img-wrapper {
+        max-width: 100% !important;
+    }
+
     .hero-buy__main-img {
         width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-        object-fit: contain !important;
+        height: 100% !important;
+        object-fit: cover !important;
     }
     
     .hero-buy__gallery {
@@ -2849,17 +2852,19 @@ p {
 
 .hero-buy__img-wrapper {
     position: relative;
-    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .hero-buy__main-img {
     width: 100%;
-    max-width: 500px;
-    height: auto;
+    height: 100%;
     display: block;
-    border-radius: 8px;
+    object-fit: cover;
     transition: opacity 280ms ease-out;
-    margin: 0 auto;
     -webkit-user-drag: none;
     user-select: none;
     pointer-events: none;
@@ -2962,7 +2967,7 @@ p {
     width: calc((100% - 36px) / 3.4);
     min-width: 130px;
     max-width: 160px;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     border: none;
     border-radius: 8px;
     overflow: hidden;
