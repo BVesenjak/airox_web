@@ -635,24 +635,33 @@ function initHeroBuyThumbnails() {
     const thumbnails = document.querySelectorAll('.thumb-buy');
     const leftArrow = document.querySelector('.carousel-arrow--left');
     const rightArrow = document.querySelector('.carousel-arrow--right');
-    
+    const thumbnailStrip = document.querySelector('.hero-buy__thumbnails');
+
     if (!heroBuyImage || !thumbnails.length) return;
-    
+
     let currentIndex = 0;
-    
+
+    function scrollToThumb(index) {
+        if (!thumbnailStrip) return;
+        const thumb = thumbnails[index];
+        // Center the active thumbnail within the strip
+        const scrollTarget = thumb.offsetLeft - (thumbnailStrip.clientWidth / 2) + (thumb.offsetWidth / 2);
+        thumbnailStrip.scrollTo({ left: scrollTarget, behavior: 'smooth' });
+    }
+
     function updateActiveThumb(index) {
         // Remove active from all thumbnails
         thumbnails.forEach(t => t.classList.remove('thumb-buy--active'));
-        
+
         // Set active on current thumbnail
         thumbnails[index].classList.add('thumb-buy--active');
-        
+
         // Update main image
         const newImageSrc = thumbnails[index].dataset.image;
         if (newImageSrc) {
             // Fade out
             heroBuyImage.style.opacity = '0';
-            
+
             // Change image after fade
             setTimeout(() => {
                 heroBuyImage.src = newImageSrc;
@@ -660,8 +669,9 @@ function initHeroBuyThumbnails() {
                 heroBuyImage.style.opacity = '1';
             }, 300);
         }
-        
+
         currentIndex = index;
+        scrollToThumb(index);
     }
     
     // Thumbnail click handlers
@@ -684,6 +694,107 @@ function initHeroBuyThumbnails() {
             const newIndex = currentIndex < thumbnails.length - 1 ? currentIndex + 1 : 0;
             updateActiveThumb(newIndex);
         });
+    }
+
+    // Mouse drag-to-scroll with momentum on desktop
+    if (thumbnailStrip) {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let velTrack = [];
+        let momentumId = null;
+
+        function disableSnap() {
+            thumbnailStrip.style.scrollSnapType = 'none';
+            thumbnailStrip.style.scrollBehavior = 'auto';
+        }
+
+        function enableSnap() {
+            thumbnailStrip.style.scrollSnapType = '';
+            thumbnailStrip.style.scrollBehavior = '';
+        }
+
+        function stopMomentum() {
+            if (momentumId) {
+                cancelAnimationFrame(momentumId);
+                momentumId = null;
+            }
+        }
+
+        function startDrag(e) {
+            stopMomentum();
+            isDown = true;
+            thumbnailStrip.style.cursor = 'grabbing';
+            disableSnap();
+            startX = e.pageX;
+            scrollLeft = thumbnailStrip.scrollLeft;
+            velTrack = [{ x: e.pageX, t: Date.now() }];
+        }
+
+        function endDrag() {
+            if (!isDown) return;
+            isDown = false;
+            thumbnailStrip.style.cursor = 'grab';
+
+            // Calculate release velocity from last 80ms of movement
+            const now = Date.now();
+            const recent = velTrack.filter(function(p) { return now - p.t < 80; });
+            let velocity = 0;
+
+            if (recent.length >= 2) {
+                const first = recent[0];
+                const last = recent[recent.length - 1];
+                const dt = last.t - first.t;
+                if (dt > 0) {
+                    velocity = (first.x - last.x) / dt; // px/ms
+                }
+            }
+
+            // Launch with momentum if flung fast enough
+            if (Math.abs(velocity) > 0.1) {
+                var v = velocity * 18; // px per frame at ~60fps
+                var friction = 0.97;   // slow, smooth deceleration
+
+                function momentumStep() {
+                    v *= friction;
+                    thumbnailStrip.scrollLeft += v;
+
+                    // Smooth phase — keep going
+                    if (Math.abs(v) > 0.5) {
+                        momentumId = requestAnimationFrame(momentumStep);
+                    } else {
+                        // Final settle — re-enable snap so it clicks into place
+                        momentumId = null;
+                        enableSnap();
+                    }
+                }
+
+                momentumId = requestAnimationFrame(momentumStep);
+            } else {
+                // No fling — just re-enable snap for a gentle settle
+                enableSnap();
+            }
+        }
+
+        function onDrag(e) {
+            if (!isDown) return;
+            e.preventDefault();
+            var dx = e.pageX - startX;
+            thumbnailStrip.scrollLeft = scrollLeft - dx;
+
+            velTrack.push({ x: e.pageX, t: Date.now() });
+            if (velTrack.length > 10) velTrack.shift();
+        }
+
+        thumbnailStrip.addEventListener('mousedown', startDrag);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('mousemove', onDrag);
+
+        thumbnailStrip.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+
+        thumbnailStrip.style.cursor = 'grab';
     }
 }
 

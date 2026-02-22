@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(export PATH=\"$PATH:/c/Program Files/Git/cmd:/c/Program Files/Git/bin\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(export PATH=\"$PATH:/c/Program Files/Git/cmd:/c/Program Files/Git/bin:/c/Windows/System32\")",
+      "Bash(export PATH=\"/c/Windows/System32:$PATH\")",
+      "Bash(dir:*)"
+    ]
+  }
+}

@@ -827,6 +827,31 @@ p {
     text-align: center;
 }
 
+/* Hero Section Mobile Layout - Below 1024px */
+@media (max-width: 1023px) {
+    .hero-section .row {
+        flex-direction: column;
+    }
+    
+    .hero-section .col-lg-6 {
+        max-width: 100%;
+        flex: 0 0 100%;
+        width: 100%;
+    }
+    
+    .hero-section .col-lg-6.hero-bg {
+        margin-bottom: 40px;
+    }
+    
+    .hero-section .hero-image {
+        order: 2;
+    }
+    
+    .hero-section .col-lg-6:first-child {
+        order: 1;
+    }
+}
+
 .product-render {
     max-width: 100%;
     height: auto;
@@ -2364,7 +2389,7 @@ p {
     
     .thumb-buy {
         width: calc((100% - 32px) / 2.8) !important;
-        min-width: 200px !important;
+        min-width: 120px !important;
     }
     
     .thumb-buy img {
@@ -2822,6 +2847,11 @@ p {
     border-radius: 12px;
 }
 
+.hero-buy__img-wrapper {
+    position: relative;
+    text-align: center;
+}
+
 .hero-buy__main-img {
     width: 100%;
     max-width: 500px;
@@ -2830,6 +2860,9 @@ p {
     border-radius: 8px;
     transition: opacity 280ms ease-out;
     margin: 0 auto;
+    -webkit-user-drag: none;
+    user-select: none;
+    pointer-events: none;
 }
 
 /* Desktop: constrain gallery max-width */
@@ -2847,9 +2880,11 @@ p {
     position: relative;
 }
 
-/* Arrow Controls — Hidden by default, fade in on hover (desktop) */
+/* Arrow Controls — Overlaid on main image, fade in on hover (desktop) */
 .carousel-arrow {
-    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: 36px;
     height: 36px;
     border: none;
@@ -2867,13 +2902,21 @@ p {
     z-index: 10;
 }
 
-/* Desktop: show arrows on carousel hover */
+.carousel-arrow--left {
+    left: 10px;
+}
+
+.carousel-arrow--right {
+    right: 10px;
+}
+
+/* Desktop: show arrows on image hover */
 @media (min-width: 769px) {
-    .hero-buy__carousel:hover .carousel-arrow:not(:disabled) {
+    .hero-buy__img-wrapper:hover .carousel-arrow:not(:disabled) {
         opacity: 1;
         pointer-events: auto;
     }
-    
+
     .carousel-arrow:hover {
         background: rgba(0, 0, 0, 0.8);
     }
@@ -2897,13 +2940,16 @@ p {
     gap: 12px;
     overflow-x: auto;
     overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior: none;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: none;
     scrollbar-width: none;
     -ms-overflow-style: none;
     flex: 1;
     padding: 2px 0;
     scroll-behavior: smooth;
+    touch-action: pan-x pan-y;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .hero-buy__thumbnails::-webkit-scrollbar {
@@ -2913,9 +2959,9 @@ p {
 /* Thumbnail — Larger, deliberate spacing, 2.5–3.5 visible */
 .thumb-buy {
     flex: 0 0 auto;
-    width: calc((100% - 40px) / 3);
-    min-width: 150px;
-    max-width: 180px;
+    width: calc((100% - 36px) / 3.4);
+    min-width: 130px;
+    max-width: 160px;
     aspect-ratio: 4 / 5;
     border: none;
     border-radius: 8px;
@@ -2925,7 +2971,7 @@ p {
     cursor: pointer;
     transition: none;
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
     position: relative;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
@@ -2937,6 +2983,8 @@ p {
     display: block;
     transition: filter 280ms ease-out;
     filter: saturate(0.7);
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
 /* Active State — Anchored, not highlighted (museum plaque philosophy) */
@@ -2965,7 +3013,16 @@ p {
     
     .thumb-buy {
         width: calc((100% - 32px) / 2.8);
-        min-width: 200px;
+        min-width: 120px;
+    }
+
+    .thumb-buy img {
+        transition: none;
+        filter: none;
+    }
+
+    .thumb-buy--active img {
+        filter: none;
     }
 }
 
@@ -2973,14 +3030,14 @@ p {
     .hero-buy__gallery {
         padding: 1rem;
     }
-    
+
     .hero-buy__thumbnails {
         gap: 12px;
     }
-    
+
     .thumb-buy {
         width: calc((100% - 24px) / 2.5);
-        min-width: 160px;
+        min-width: 100px;
     }
 }
 
@@ -4388,27 +4445,6 @@ p {
     .story,
     .brand-video {
         background-attachment: scroll;
-    }
-    
-    .hero-buy__gallery {
-        padding: 1rem;
-    }
-    
-    .carousel-arrow {
-        display: none;
-    }
-    
-    .hero-buy__carousel {
-        gap: 0;
-    }
-    
-    .hero-buy__thumbnails {
-        gap: 12px;
-    }
-    
-    .thumb-buy {
-        width: calc((100% - 24px) / 2.5);
-        min-width: 160px;
     }
 }
 
