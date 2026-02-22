@@ -4732,47 +4732,10 @@ p {
     }
 }
 
-/* Mobile-specific navbar behavior for product page */
-@media (max-width: 767px) {
-    #navbarProduct {
-        position: absolute; /* Not fixed - stays at top of page */
-        top: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(0, 0, 0, 0.14) !important;
-        transition: none;
-    }
-    
-    /* Override desktop scroll effects on mobile */
-    #navbarProduct.transparent,
-    #navbarProduct.visible-opaque,
-    #navbarProduct.shrunk {
-        background-color: rgba(0, 0, 0, 0.95) !important;
-        padding: 20px 0 !important;
-    }
-}
-
-/* Desktop-specific navbar behavior for product page */
-@media (min-width: 768px) {
-    #navbarProduct {
-        position: fixed;
-        transition: all 0.3s ease;
-    }
-    
-    /* Transparent at top */
-    #navbarProduct.transparent {
-        background-color: transparent;
-    }
-    
-    /* Opaque when scrolling */
-    #navbarProduct.visible-opaque {
-        background-color: rgba(0, 0, 0, 0.95);
-    }
-    
-    /* Shrink when scrolling */
-    #navbarProduct.shrunk {
-        padding: 25px 0;
-    }
+/* Product page navbar — static, always opaque */
+#navbarProduct {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.95);
 }
 
 .cta-btn-wrapper button.buy-cta {

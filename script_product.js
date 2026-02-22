@@ -50,44 +50,6 @@ function updatePriceDisplay() {
     }
 }
 
-// Product page navbar scroll behavior (desktop only)
-(function() {
-    const navbar = document.getElementById('navbarProduct');
-    if (!navbar) return;
-    
-    function handleScroll() {
-        // Only apply scroll effects on desktop
-        if (window.innerWidth > 767) {
-            const currentScrollY = window.scrollY;
-            
-            if (currentScrollY < 50) {
-                navbar.classList.add('transparent');
-                navbar.classList.remove('visible-opaque', 'shrunk');
-            } else {
-                navbar.classList.remove('transparent');
-                navbar.classList.add('visible-opaque', 'shrunk');
-            }
-        }
-    }
-    
-    // Throttle scroll events for performance
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                handleScroll();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-    
-    // Initial call
-    handleScroll();
-    
-    // Handle window resize
-    window.addEventListener('resize', handleScroll);
-})();
 
 // Update Variant Display in Sticky Cart
 function updateStickyVariant() {
