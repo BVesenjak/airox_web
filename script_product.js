@@ -798,6 +798,7 @@ function initHeroBuyThumbnails() {
     }
 }
 
+
 // Initialize All
 function init() {
     // Variant & Cart
@@ -821,7 +822,7 @@ function init() {
     initButtonHoverAnimations();
     initHeroBuyImageSwitching();
     initHeroBuyThumbnails();
-    
+
     // Initial updates
     updatePriceDisplay();
     updateStickyVariant();

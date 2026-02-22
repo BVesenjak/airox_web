@@ -2357,6 +2357,9 @@ p {
     .hero-buy__gallery {
         width: 100% !important;
         max-width: 100% !important;
+    }
+
+    .hero-buy__gallery-inner {
         position: relative !important;
         top: 0 !important;
         padding: 1.5rem !important;
@@ -2796,20 +2799,6 @@ p {
     }
 }
 
-/* Hero Buy Gallery */
-.hero-buy__gallery {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 100px;
-    align-self: start;
-}
-
-@media (max-width: 767px) {
-    .hero-buy__gallery {
-        position: relative;
-        top: 0;
-    }
-}
 
 .hero-buy__animation {
     margin-bottom: 2rem;
@@ -2855,7 +2844,7 @@ p {
    - No dots, no progress bar, no slider chrome
    ═══════════════════════════════════════════════════════════ */
 
-.hero-buy__gallery {
+.hero-buy__gallery-inner {
     background: #F5F5F5;
     padding: 2rem;
     border-radius: 12px;
@@ -3016,7 +3005,7 @@ p {
 
 /* Mobile Responsive — Maintain premium feel */
 @media (max-width: 768px) {
-    .hero-buy__gallery {
+    .hero-buy__gallery-inner {
         padding: 1.5rem;
     }
     
@@ -3045,7 +3034,7 @@ p {
 }
 
 @media (max-width: 576px) {
-    .hero-buy__gallery {
+    .hero-buy__gallery-inner {
         padding: 1rem;
     }
 
