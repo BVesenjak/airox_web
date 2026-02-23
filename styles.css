@@ -1764,9 +1764,20 @@ p {
     position: absolute;
     top: 12px;
     left: 12px;
+    right: 12px;
     font-size: 18px;
     color: #f5c518;
     letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-a .verified-badge {
+    font-size: 11px;
+    color: #4caf80;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .card-a .content {
