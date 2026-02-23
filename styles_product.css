@@ -258,7 +258,7 @@ button {
 .stars {
     display: flex;
     gap: 4px;
-    color: var(--accent);
+    color: #f5c518;
 }
 
 .trust-row__text {
