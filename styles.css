@@ -1802,6 +1802,14 @@ p {
     text-align: left;
 }
 
+.card-a .review-date {
+    font-size: 11px;
+    color: #636d83;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    align-self: flex-start;
+}
+
 /* =================================
    SECTION 9: FAQ
    ================================= */
@@ -5642,3 +5650,9 @@ h1, h2 {
       max-width: 600px;
     }
   }
+
+  .microcopy-disclaimer {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.5px;
+}
