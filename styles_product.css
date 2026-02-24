@@ -350,41 +350,6 @@ button {
 }
 
 /* Quantity Selector (inline row) */
-.qty-selector {
-    display: inline-flex;
-    align-items: center;
-    height: 44px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.qty-selector__btn {
-    width: 44px;
-    height: 100%;
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background var(--timing-fast) var(--ease);
-}
-
-.qty-selector__btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.qty-selector__value {
-    width: 44px;
-    text-align: center;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    user-select: none;
-}
 
 /* Quantity (legacy) */
 .quantity-group {

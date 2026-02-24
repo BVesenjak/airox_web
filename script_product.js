@@ -168,43 +168,6 @@ function initVariantPills() {
     });
 }
 
-// Initialize Quantity Stepper
-function initQuantityStepper() {
-    const quantityDisplay = document.getElementById('quantity');
-    const decreaseBtn = document.querySelector('[data-action="decrease"]');
-    const increaseBtn = document.querySelector('[data-action="increase"]');
-
-    if (!quantityDisplay) return;
-
-    function getQty() {
-        return parseInt(quantityDisplay.textContent) || 1;
-    }
-
-    function updateQuantity(newQty) {
-        const clamped = Math.max(1, Math.min(10, newQty));
-        quantityDisplay.textContent = clamped;
-        state.quantity = clamped;
-
-        // Update sticky cart qty
-        const stickyQty = document.getElementById('stickyQty');
-        if (stickyQty) {
-            stickyQty.textContent = clamped;
-        }
-
-    }
-
-    if (decreaseBtn) {
-        decreaseBtn.addEventListener('click', () => {
-            updateQuantity(getQty() - 1);
-        });
-    }
-
-    if (increaseBtn) {
-        increaseBtn.addEventListener('click', () => {
-            updateQuantity(getQty() + 1);
-        });
-    }
-}
 
 // Initialize Gift Wrap Checkbox
 function initGiftWrapCheckbox() {
@@ -430,32 +393,7 @@ function initStickyCart() {
     );
     
     observer.observe(heroSection);
-    
-    // Sticky cart quantity controls
-    const decreaseSticky = document.querySelector('[data-action="decrease-sticky"]');
-    const increaseSticky = document.querySelector('[data-action="increase-sticky"]');
-    const stickyQty = document.getElementById('stickyQty');
-    const mainQtyInput = document.getElementById('quantity');
-    
-    function updateStickyQty(newQty) {
-        const clamped = Math.max(1, Math.min(10, newQty));
-        if (stickyQty) stickyQty.textContent = clamped;
-        if (mainQtyInput) mainQtyInput.textContent = clamped;
-        state.quantity = clamped;
-    }
-    
-    if (decreaseSticky) {
-        decreaseSticky.addEventListener('click', () => {
-            updateStickyQty(state.quantity - 1);
-        });
-    }
-    
-    if (increaseSticky) {
-        increaseSticky.addEventListener('click', () => {
-            updateStickyQty(state.quantity + 1);
-        });
-    }
-    
+
     // Quick add buttons
     const quickAddBtns = document.querySelectorAll('.quick-add');
     quickAddBtns.forEach(btn => {
@@ -958,7 +896,6 @@ function initVideoTestimonialsCarousel() {
 function init() {
     // Variant & Cart
     initVariantPills();
-    initQuantityStepper();
     initGiftWrapCheckbox();
     initAddToCartButtons();
     initBuyNowButtons();
