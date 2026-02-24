@@ -73,7 +73,7 @@ window.client = ShopifyBuy.buildClient({
     const fanChips = document.querySelectorAll('.bundle-contents-chips .fan-chip');
     const colors = Array.from(fanChips).map(chip => {
       const label = chip.querySelector('.fan-chip__label');
-      return label ? label.textContent.trim() : 'Stealth';
+      return label ? label.textContent.trim() : 'Onyx';
     });
     
     return {

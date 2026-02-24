@@ -1898,15 +1898,16 @@ p {
     color: var(--white);
     border: none;
     padding: 20px 30px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0.3px;
     text-align: left;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: 'Courier New', monospace;
+    font-family: inherit;
+    text-transform: uppercase;
     transition: background-color 0.3s ease;
 }
 
@@ -1937,10 +1938,11 @@ p {
 }
 
 .faq-answer p {
-    font-size: 12px;
-    line-height: 1.8;
+    font-size: 14px;
+    line-height: 1.7;
     color: var(--text-gray);
-    letter-spacing: 1px;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
 }
 
 /* =================================

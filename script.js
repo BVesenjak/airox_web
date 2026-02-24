@@ -168,28 +168,32 @@ document.addEventListener('click', (e) => {
 const testimonials = [
     {
         name: "MATILDA D.",
-        quote: "It’s not just a breeze, it's that peaceful, slowed-down feeling it produces. It's like the breeze understands you. That’s what I love the most about it. It’s a tiny piece of freedom I can hold in my hand every day.",
+        quote: "It’s not just a breeze, it’s that peaceful, slowed-down feeling it produces. It’s like the breeze understands you. That’s what I love the most about it. It’s a tiny piece of freedom I can hold in my hand every day.",
         credentials: "Creative Director · Style Founder",
+        credentials_de: "Kreativdirektorin · Style-Gründerin",
         image: "assets/testimonial-matilda.jpg"
     },
     {
         name: "NAOTO F.",
-        quote: "A device that moves the air softly, breezily even, intuitively reminds you that comfort doesn’t need to make a hassle. It just needs to happen, at the right time, in the right way.",
-        credentials: " Product Designer · MUJI Collaborator",
+        quote: "People shouldn't really have to think about an object when they are using it. Not having to think about it makes the relationship between a person and an object run more smoothly.",
+        credentials: "Product Designer · MUJI Collaborator",
+        credentials_de: "Produktdesigner · MUJI-Mitarbeiter",
         image: "assets/testimonial-naoto.jpg"
     },
     {
         name: "CLARA M.",
-        quote: "I used to think cooling down meant stopping. Now I just keep going. It's light enough to forget you're carrying it, but the moment you need it, it's there. On a trail, in the heat, between sets — it doesn't care where you are. It just works. That's all I ever needed from gear.",
+        quote: "I used to think cooling down meant stopping. Now I just keep going. It’s light enough to forget you’re carrying it, but the moment you need it, it’s there. On a trail, in the heat, between sets — it doesn’t care where you are. It just works. Simple as that.",
         credentials: "Outdoor Instructor · Trail Runner",
+        credentials_de: "Outdoor-Trainerin · Trailrunnerin",
         image: "assets/testimonial-clara.jpg"
     },
     {
         name: "DIETER R.",
-        quote_en: "The best tools almost disappear. They simply work. Nothing excessive, nothing constrained, everything just so. Fresh air on demand is a small thing, but it’s also the essence of comfort. In an age that celebrates more, it’s the less that restores you. True luxury is found in what doesn’t ask for attention, but quietly makes life better.",
-        quote_de: "Die besten Werkzeuge verschwinden fast. Sie funktionieren einfach. Nichts Übertriebenes, nichts Eingeengtes, alles stimmt. Frische Luft, wann immer man sie braucht — eine Kleinigkeit, aber auch das Wesen von Komfort. In einer Zeit, die das Mehr feiert, ist es das Weniger, das einem guttut. Wahrer Luxus liegt in dem, was keine Aufmerksamkeit verlangt, sondern das Leben leise besser macht.",
+        quote_en: "Weniger, aber besser.",
+        quote_de: "Weniger, aber besser.",
         hasTranslation: true,
         credentials: "Industrial Designer · Minimalist Thinker",
+        credentials_de: "Industriedesigner · Minimalistischer Denker",
         image: "assets/testimonial-dieter.jpg"
     }
 ];
@@ -210,7 +214,8 @@ function loadTestimonial(index) {
             : testimonial.quote;
         document.querySelector('.testimonial-quote').textContent = quote;
         document.querySelector('.testimonial-signature').textContent = testimonial.name;
-        document.querySelector('.testimonial-credentials').textContent = testimonial.credentials;
+        const creds = (currentLanguage === 'de' && testimonial.credentials_de) ? testimonial.credentials_de : testimonial.credentials;
+        document.querySelector('.testimonial-credentials').textContent = creds;
         document.querySelector('.testimonial-image').src = testimonial.image;
         document.querySelector('.testimonial-image').alt = testimonial.name;
         

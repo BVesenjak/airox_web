@@ -37,10 +37,20 @@
 
     // Color name mapping
     const COLOR_NAMES = {
-        'black': 'Stealth',
-        'white': 'Arctic',
+        'black': 'Onyx',
+        'white': 'Glacier',
         'violet': 'Ion'
     };
+
+    const COLOR_NAMES_DE = {
+        'black': 'Onyx',
+        'white': 'Gletscher',
+        'violet': 'Ion'
+    };
+
+    function getColorName(key) {
+        return (lang() === 'de' ? COLOR_NAMES_DE : COLOR_NAMES)[key] || key;
+    }
 
     // German UI strings
     const I18N = {
@@ -71,8 +81,8 @@
     
     // Color shorthand mapping for session tracking
     const COLOR_SHORTHAND = {
-        'black': 's',    // Stealth
-        'white': 'a',    // Arctic
+        'black': 's',    // Onyx
+        'white': 'a',    // Glacier
         'violet': 'i'    // Ion
     };
     
@@ -302,13 +312,13 @@
         // Create chips for each fan
         for (let i = 0; i < state.fanCount; i++) {
             const color = state.selectedColors[i] || 'black';
-            const colorName = COLOR_NAMES[color];
+            const colorLabel = getColorName(color);
             const iconSrc = COLOR_ICONS[color];
-            
+
             const chip = document.createElement('button');
             chip.className = 'fan-chip';
             chip.setAttribute('type', 'button');
-            chip.setAttribute('aria-label', I18N.fanAriaLabel[lang()](i + 1, colorName));
+            chip.setAttribute('aria-label', I18N.fanAriaLabel[lang()](i + 1, colorLabel));
             chip.dataset.unitIndex = i;
             
             // Active state
@@ -325,12 +335,12 @@
             const icon = document.createElement('img');
             icon.className = 'fan-chip__icon';
             icon.src = iconSrc;
-            icon.alt = colorName;
-            
+            icon.alt = colorLabel;
+
             // Label (color name - now shrunk)
             const label = document.createElement('span');
             label.className = 'fan-chip__label';
-            label.textContent = colorName;
+            label.textContent = colorLabel;
             
             chip.appendChild(badge);
             chip.appendChild(icon);
@@ -504,7 +514,7 @@
                 break;
 
             case 'confirmation':
-                const colorName = COLOR_NAMES[data] || data;
+                const colorName = getColorName(data);
                 els.feedbackText.innerHTML = I18N.confirmation[l](colorName);
                 els.microFeedback.style.background = 'rgba(21, 204, 190, 0.15)';
                 break;
@@ -618,7 +628,7 @@
     window.ProgressiveLockInState = {
         getState: () => state,
         getSelectedColors: () => state.selectedColors,
-        getColorNames: () => state.selectedColors.map(c => COLOR_NAMES[c]),
+        getColorNames: () => state.selectedColors.map(c => getColorName(c)),
         getBundle: () => state.bundle,
         getFanCount: () => state.fanCount,
         reRenderLanguage: () => {
