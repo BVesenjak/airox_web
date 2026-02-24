@@ -892,6 +892,32 @@ function initVideoTestimonialsCarousel() {
     track.style.cursor = 'grab';
 }
 
+// Initialize Sticky Footer CTA (show after hero scrolls away, dismiss on close)
+function initStickyFooterCTA() {
+    const footer = document.getElementById('stickyFooterCTA');
+    const hero = document.getElementById('hero-buy');
+    const closeBtn = document.getElementById('footerCtaClose');
+    if (!footer || !hero) return;
+
+    let dismissed = false;
+
+    const observer = new IntersectionObserver(
+        ([entry]) => {
+            if (dismissed) return;
+            footer.setAttribute('aria-hidden', entry.isIntersecting ? 'true' : 'false');
+        },
+        { threshold: 0 }
+    );
+    observer.observe(hero);
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            dismissed = true;
+            footer.setAttribute('aria-hidden', 'true');
+        });
+    }
+}
+
 // Initialize All
 function init() {
     // Variant & Cart
@@ -915,6 +941,7 @@ function init() {
     initHeroBuyImageSwitching();
     initHeroBuyThumbnails();
     initVideoTestimonialsCarousel();
+    initStickyFooterCTA();
 
     // Initial updates
     updatePriceDisplay();
