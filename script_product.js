@@ -762,7 +762,6 @@ function initVideoTestimonialsCarousel() {
 
     var totalSlides = cards.length;
     var currentSlide = 0;
-    var autoRotateInterval = null;
 
     // --- Build dots dynamically ---
     var dots = [];
@@ -846,24 +845,8 @@ function initVideoTestimonialsCarousel() {
     dots.forEach(function(dot, index) {
         dot.addEventListener('click', function() {
             scrollToCard(index);
-            resetAutoRotate();
         });
     });
-
-    // Auto-rotate every 5 seconds
-    function startAutoRotate() {
-        autoRotateInterval = setInterval(function() {
-            var next = (currentSlide + 1) % totalSlides;
-            scrollToCard(next);
-        }, 5000);
-    }
-
-    function resetAutoRotate() {
-        clearInterval(autoRotateInterval);
-        startAutoRotate();
-    }
-
-    startAutoRotate();
 
     // Update dots on scroll settle (for drag/swipe)
     var scrollTimer = null;
