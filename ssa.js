@@ -133,7 +133,8 @@ window.client = ShopifyBuy.buildClient({
     const itemsContainer = document.getElementById('cartItems');
     
     if (isLoading) {
-      itemsContainer.innerHTML = '<p style="text-align:center;padding:20px;">Adding to cart...</p>';
+      const loadingText = (window.currentLanguage || 'en') === 'de' ? 'Wird zum Warenkorb hinzugefügt...' : 'Adding to cart...';
+      itemsContainer.innerHTML = `<p style="text-align:center;padding:20px;">${loadingText}</p>`;
       drawer.classList.add('open');
       return;
     }
@@ -169,7 +170,7 @@ window.client = ShopifyBuy.buildClient({
         <img src="${item.variant.image.src}" alt="${item.title}">
         <div style="flex: 1;">
           <p><strong>${item.title}</strong></p>
-          <p style="color: #666; font-size: 14px;">Colors: ${item.colors}</p>
+          <p style="color: #666; font-size: 14px;">${(window.currentLanguage || 'en') === 'de' ? 'Farben' : 'Colors'}: ${item.colors}</p>
           <p><strong>$${(parseFloat(item.variant.price.amount) * item.quantity).toFixed(2)}</strong></p>
            <div class="quantity-picker" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
              <button class="qty-btn" data-action="decrease" data-key="${key}" style="padding: 8px 12px;; border: 1px solid; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; min-width: 32px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">−</button>
@@ -250,7 +251,7 @@ window.client = ShopifyBuy.buildClient({
           
         } catch (error) {
           console.error('Quantity update error:', error);
-          alert('Failed to update quantity. Please try again.');
+          alert((window.currentLanguage || 'en') === 'de' ? 'Menge konnte nicht aktualisiert werden. Bitte versuche es erneut.' : 'Failed to update quantity. Please try again.');
           
           // Re-enable button
           this.disabled = false;
@@ -303,6 +304,6 @@ window.client = ShopifyBuy.buildClient({
       
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('Something went wrong. Please try again.');
+      alert((window.currentLanguage || 'en') === 'de' ? 'Etwas ist schiefgelaufen. Bitte versuche es erneut.' : 'Something went wrong. Please try again.');
     }
   });

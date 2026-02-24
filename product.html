@@ -57,6 +57,9 @@
             <li><a href="index.html#faq" data-en="FAQ" data-de="FAQ">FAQ</a></li>
             <li><a href="index.html#newsletter" data-en="Newsletter" data-de="Newsletter">Newsletter</a></li>
         </ul>
+        <div class="language-toggle">
+            <button id="langToggle" class="lang-btn">EN / DE</button>
+        </div>
     </div>
 
     <!-- Section 3: Hero Buy Block -->
@@ -113,7 +116,7 @@
                         </div>
                     </div>
                   </div>
-                  <p class="microcopy-disclaimer">Product appearance may vary slightly from images shown.</p>
+                  <p class="microcopy-disclaimer" data-en="Product appearance may vary slightly from images shown." data-de="Das Produktaussehen kann leicht von den gezeigten Bildern abweichen.">Product appearance may vary slightly from images shown.</p>
                 </div>
 
 
@@ -138,10 +141,10 @@
                                 <path d="M10 0l2.5 6.5L19 7.5l-5 4.5L15.5 19 10 15.5 4.5 19 6 12 1 7.5l6.5-1z"/>
                             </svg>
                         </div>
-                        <span class="trust-row__text">Trusted by 50,000+ customers worldwide</span>
+                        <span class="trust-row__text" data-en="Trusted by 50,000+ customers worldwide" data-de="Über 50.000 zufriedene Kunden weltweit">Trusted by 50,000+ customers worldwide</span>
                     </div>
 
-                    <p class="hero-buy__subtitle">Cold annihilation. Thermal obliteration. Command the climate — sweat only by choice.</p>
+                    <p class="hero-buy__subtitle" data-en="Cold annihilation. Thermal obliteration. Command the climate — sweat only by choice." data-de="Kälte pur, Hitze war gestern. Kontrollier dein Klima — schwitze nur, wenn du willst.">Cold annihilation. Thermal obliteration. Command the climate — sweat only by choice.</p>
                     
                     <div class="price-block">
                         <div class="price-block__main">
@@ -153,19 +156,19 @@
                     
                     <!-- Variant Selectors -->
                     <div class="variant-group variant-group--bundle">
-                        <label class="variant-group__label">Choose Bundle</label>
+                        <label class="variant-group__label" data-en="Choose Bundle" data-de="Bundle wählen">Choose Bundle</label>
                         <div class="variant-pills variant-pills--bundle" role="radiogroup" aria-label="Select bundle">
                             <button class="pill pill--active pill--animated pill--bundle bundle-card" role="radio" aria-checked="true" data-variant-type="bundle" data-value="single" data-animation="assets/btn-anim-4.mp4" data-price="38.99" data-compare="89.99" data-savings="">
-                                1-Pack — Buy 1
+                                <span data-en="1-Pack — Buy 1" data-de="1er-Pack — 1 kaufen">1-Pack — Buy 1</span>
                             </button>
-                            <button class="pill pill--animated pill--bundle bundle-card" role="radio" aria-checked="false" data-variant-type="bundle" data-value="duo" data-animation="assets/btn-anim-5.mp4" data-price="38.99" data-compare="89.99" data-savings="+1 Fan gratis">
-                                <span class="bundle-badge bundle-badge--top-right">POPULAR CHOICE</span>
-                                2-Pack — Buy 1 Get 1 FREE 🔥
-                                <span class="bundle-badge bundle-badge--bottom-left">BEST VALUE</span>
+                            <button class="pill pill--animated pill--bundle bundle-card" role="radio" aria-checked="false" data-variant-type="bundle" data-value="duo" data-animation="assets/btn-anim-5.mp4" data-price="38.99" data-compare="89.99" data-savings-en="+1 Fan free" data-savings-de="+1 Fan gratis" data-savings="+1 Fan gratis">
+                                <span class="bundle-badge bundle-badge--top-right" data-en="POPULAR CHOICE" data-de="BELIEBTESTE WAHL">POPULAR CHOICE</span>
+                                <span data-en="2-Pack — Buy 1 Get 1 FREE 🔥" data-de="2er-Pack — 1 kaufen, 1 GRATIS 🔥">2-Pack — Buy 1 Get 1 FREE 🔥</span>
+                                <span class="bundle-badge bundle-badge--bottom-left" data-en="BEST VALUE" data-de="BESTER PREIS">BEST VALUE</span>
                             </button>
-                            <button class="pill pill--animated pill--bundle bundle-card" role="radio" aria-checked="false" data-variant-type="bundle" data-value="family" data-animation="assets/btn-anim-6.mp4" data-price="105.99" data-compare="199.99" data-savings="SAVE €50">
-                                <span class="bundle-badge bundle-badge--top-right">RECOMMENDED</span>
-                                Family (4-Pack) — 32% OFF 🎁
+                            <button class="pill pill--animated pill--bundle bundle-card" role="radio" aria-checked="false" data-variant-type="bundle" data-value="family" data-animation="assets/btn-anim-6.mp4" data-price="105.99" data-compare="199.99" data-savings-en="SAVE €50" data-savings-de="SPARE €50" data-savings="SAVE €50">
+                                <span class="bundle-badge bundle-badge--top-right" data-en="RECOMMENDED" data-de="EMPFOHLEN">RECOMMENDED</span>
+                                <span data-en="Family (4-Pack) — 32% OFF 🎁" data-de="Familienpack (4er) — 32% RABATT 🎁">Family (4-Pack) — 32% OFF 🎁</span>
                             </button>
                         </div>
                     </div>
@@ -195,7 +198,7 @@
                             
                             <!-- STATE 1: Progressive Color Selector (visible during selection) -->
                             <div id="progressiveSelectorState" class="variant-group variant-group--color">
-                                <label class="variant-group__label" id="selectorLabel">Choose color for Fan 1</label>
+                                <label class="variant-group__label" id="selectorLabel" data-en="Choose color for Fan 1" data-de="Farbe für Ventilator 1 wählen">Choose color for Fan 1</label>
                                 <div class="variant-pills variant-pills--color" role="radiogroup" aria-label="Select model color" id="colorPills">
                                     <button class="pill pill--animated pill--color" role="radio" aria-checked="false" 
                                             data-variant-type="color" data-value="black" data-image="assets/model-black.jpg" 
@@ -210,7 +213,7 @@
                                 
                                 <!-- Persistent Micro-Feedback: Never vanishes, always guiding -->
                                 <div id="microFeedback" style="margin-top: 14px; padding: 10px 14px; background: rgba(153, 255, 255, 0.08); border-radius: 8px; min-height: 42px; display: flex; align-items: center; transition: all 0.28s ease-out;">
-                                    <span id="feedbackText" style="font-size: 0.875rem; color: rgba(255,255,255,0.75); line-height: 1.4;">
+                                    <span id="feedbackText" style="font-size: 0.875rem; color: rgba(255,255,255,0.75); line-height: 1.4;" data-en="👉 Pick a color to continue" data-de="👉 Wähle eine Farbe, um fortzufahren">
                                         👉 Pick a color to continue
                                     </span>
                                 </div>
@@ -222,14 +225,14 @@
                                 <div class="summary-container">
                                     <!-- Header: Warm and welcoming, not technical -->
                                     <div class="summary-header">
-                                        <h3 class="summary-title">Ready to purchase</h3>
+                                        <h3 class="summary-title" data-en="Ready to purchase" data-de="Bereit zum Kauf">Ready to purchase</h3>
                                         <div class="edit-area">
                                             <!-- Edit button: Secondary emphasis, safe escape hatch -->
-                                            <button id="editSelectionsBtn" class="edit-btn">
+                                            <button id="editSelectionsBtn" class="edit-btn" data-en="Change selection" data-de="Auswahl ändern">
                                                 Change selection
                                             </button>
                                             <!-- Temporary hint: appears for 3s after completion -->
-                                            <div id="editHint" class="edit-hint">You can change this anytime.</div>
+                                            <div id="editHint" class="edit-hint" data-en="You can change this anytime." data-de="Du kannst dies jederzeit ändern.">You can change this anytime.</div>
                                         </div>
                                     </div>
                                     <!-- Grid layout: 2x2 for 4 fans, 1x2 for 2 fans (prevents tall stacks) -->
@@ -242,7 +245,7 @@
                         <!-- PANEL B: CTA Panel (always present, but disabled during selection) -->
                         <div id="panelB" style="flex: 1; min-height: 60px;">
                             <!-- CTA status indicator (optional reassurance) -->
-                            <div id="ctaStatus" style="margin-bottom: 8px; font-size: 0.813rem; color: rgba(255,255,255,0.6); text-align: center; transition: all 0.28s ease-out;">
+                            <div id="ctaStatus" style="margin-bottom: 8px; font-size: 0.813rem; color: rgba(255,255,255,0.6); text-align: center; transition: all 0.28s ease-out;" data-en="Complete color selection to continue" data-de="Farbauswahl abschließen, um fortzufahren">
                                 Complete color selection to continue
                             </div>
                         </div>
@@ -251,7 +254,7 @@
 
                     <!-- Quantity Selector -->
                     <div class="variant-group variant-group--quantity">
-                        <label class="variant-group__label">Quantity</label>
+                        <label class="variant-group__label" data-en="Quantity" data-de="Anzahl">Quantity</label>
                         <div class="qty-selector">
                             <button class="qty-selector__btn" data-action="decrease" aria-label="Decrease quantity">&minus;</button>
                             <span class="qty-selector__value" id="quantity">1</span>
@@ -259,11 +262,11 @@
                         </div>
                     </div>
 
-                    <button id="addToCart" class="btn-secondary">Add to Cart</button>
+                    <button id="addToCart" class="btn-secondary" data-en="Add to Cart" data-de="In den Warenkorb">Add to Cart</button>
                     
                     <!-- Buy CTA -->
                    <div class="cta-group">
-                    <button id="buyNow" class="btn-cta" data-analytics="confirm-selection">CHECKOUT NOW</button>
+                    <button id="buyNow" class="btn-cta" data-analytics="confirm-selection" data-en="CHECKOUT NOW" data-de="JETZT KAUFEN">CHECKOUT NOW</button>
                     
                     <!-- Trust Badges -->
                     <div class="product-trust-badges">
@@ -332,7 +335,7 @@
             <div class="video-carousel-track">
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-1.jpg" alt="John D.">
                     </div>
                     <div class="content">
@@ -342,14 +345,14 @@
                                 <div class="name">JOHN D.</div>
                                 <div class="location" data-en="USA" data-de="USA">USA</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-2.jpg" alt="Michael B.">
                     </div>
                     <div class="content">
@@ -359,14 +362,14 @@
                                 <div class="name">MICHAEL B.</div>
                                 <div class="location" data-en="Germany" data-de="Deutschland">Germany</div>
                             </div>
-                            <div class="review-date">Jan 2026</div>
+                            <div class="review-date" data-en="Jan 2026" data-de="Jan. 2026">Jan 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -376,14 +379,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -393,14 +396,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -410,14 +413,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -427,14 +430,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -444,14 +447,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -461,14 +464,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -478,14 +481,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -495,14 +498,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -512,14 +515,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -529,14 +532,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -546,14 +549,14 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="video-card card-a">
                     <div class="photo">
-                        <div class="stars">★★★★★ <span class="verified-badge">✓ Verified Purchase</span></div>
+                        <div class="stars">★★★★★ <span class="verified-badge" data-en="✓ Verified Purchase" data-de="✓ Verifizierter Kauf">✓ Verified Purchase</span></div>
                         <img src="assets/testimonial-3.jpg" alt="Chris L.">
                     </div>
                     <div class="content">
@@ -563,7 +566,7 @@
                                 <div class="name">CHRIS L.</div>
                                 <div class="location" data-en="United Kingdom" data-de="Vereinigtes Königreich">United Kingdom</div>
                             </div>
-                            <div class="review-date">Feb 2026</div>
+                            <div class="review-date" data-en="Feb 2026" data-de="Feb. 2026">Feb 2026</div>
                         </div>
                     </div>
                 </div>
@@ -744,7 +747,7 @@
                         <li data-en="Smart Speed Control to Adjusts to Your Rhythm" data-de="⚙️ Digitalanzeige mit intelligenter Leistungssteuerung">⚙️ Smart Speed Control to Adjusts to Your Rhythm</li>
                         <li data-en="Sonic Forcefield Effect through Consistent White Noise" data-de="🌪️ Weißes Rauschen erzeugt ein schützendes Klangfeld">🌪️ Sonic Forcefield Effect through Consistent White Noise</li>
                         <li data-en="Lightweight, Durable, and Travel-Ready" data-de="🛰️ Leicht, robust und reisebereit">🛰️ Lightweight, Durable, and Travel-Ready</li>
-                        <li data-en="Tested across prolonged heat exposure scenarios." data-de="🧠 Entwickelt für Kontrolle über Geist, Körper und Umgebung">🧠 Designed for Mind, Body, and Environment Control</li>
+                        <li data-en="🧠 Designed for Mind, Body, and Environment Control" data-de="🧠 Entwickelt für Kontrolle über Geist, Körper und Umgebung">🧠 Designed for Mind, Body, and Environment Control</li>
                     </ul>
 
                     <img src="assets/product-detail.png" alt="Product Detail" class="product-detail-img">
@@ -753,35 +756,35 @@
                 
                 <div class="col-lg-6">
                     <div class="hero-product__details">
-                        <h2 class="hero-product__title">AIROX Portable Power</h2>
-                        
+                        <h2 class="hero-product__title" data-en="AIROX Portable Power" data-de="AIROX Tragbare Power">AIROX Portable Power</h2>
+
                         <ul class="feature-list" id="productDetails">
-                            <li>Advanced temperature regulation technology</li>
-                            <li>20-hour battery life on single charge</li>
-                            <li>Whisper-quiet operation (< 30dB)</li>
-                            <li>Medical-grade materials, hypoallergenic</li>
-                            <li>IPX5 water-resistant design</li>
-                            <li>USB-C fast charging (0-100% in 2 hours)</li>
+                            <li data-en="Advanced temperature regulation technology" data-de="Fortschrittliche Temperaturregulierungstechnologie">Advanced temperature regulation technology</li>
+                            <li data-en="20-hour battery life on single charge" data-de="20 Stunden Akkulaufzeit pro Ladung">20-hour battery life on single charge</li>
+                            <li data-en="Whisper-quiet operation (< 30dB)" data-de="Flüsterleiser Betrieb (< 30dB)">Whisper-quiet operation (< 30dB)</li>
+                            <li data-en="Medical-grade materials, hypoallergenic" data-de="Medizinische Materialien, hypoallergen">Medical-grade materials, hypoallergenic</li>
+                            <li data-en="IPX5 water-resistant design" data-de="IPX5 wasserfestes Design">IPX5 water-resistant design</li>
+                            <li data-en="USB-C fast charging (0-100% in 2 hours)" data-de="USB-C Schnellladung (0-100% in 2 Stunden)">USB-C fast charging (0-100% in 2 hours)</li>
                         </ul>
-                        
+
                         <table class="spec-table">
-                            <caption class="spec-table__caption">Technical Specifications</caption>
+                            <caption class="spec-table__caption" data-en="Technical Specifications" data-de="Technische Daten">Technical Specifications</caption>
                             <tbody>
                                 <tr>
-                                    <th scope="row">Weight</th>
+                                    <th scope="row" data-en="Weight" data-de="Gewicht">Weight</th>
                                     <td>185g (6.5 oz)</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Dimensions</th>
+                                    <th scope="row" data-en="Dimensions" data-de="Abmessungen">Dimensions</th>
                                     <td>12 × 8 × 3 cm</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Battery</th>
+                                    <th scope="row" data-en="Battery" data-de="Akku">Battery</th>
                                     <td>3000 mAh Li-ion</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Warranty</th>
-                                    <td>2 years limited</td>
+                                    <th scope="row" data-en="Warranty" data-de="Garantie">Warranty</th>
+                                    <td data-en="2 years limited" data-de="2 Jahre eingeschränkt">2 years limited</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -789,39 +792,39 @@
                         <br>
                         <br>
                         <div class="price-callout">
-                            <span class="price-callout__label">From:</span>
+                            <span class="price-callout__label" data-en="From:" data-de="Ab:">From:</span>
                             <span class="price-callout__value">$38.99</span>
                         </div>
                         <br>
-                        
+
                         <div class="whats-in-box">
-                            <h3 class="whats-in-box__title">What's in the box</h3>
+                            <h3 class="whats-in-box__title" data-en="What's in the box" data-de="Das ist im Paket">What's in the box</h3>
                             <ul class="whats-in-box__list">
-                                <li>1× AIROX device</li>
-                                <li>1× USB-C charging cable</li>
-                                <li>1× Travel pouch</li>
-                                <li>1× Quick-start guide</li>
+                                <li data-en="1× AIROX device" data-de="1× AIROX Gerät">1× AIROX device</li>
+                                <li data-en="1× USB-C charging cable" data-de="1× USB-C Ladekabel">1× USB-C charging cable</li>
+                                <li data-en="1× Travel pouch" data-de="1× Reisetasche">1× Travel pouch</li>
+                                <li data-en="1× Quick-start guide" data-de="1× Schnellstartanleitung">1× Quick-start guide</li>
                             </ul>
                         </div>
-                        
-                        <a class="btn btn--primary" href="https://www.mdpi.com/1996-1073/14/23/8077">Learn More</a>
-                        
-                        <a href="#hero-buy" class="link-subtle">See all variants →</a>
+
+                        <a class="btn btn--primary" href="https://www.mdpi.com/1996-1073/14/23/8077" data-en="Learn More" data-de="Mehr erfahren">Learn More</a>
+
+                        <a href="#hero-buy" class="link-subtle" data-en="See all variants →" data-de="Alle Varianten ansehen →">See all variants →</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <br><br><br>
-        <h3 class="value-subheading" data-en="INVEST IN YOUR LONG TERM COMFORT" data-de="INVEST IN YOUR LONG TERM COMFORT">INVEST IN YOUR LONG TERM COMFORT</h3>
-        <p class="value-subheading" style="color:rgba(107, 107, 107, 0.85);">Heat doesn't negotiate.</p>
+        <h3 class="value-subheading" data-en="INVEST IN YOUR LONG TERM COMFORT" data-de="INVESTIERE IN DEINEN LANGFRISTIGEN KOMFORT">INVEST IN YOUR LONG TERM COMFORT</h3>
+        <p class="value-subheading" style="color:rgba(107, 107, 107, 0.85);" data-en="Heat doesn't negotiate." data-de="Hitze verhandelt nicht.">Heat doesn't negotiate.</p>
         <div class="shipping-footer">
             <div class="shipping-content">
-                <span id="shipping" data-en="SHIPPING" data-de="WELTWEITER">SHIPPING</span>
+                <span id="shipping" data-en="SHIPPING" data-de="VERSAND">SHIPPING</span>
                 <span class="worldwide-icon-wrapper">
                     <img src="assets/icon-worldwide.png" alt="Worldwide" class="worldwide-icon">
                 </span>
-                <span id="worldwide" data-en="WORLDWIDE" data-de="VERSAND">WORLDWIDE</span>
+                <span id="worldwide" data-en="WORLDWIDE" data-de="WELTWEIT">WORLDWIDE</span>
             </div>
         </div>
         <hr class="lowerdivider">
@@ -908,36 +911,36 @@
     <section id="story" class="story">
         <div class="container">
             <h2 class="section-title">
-                <span class="weight-light">Our</span>
-                <span class="weight-bold">Story</span>
+                <span class="weight-light" data-en="Our" data-de="Unsere">Our</span>
+                <span class="weight-bold" data-en="Story" data-de="Geschichte">Story</span>
             </h2>
-            
+
             <div class="story__grid">
                 <div class="story__column">
-                    <h3 class="story__subtitle">Origin & Mission</h3>
-                    <p class="story__text">AIROX was born from a simple observation: people were sacrificing comfort for convenience. We saw travelers, athletes, and professionals struggling with bulky, ineffective wellness tools.</p>
-                    <p class="story__text">Our mission became clear, create technology so elegant and powerful that it disappears into your routine while dramatically improving your quality of life.</p>
+                    <h3 class="story__subtitle" data-en="Origin & Mission" data-de="Ursprung & Mission">Origin & Mission</h3>
+                    <p class="story__text" data-en="AIROX was born from a simple observation: people were sacrificing comfort for convenience. We saw travelers, athletes, and professionals struggling with bulky, ineffective wellness tools." data-de="AIROX entstand aus einer einfachen Beobachtung: Menschen opferten Komfort für Bequemlichkeit. Wir sahen Reisende, Sportler und Berufstätige, die mit klobigen, ineffektiven Wellness-Tools kämpften.">AIROX was born from a simple observation: people were sacrificing comfort for convenience. We saw travelers, athletes, and professionals struggling with bulky, ineffective wellness tools.</p>
+                    <p class="story__text" data-en="Our mission became clear, create technology so elegant and powerful that it disappears into your routine while dramatically improving your quality of life." data-de="Unsere Mission wurde klar: Technologie schaffen, die so elegant und leistungsstark ist, dass sie in deinem Alltag verschwindet und gleichzeitig deine Lebensqualität dramatisch verbessert.">Our mission became clear, create technology so elegant and powerful that it disappears into your routine while dramatically improving your quality of life.</p>
                 </div>
-                
+
                 <div class="story__column">
-                    <h3 class="story__subtitle">Vision & Impact</h3>
-                    <p class="story__text">We envision a world where personal wellness is effortless, accessible, and sustainable. Each product in our line pushes the boundaries of what's possible.</p>
-                    <p class="story__text">Today, over 50,000 customers across 40 countries trust AIROX to help them perform at their best—every single day.</p>
+                    <h3 class="story__subtitle" data-en="Vision & Impact" data-de="Vision & Wirkung">Vision & Impact</h3>
+                    <p class="story__text" data-en="We envision a world where personal wellness is effortless, accessible, and sustainable. Each product in our line pushes the boundaries of what’s possible." data-de="Wir stellen uns eine Welt vor, in der persönliches Wohlbefinden mühelos, zugänglich und nachhaltig ist. Jedes Produkt in unserer Linie verschiebt die Grenzen des Möglichen.">We envision a world where personal wellness is effortless, accessible, and sustainable. Each product in our line pushes the boundaries of what’s possible.</p>
+                    <p class="story__text" data-en="Today, over 50,000 customers across 40 countries trust AIROX to help them perform at their best—every single day." data-de="Heute vertrauen über 50.000 Kunden in 40 Ländern auf AIROX, um jeden Tag ihr Bestes zu geben.">Today, over 50,000 customers across 40 countries trust AIROX to help them perform at their best—every single day.</p>
                 </div>
             </div>
-            
+
             <blockquote class="story__quote">
-                <p><span style="font-size:1.2em;">»</span>We were born from heat... From long summers where still air crushed focus and drained drive, The world moved slower, We didn’t.<span style="font-size:1.2em;">«</span>
+                <p data-en="»We were born from heat... From long summers where still air crushed focus and drained drive, The world moved slower, We didn’t.« At Airox, we set out with one purpose: to keep motion alive. Portable fans were either weak, overpriced, or both. We fixed that. The wildest selection of High-Performance AirFans, chosen for those who REFUSE to slow down! Driven by necessity. Refined by design. United by movement. We made a better portable fan because the existing ones just didn’t cut it." data-de="»Wir wurden aus der Hitze geboren... Aus langen Sommern, in denen stehende Luft den Fokus erdrückte und den Antrieb raubte. Die Welt wurde langsamer. Wir nicht.« Bei Airox sind wir mit einem Ziel angetreten: Bewegung am Leben zu halten. Tragbare Ventilatoren waren entweder schwach, überteuert oder beides. Das haben wir geändert. Die wildeste Auswahl an Hochleistungs-AirFans, für alle, die sich WEIGERN langsamer zu werden! Getrieben von Notwendigkeit. Verfeinert durch Design. Vereint durch Bewegung. Wir haben einen besseren tragbaren Ventilator gebaut, weil die bestehenden einfach nicht reichten."><span style="font-size:1.2em;">»</span>We were born from heat... From long summers where still air crushed focus and drained drive, The world moved slower, We didn’t.<span style="font-size:1.2em;">«</span>
                     <br>
                     <br>
                     At Airox, we set out with one purpose: to keep motion alive.
                     Portable fans were either weak, overpriced, or both. We fixed that.
-                    
+
                     The wildest selection of High-Performance AirFans, chosen for those who REFUSE to slow down!
 
                     Driven by necessity. Refined by design. United by movement.
-                    We made a better portable fan because the existing ones just didn't cut it.</p>
-                <footer>— BEN VAES — Founder & CEO</footer>
+                    We made a better portable fan because the existing ones just didn’t cut it.</p>
+                <footer data-en="— BEN VAES — Founder & CEO" data-de="— BEN VAES — Gründer & CEO">— BEN VAES — Founder & CEO</footer>
             </blockquote>
         </div>
     </section>
@@ -1157,7 +1160,7 @@
                 -webkit-text-fill-color: transparent;
                 display: inline-block;
                 text-transform: uppercase;
-              "> FAQ'S</h2>
+              " data-en="FAQ'S" data-de="FAQ'S"> FAQ'S</h2>
                 <p style="filter: brightness(1.1)" class="faq-subtitle" data-en="OUR MOST COMMONLY ASKED QUESTIONS" data-de="UNSERE AM HÄUFIGSTEN GESTELLTEN FRAGEN">OUR MOST COMMONLY ASKED QUESTIONS</p>
             </div>
             
@@ -1189,7 +1192,7 @@
                         
                         <div class="faq-item">
                             <button class="faq-question">
-                                <span data-en="DO THE FANS LOOK EXACTLY LIKE THE PICTURES?" data-de="SEHEN DIE VENTILATOREN GENAU WIE AUF DEN BILDERN AUS?">DO THE FANS LOOK EXACTLY LIKE THE PICTURES?">Do the fans look exactly like the pictures?</span>
+                                <span data-en="DO THE FANS LOOK EXACTLY LIKE THE PICTURES?" data-de="SEHEN DIE VENTILATOREN GENAU WIE AUF DEN BILDERN AUS?">DO THE FANS LOOK EXACTLY LIKE THE PICTURES?</span>
                                 <span class="faq-icon">+</span>
                             </button>
                             <div class="faq-answer">
@@ -1231,10 +1234,10 @@
     <section id="brand-video" class="brand-video">
         <div class="container">
             <h2 class="section-title">
-                <span class="weight-light">One Device.</span>
-                <span class="weight-bold">Total CONTROL</span>
+                <span class="weight-light" data-en="One Device." data-de="Ein Gerät.">One Device.</span>
+                <span class="weight-bold" data-en="Total CONTROL" data-de="Totale KONTROLLE">Total CONTROL</span>
             </h2>
-            <p class="section-subtitle">Building wellness technology that empowers your daily life.</p>
+            <p class="section-subtitle" data-en="Building wellness technology that empowers your daily life." data-de="Wellness-Technologie, die deinen Alltag stärkt.">Building wellness technology that empowers your daily life.</p>
             
             <div class="video-module">
                 <div class="video-module__wrapper">
@@ -1264,16 +1267,16 @@
             
             <div class="credibility-badges">
                 <div class="badge">
-                    <span class="badge__label">Featured in</span>
+                    <span class="badge__label" data-en="Featured in" data-de="Bekannt aus">Featured in</span>
                     <span class="badge__value">TechCrunch</span>
                 </div>
                 <div class="badge">
-                    <span class="badge__label">Certified by</span>
+                    <span class="badge__label" data-en="Certified by" data-de="Zertifiziert von">Certified by</span>
                     <span class="badge__value">CE & FDA</span>
                 </div>
                 <div class="badge">
-                    <span class="badge__label">Awarded</span>
-                    <span class="badge__value">Best Design 2025</span>
+                    <span class="badge__label" data-en="Awarded" data-de="Ausgezeichnet">Awarded</span>
+                    <span class="badge__value" data-en="Best Design 2025" data-de="Bestes Design 2025">Best Design 2025</span>
                 </div>
             </div>
             <hr>
@@ -1300,7 +1303,7 @@
                     -webkit-text-fill-color: transparent;
                     display: inline-block;
                     text-transform: uppercase;
-                    ">GET AIROX</span>
+                    " data-en="GET AIROX" data-de="AIROX KAUFEN">GET AIROX</span>
                 </button>
             </div>
         </div>
@@ -1311,15 +1314,15 @@
         <div class="container">
             <div class="footer-cta-content">
                 <div class="footer-cta-main">
-                    <div class="footer-cta-text">
+                    <div class="footer-cta-text" data-en="⚡ Limited Time: 20% OFF Your First Order" data-de="⚡ Nur für kurze Zeit: 20% RABATT auf deine erste Bestellung">
                         ⚡ Limited Time: 20% OFF Your First Order
                     </div>
                     <div class="footer-cta-action">
-                        <a href="#buy" class="btn-cta">Secure Yours Now</a>
-                        <div class="footer-cta-code">Code: FREE20 (applied at checkout)</div>
+                        <a href="#buy" class="btn-cta" data-en="Secure Yours Now" data-de="Jetzt sichern">Secure Yours Now</a>
+                        <div class="footer-cta-code" data-en="Code: FREE20 (applied at checkout)" data-de="Code: FREE20 (wird an der Kasse angewendet)">Code: FREE20 (applied at checkout)</div>
                     </div>
                 </div>
-                <div class="footer-cta-rating">⭐ 4.8/5 · Fast EU Shipping</div>
+                <div class="footer-cta-rating" data-en="⭐ 4.8/5 · Fast EU Shipping" data-de="⭐ 4.8/5 · Schneller EU-Versand">⭐ 4.8/5 · Fast EU Shipping</div>
             </div>
         </div>
     </div>
@@ -1390,13 +1393,13 @@
         <div class="cart-drawer__overlay"></div>
         <div class="cart-drawer__content">
           <div class="cart-drawer__header">
-            <h3>Cart (<span id="cartCount">0</span>)</h3>
+            <h3><span data-en="Cart" data-de="Warenkorb">Cart</span> (<span id="cartCount">0</span>)</h3>
             <button id="closeCart">×</button>
           </div>
           <div id="cartItems"></div>
           <div class="cart-drawer__footer">
-            <p><span style="color:black;">Subtotal:</span><br> <strong id="cartTotal">$0.00</strong></p>
-            <button id="cartCheckout" class="btn-cart-cta">Checkout</button>
+            <p><span style="color:black;" data-en="Subtotal:" data-de="Zwischensumme:">Subtotal:</span><br> <strong id="cartTotal">$0.00</strong></p>
+            <button id="cartCheckout" class="btn-cart-cta" data-en="Checkout" data-de="Zur Kasse">Checkout</button>
           </div>
         </div>
       </div>

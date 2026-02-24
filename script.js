@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Language detection and switching
 let currentLanguage = 'en';
+window.currentLanguage = currentLanguage;
 
 // Detect DACH region (Germany, Austria, Switzerland)
 function detectLanguage() {
@@ -39,6 +40,7 @@ function detectLanguage() {
 // Apply language to all elements
 function applyLanguage(lang) {
     currentLanguage = lang;
+    window.currentLanguage = lang;
     
     document.querySelectorAll('[data-en]').forEach(element => {
         const text = element.getAttribute(`data-${lang}`);
@@ -72,6 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reload current testimonial to update language
             if (typeof currentTestimonialIndex !== 'undefined') {
                 loadTestimonial(currentTestimonialIndex);
+            }
+            // Re-render progressive lock-in dynamic text
+            if (window.ProgressiveLockInState && window.ProgressiveLockInState.reRenderLanguage) {
+                window.ProgressiveLockInState.reRenderLanguage();
             }
         });
     }

@@ -103,7 +103,8 @@ function addToCart(qty = 1) {
     }
     
     // Show toast
-    showToast(`Added ${qty} item(s) to cart!`);
+    const lang = window.currentLanguage || 'en';
+    showToast(lang === 'de' ? `${qty} Artikel in den Warenkorb gelegt!` : `Added ${qty} item(s) to cart!`);
     
     // Analytics (placeholder)
     console.log('Cart:', state.cart);
@@ -127,7 +128,7 @@ function buildCheckoutUrl() {
 // Buy Now Handler
 function handleBuyNow() {
     const checkoutUrl = buildCheckoutUrl();
-    showToast('Redirecting to checkout...');
+    showToast((window.currentLanguage || 'en') === 'de' ? 'Weiterleitung zur Kasse...' : 'Redirecting to checkout...');
     
     setTimeout(() => {
         // window.location.href = checkoutUrl;

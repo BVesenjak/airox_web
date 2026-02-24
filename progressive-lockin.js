@@ -32,11 +32,27 @@
         hasCustomized: false        // True if user has changed any color from defaults
     };
     
+    // Get current language
+    function lang() { return window.currentLanguage || 'en'; }
+
     // Color name mapping
     const COLOR_NAMES = {
         'black': 'Stealth',
         'white': 'Arctic',
         'violet': 'Ion'
+    };
+
+    // German UI strings
+    const I18N = {
+        bundleLabel: { en: (n, w) => `Your bundle includes ${n} ${w} — tap any fan to change its color`, de: (n, w) => `Dein Bundle enthält ${n} ${w} — tippe auf einen Ventilator, um die Farbe zu ändern` },
+        fanWord: { en: (n) => n === 1 ? 'fan' : 'fans', de: (n) => n === 1 ? 'Ventilator' : 'Ventilatoren' },
+        fanAriaLabel: { en: (i, c) => `Fan ${i} color: ${c}. Click to edit.`, de: (i, c) => `Ventilator ${i} Farbe: ${c}. Klicken zum Ändern.` },
+        selectorLabel: { en: (n) => `Choose color for Fan ${n}`, de: (n) => `Farbe für Ventilator ${n} wählen` },
+        defaultReady: { en: '✓ Defaults preselected — tap any fan to customize (optional)', de: '✓ Voreinstellungen gewählt — tippe auf einen Ventilator zum Anpassen (optional)' },
+        activeReady: { en: "✓ Selections updated · you're ready to checkout", de: '✓ Auswahl aktualisiert · bereit zum Kauf' },
+        confirmation: { en: (c) => `✓ ${c} selected`, de: (c) => `✓ ${c} ausgewählt` },
+        ctaDisabled: { en: 'Complete color selection to continue', de: 'Farbauswahl abschließen, um fortzufahren' },
+        pickColor: { en: '👉 Pick a color to continue', de: '👉 Wähle eine Farbe, um fortzufahren' }
     };
     
     // Icon mapping
@@ -198,7 +214,8 @@
     function updatePricing(bundleButton) {
         const price = bundleButton.dataset.price;
         const comparePrice = bundleButton.dataset.compare;
-        const savings = bundleButton.dataset.savings;
+        const l = lang();
+        const savings = bundleButton.dataset[`savings${l === 'de' ? 'De' : 'En'}`] || bundleButton.dataset.savings;
         
         // Update price elements
         const currentPriceEl = document.getElementById('currentPrice');
@@ -275,8 +292,9 @@
         if (!els.bundleContentsChips) return;
         
         // Update label
-        const fanWord = state.fanCount === 1 ? 'fan' : 'fans';
-        els.bundleContentsLabel.textContent = `Your bundle includes ${state.fanCount} ${fanWord} — tap any fan to change its color`;
+        const l = lang();
+        const fanWord = I18N.fanWord[l](state.fanCount);
+        els.bundleContentsLabel.textContent = I18N.bundleLabel[l](state.fanCount, fanWord);
         
         // Clear existing chips
         els.bundleContentsChips.innerHTML = '';
@@ -290,7 +308,7 @@
             const chip = document.createElement('button');
             chip.className = 'fan-chip';
             chip.setAttribute('type', 'button');
-            chip.setAttribute('aria-label', `Fan ${i + 1} color: ${colorName}. Click to edit.`);
+            chip.setAttribute('aria-label', I18N.fanAriaLabel[lang()](i + 1, colorName));
             chip.dataset.unitIndex = i;
             
             // Active state
@@ -456,7 +474,7 @@
      */
     function updateSelectorLabel() {
         const fanNumber = state.activeUnitIndex + 1;
-        els.selectorLabel.textContent = `Choose color for Fan ${fanNumber}`;
+        els.selectorLabel.textContent = I18N.selectorLabel[lang()](fanNumber);
     }
     
     /**
@@ -473,20 +491,21 @@
     function updateMicroFeedback(mode, data = null) {
         if (!els.feedbackText) return;
         
+        const l = lang();
         switch(mode) {
             case 'defaultready':
-                els.feedbackText.innerHTML = '✓ Defaults preselected — tap any fan to customize (optional)';
+                els.feedbackText.innerHTML = I18N.defaultReady[l];
                 els.microFeedback.style.background = 'rgba(153, 255, 255, 0.08)';
                 break;
-                
+
             case 'activeready':
-                els.feedbackText.innerHTML = "✓ Selections updated · you're ready to checkout";
+                els.feedbackText.innerHTML = I18N.activeReady[l];
                 els.microFeedback.style.background = 'rgba(21, 204, 190, 0.10)';
                 break;
-                
+
             case 'confirmation':
                 const colorName = COLOR_NAMES[data] || data;
-                els.feedbackText.innerHTML = `✓ ${colorName} selected`;
+                els.feedbackText.innerHTML = I18N.confirmation[l](colorName);
                 els.microFeedback.style.background = 'rgba(21, 204, 190, 0.15)';
                 break;
         }
@@ -505,7 +524,7 @@
         
         // Update status
         if (els.ctaStatus) {
-            els.ctaStatus.textContent = 'Complete color selection to continue';
+            els.ctaStatus.textContent = I18N.ctaDisabled[lang()];
             els.ctaStatus.style.opacity = '1';
         }
     }
@@ -601,7 +620,17 @@
         getSelectedColors: () => state.selectedColors,
         getColorNames: () => state.selectedColors.map(c => COLOR_NAMES[c]),
         getBundle: () => state.bundle,
-        getFanCount: () => state.fanCount
+        getFanCount: () => state.fanCount,
+        reRenderLanguage: () => {
+            renderBundleContentsIcons();
+            updateSelectorLabel();
+            if (state.isComplete) {
+                updateMicroFeedback(getReadyMode());
+            } else {
+                els.feedbackText.innerHTML = I18N.pickColor[lang()];
+            }
+            if (!state.isComplete) disableCTAs();
+        }
     };
     
 })();
