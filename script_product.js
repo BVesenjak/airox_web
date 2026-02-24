@@ -169,50 +169,40 @@ function initVariantPills() {
 
 // Initialize Quantity Stepper
 function initQuantityStepper() {
-    const quantityInput = document.getElementById('quantity');
+    const quantityDisplay = document.getElementById('quantity');
     const decreaseBtn = document.querySelector('[data-action="decrease"]');
     const increaseBtn = document.querySelector('[data-action="increase"]');
-    
-    if (!quantityInput) return;
-    
+
+    if (!quantityDisplay) return;
+
+    function getQty() {
+        return parseInt(quantityDisplay.textContent) || 1;
+    }
+
     function updateQuantity(newQty) {
-        const clamped = Math.max(1, Math.min(99, newQty));
-        quantityInput.value = clamped;
+        const clamped = Math.max(1, Math.min(10, newQty));
+        quantityDisplay.textContent = clamped;
         state.quantity = clamped;
-        
+
         // Update sticky cart qty
         const stickyQty = document.getElementById('stickyQty');
         if (stickyQty) {
             stickyQty.textContent = clamped;
         }
+
     }
-    
+
     if (decreaseBtn) {
         decreaseBtn.addEventListener('click', () => {
-            updateQuantity(parseInt(quantityInput.value) - 1);
+            updateQuantity(getQty() - 1);
         });
     }
-    
+
     if (increaseBtn) {
         increaseBtn.addEventListener('click', () => {
-            updateQuantity(parseInt(quantityInput.value) + 1);
+            updateQuantity(getQty() + 1);
         });
     }
-    
-    quantityInput.addEventListener('input', function() {
-        updateQuantity(parseInt(this.value) || 1);
-    });
-    
-    // Keyboard support
-    quantityInput.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            updateQuantity(parseInt(this.value) + 1);
-        } else if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            updateQuantity(parseInt(this.value) - 1);
-        }
-    });
 }
 
 // Initialize Gift Wrap Checkbox
@@ -447,9 +437,9 @@ function initStickyCart() {
     const mainQtyInput = document.getElementById('quantity');
     
     function updateStickyQty(newQty) {
-        const clamped = Math.max(1, Math.min(99, newQty));
+        const clamped = Math.max(1, Math.min(10, newQty));
         if (stickyQty) stickyQty.textContent = clamped;
-        if (mainQtyInput) mainQtyInput.value = clamped;
+        if (mainQtyInput) mainQtyInput.textContent = clamped;
         state.quantity = clamped;
     }
     

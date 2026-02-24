@@ -9,6 +9,11 @@ window.client = ShopifyBuy.buildClient({
   });
   
   var client = window.client;
+
+  function getSelectedQuantity() {
+    const el = document.getElementById('quantity');
+    return el ? Math.max(1, Math.min(10, parseInt(el.textContent) || 1)) : 1;
+  }
   
   // 2. Initialize UI component for cart drawer
   const ui = ShopifyBuy.UI.init(client);
@@ -104,10 +109,10 @@ window.client = ShopifyBuy.buildClient({
       
       currentCheckout = await client.checkout.addLineItems(checkout.id, [{
         variantId: variantId,
-        quantity: 1,
+        quantity: getSelectedQuantity(),
         customAttributes: [{ key: 'Colors', value: colors }]
       }]);
-      
+
       // Update navbar badge immediately
       const totalItems = currentCheckout.lineItems.reduce((sum, item) => sum + item.quantity, 0);
       if (window.updateNavbarCartBadge) {
@@ -282,10 +287,10 @@ window.client = ShopifyBuy.buildClient({
         const { variantId, colors } = getSelectedBundle();
         currentCheckout = await client.checkout.addLineItems(checkout.id, [{
           variantId: variantId,
-          quantity: 1,
+          quantity: getSelectedQuantity(),
           customAttributes: [{ key: 'Colors', value: colors }]
         }]);
-        
+
         // Update navbar badge
         const totalItems = currentCheckout.lineItems.reduce((sum, item) => sum + item.quantity, 0);
         if (window.updateNavbarCartBadge) {
