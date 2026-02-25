@@ -116,7 +116,7 @@
                         </div>
                     </div>
                   </div>
-                  <p class="microcopy-disclaimer" data-en="Product appearance may vary slightly from images shown." data-de="Das Produktaussehen kann leicht von den gezeigten Bildern abweichen.">Product appearance may vary slightly from images shown.</p>
+                  <p class="microcopy-disclaimer" style="text-align: center; width: 100%;" data-en="Product appearance may vary slightly from images shown." data-de="Das Produktaussehen kann leicht von den gezeigten Bildern abweichen.">Product appearance may vary slightly from images shown.</p>
                 </div>
 
 
@@ -258,10 +258,6 @@
                    <div class="cta-group">
                     <button id="buyNow" class="btn-cta" data-analytics="confirm-selection" data-en="CHECKOUT NOW" data-de="JETZT KAUFEN">CHECKOUT NOW</button>
                     
-                    <!-- Trust Badges -->
-                    <div class="product-trust-badges">
-                        <img src="assets/trust/badges.png" alt="Trust badges" class="trust-badges-image">
-                    </div>
                 </div>
 
                
@@ -901,8 +897,8 @@
     <section id="story" class="story">
         <div class="container">
             <h2 class="section-title">
-                <span class="weight-light" data-en="Our" data-de="Unsere">Our</span>
-                <span class="weight-bold" data-en="Story" data-de="Geschichte">Story</span>
+                <span class="weight-light" data-en="Why" data-de="Warum">Why</span>
+                <span class="weight-bold" data-en="Airox?" data-de="Airox?">Airox?</span>
             </h2>
 
             <div class="story__grid">
@@ -1335,7 +1331,7 @@
                 <div class="col-lg-3">
                     <h4 data-en="Sitemap" data-de="Sitemap">Sitemap</h4>
                     <ul class="footer-links">
-                        <li><a href="#home" data-en="Home" data-de="Startseite">Home</a></li>
+                        <li><a href="index.html" data-en="Home" data-de="Startseite">Home</a></li>
                         <li><a href="#about" data-en="About Us" data-de="Über uns">About Us</a></li>
                         <li><a href="#products" data-en="Products" data-de="Produkte">Products</a></li>
                         <li><a href="#contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
@@ -1383,17 +1379,75 @@
     <div id="cartDrawer" class="cart-drawer">
         <div class="cart-drawer__overlay"></div>
         <div class="cart-drawer__content">
-          <div class="cart-drawer__header">
-            <h3><span data-en="Cart" data-de="Warenkorb">Cart</span> (<span id="cartCount">0</span>)</h3>
-            <button id="closeCart">×</button>
-          </div>
-          <div id="cartItems"></div>
-          <div class="cart-drawer__footer">
-            <p><span style="color:black;" data-en="Subtotal:" data-de="Zwischensumme:">Subtotal:</span><br> <strong id="cartTotal">$0.00</strong></p>
-            <button id="cartCheckout" class="btn-cart-cta" data-en="Checkout" data-de="Zur Kasse">Checkout</button>
-          </div>
+
+            <!-- Header -->
+            <div class="cart-drawer__header">
+                <h3><span data-en="Your Cart" data-de="Dein Warenkorb">Your Cart</span> (<span id="cartCount">0</span>)</h3>
+                <button id="closeCart" class="cart-drawer__close" aria-label="Close cart">&times;</button>
+            </div>
+
+            <!-- Line Items (scrollable) -->
+            <div id="cartItems" class="cart-drawer__items"></div>
+
+            <!-- Empty State -->
+            <div id="cartEmpty" class="cart-drawer__empty" style="display:none;">
+                <img src="assets/logo/logo.png" alt="AIROX" class="cart-drawer__empty-logo">
+                <p data-en="Your cart is empty" data-de="Dein Warenkorb ist leer">Your cart is empty</p>
+                <button class="cart-drawer__continue-btn" data-en="Continue Shopping" data-de="Weiter einkaufen">Continue Shopping</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="cart-drawer__footer">
+
+                <!-- Promo Code -->
+                <div class="cart-drawer__promo">
+                    <button class="cart-drawer__promo-toggle" id="promoToggle">
+                        <span data-en="Have a code?" data-de="Hast du einen Code?">Have a code?</span>
+                        <i class="fas fa-chevron-down cart-drawer__promo-chevron"></i>
+                    </button>
+                    <div class="cart-drawer__promo-body" id="promoBody">
+                        <div class="cart-drawer__promo-input-row">
+                            <input type="text" id="promoInput" class="cart-drawer__promo-input" placeholder="Discount code" data-en-placeholder="Discount code" data-de-placeholder="Rabattcode">
+                            <button id="promoApply" class="cart-drawer__promo-apply" data-en="Apply" data-de="Einlösen">Apply</button>
+                        </div>
+                        <p id="promoMessage" class="cart-drawer__promo-message"></p>
+                    </div>
+                </div>
+
+                <!-- Totals -->
+                <div class="cart-drawer__totals">
+                    <div class="cart-drawer__totals-row">
+                        <span data-en="Subtotal" data-de="Zwischensumme">Subtotal</span>
+                        <span id="cartSubtotal">$0.00</span>
+                    </div>
+                    <div class="cart-drawer__totals-row">
+                        <span data-en="Shipping" data-de="Versand">Shipping</span>
+                        <span class="cart-drawer__free-shipping" data-en="Free EU Shipping" data-de="Kostenloser EU-Versand">Free EU Shipping</span>
+                    </div>
+                    <div class="cart-drawer__totals-row cart-drawer__totals-row--total">
+                        <span data-en="Total" data-de="Gesamt">Total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Checkout -->
+                <button id="cartCheckout" class="btn-cart-cta" data-en="CHECKOUT NOW" data-de="JETZT KAUFEN">CHECKOUT NOW</button>
+
+                <!-- Continue Shopping -->
+                <button class="cart-drawer__continue-link" data-en="Continue Shopping" data-de="Weiter einkaufen">Continue Shopping</button>
+
+                <!-- Trust -->
+                <div class="cart-drawer__trust">
+                    <img src="assets/trust/trust.png" alt="Payment methods" class="cart-drawer__trust-img">
+                    <div class="cart-drawer__secure">
+                        <i class="fas fa-lock"></i>
+                        <span data-en="Secure checkout" data-de="Sicherer Checkout">Secure checkout</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
-      </div>
+    </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
