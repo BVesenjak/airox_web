@@ -2082,6 +2082,92 @@ p {
 }
 
 /* =================================
+   CONTACT PAGE
+   ================================= */
+
+.contact-section {
+    padding: 160px 0 100px;
+    background: linear-gradient(135deg, var(--dark-gray) 0%, var(--black) 100%);
+    min-height: 100vh;
+    text-align: center;
+}
+
+.contact-pretitle {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--text-gray);
+    margin-bottom: 10px;
+}
+
+.contact-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+}
+
+.contact-subtitle {
+    font-size: 16px;
+    color: var(--text-gray);
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.contact-form {
+    text-align: left;
+}
+
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form .form-input {
+    width: 100%;
+    background-color: var(--medium-gray);
+    border: 1px solid var(--border-gray);
+    color: var(--white);
+    padding: 16px 20px;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.contact-form .form-input:focus {
+    border-color: #15ccbe;
+}
+
+.contact-form .form-input::placeholder {
+    color: var(--text-gray);
+}
+
+.contact-form .form-textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.btn-contact-submit {
+    width: 100%;
+    background-color: var(--white);
+    color: var(--black);
+    border: none;
+    padding: 18px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-contact-submit:hover {
+    background-color: #15ccbe;
+    color: var(--black);
+}
+
+/* =================================
    SECTION 11: FOOTER
    ================================= */
 
@@ -5625,6 +5711,7 @@ h1, h2 {
     display: flex;
     flex-direction: column;
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
 }
 .cart-drawer.open .cart-drawer__content {
     transform: translateX(0);

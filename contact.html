@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIROX - Contact</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- Section 1: Navigation Bar -->
+    <nav id="navbar" class="navbar-custom" style="transform: none; opacity: 1;">
+        <div class="container-fluid">
+            <div class="navbar-content">
+                <button class="hamburger" id="hamburgerBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <a href="index.html" class="navbar-logo">
+                    <div class="logo-flame"><img src="assets/logo/logo.png" alt="Logo" style="height: 54px; width: auto;"></div>
+                </a>
+
+                <div class="navbar-links">
+                    <a href="product.html" class="nav-link" data-en="SHOP" data-de="SHOP">SHOP</a>
+                    <a href="product.html" class="nav-link nav-link-cta" data-en="GET AIROX" data-de="AIROX KAUFEN">GET AIROX</a>
+                </div>
+
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu">
+        <button class="close-menu" id="closeMenuBtn">&times;</button>
+        <ul class="menu-list">
+            <li><a href="index.html#hero" data-en="Home" data-de="Startseite">Home</a></li>
+            <li><a href="index.html#value-prop" data-en="Benefits" data-de="Vorteile">Benefits</a></li>
+            <li><a href="index.html#testimonials" data-en="Testimonials" data-de="Testimonials">Testimonials</a></li>
+            <li><a href="index.html#faq" data-en="FAQ" data-de="FAQ">FAQ</a></li>
+            <li><a href="contact.html" data-en="Contact" data-de="Kontakt">Contact</a></li>
+        </ul>
+        <div class="language-toggle">
+            <button id="langToggle" class="lang-btn">EN / DE</button>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <p class="contact-pretitle" data-en="GET IN TOUCH" data-de="KONTAKTIEREN SIE UNS">GET IN TOUCH</p>
+                    <h1 class="contact-title" data-en="CONTACT US" data-de="KONTAKT">CONTACT US</h1>
+                    <p class="contact-subtitle" data-en="Have a question or need help? Send us a message and we'll get back to you as soon as possible." data-de="Haben Sie eine Frage oder brauchen Sie Hilfe? Senden Sie uns eine Nachricht und wir melden uns so schnell wie möglich.">Have a question or need help? Send us a message and we'll get back to you as soon as possible.</p>
+
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <input type="text" class="form-input" id="contactName" placeholder="Your Name" data-en-placeholder="Your Name" data-de-placeholder="Ihr Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" id="contactEmail" placeholder="Your Email" data-en-placeholder="Your Email" data-de-placeholder="Ihre E-Mail" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-input form-textarea" id="contactMessage" placeholder="Your Message" data-en-placeholder="Your Message" data-de-placeholder="Ihre Nachricht" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-contact-submit" data-en="SEND MESSAGE" data-de="NACHRICHT SENDEN">SEND MESSAGE</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <h4 data-en="Support" data-de="Support">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="contact.html" data-en="Contact" data-de="Kontakt">Contact</a></li>
+                        <li><a href="#shipping" data-en="Shipping Info" data-de="Versandinfos">Shipping Info</a></li>
+                        <li><a href="#returns" data-en="Returns" data-de="Retouren">Returns</a></li>
+                        <li><a href="index.html#faq" data-en="FAQ" data-de="FAQ">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3">
+                    <h4 data-en="Sitemap" data-de="Sitemap">Sitemap</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html" data-en="Home" data-de="Startseite">Home</a></li>
+                        <li><a href="index.html#about" data-en="About Us" data-de="Über uns">About Us</a></li>
+                        <li><a href="product.html" data-en="Products" data-de="Produkte">Products</a></li>
+                        <li><a href="contact.html" data-en="Contact" data-de="Kontakt">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3">
+                    <h4 data-en="Legal" data-de="Rechtliches">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#privacy" data-en="Privacy Policy" data-de="Datenschutzrichtlinie">Privacy Policy</a></li>
+                        <li><a href="#terms" data-en="Terms & Conditions" data-de="Geschäftsbedingungen">Terms & Conditions</a></li>
+                        <li><a href="#shipping" data-en="Shipping Policy" data-de="Versandrichtlinie">Shipping Policy</a></li>
+                        <li><a href="#returns" data-en="Return Policy" data-de="Rückgaberichtlinie">Return Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3">
+                    <h4 data-en="Follow Us On" data-de="Folgen Sie uns auf">Follow Us On</h4>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-x fa-2x"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube fa-2x"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 footer-brand">
+                    <div class="logo-flame-footer"><img src="assets/logo/logo.png" alt="Logo" style="height: 64px; width: auto;"></div>
+                </div>
+            </div>
+        </div>
+        <br><br><br>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+
+    <!-- Shopify Buy SDK + Cart -->
+    <script src="https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js"></script>
+    <script src="ssa.js"></script>
+</body>
+</html>
