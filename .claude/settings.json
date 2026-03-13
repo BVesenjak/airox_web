@@ -1,11 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(where:*)",
-      "Bash(ls -la /c/Users/mainm/Desktop/warchargev2/*.html)",
-      "Bash(ls /c/Users/mainm/Desktop/warchargev2/*.js /c/Users/mainm/Desktop/warchargev2/*.css)",
-      "Bash(__NEW_LINE_e19b8ab65c9989f6__ echo \"\")",
-      "Bash(__NEW_LINE_76cd44262e2a47cc__ echo \"\")"
+      "Bash(where:*)"
     ]
   }
 }

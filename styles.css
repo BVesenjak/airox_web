@@ -1043,7 +1043,6 @@ p {
     background-color: var(--dark-gray);
     overflow: visible;
     height: auto;
-    scroll-margin-top: -20px;
 }
 
 .feature-grid-section .container {
@@ -2150,8 +2149,8 @@ p {
 
 .btn-contact-submit {
     width: 100%;
-    background-color: #47b0ff;
-    color: var(--white);
+    background-color: var(--white);
+    color: var(--black);
     border: none;
     padding: 18px 40px;
     font-size: 16px;
@@ -2164,8 +2163,8 @@ p {
 }
 
 .btn-contact-submit:hover {
-    background-color: #3a9ee0;
-    color: var(--white);
+    background-color: #15ccbe;
+    color: var(--black);
 }
 
 /* =================================
