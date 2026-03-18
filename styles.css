@@ -789,11 +789,12 @@ p {
 
 .hero-title {
     font-size: 56px;
-    line-height: 1.1;
+    line-height: 0.8;
     margin-bottom: 20px;
 }
 
 .hero-title .thin {
+    font-size: 104px;
     font-weight: 300;
     display: block;
 }
